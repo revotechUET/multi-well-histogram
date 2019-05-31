@@ -125,7 +125,6 @@ multi-well-histogram {
             align-items: center;
             justify-content: space-between;
             font-weight: 400;
-            width: 100%;
         }
         .label-info-image{
             background: #fff;
@@ -163,11 +162,13 @@ multi-well-histogram {
             padding: 5px 10px;
             border: 1px solid #e4e4e4;
             border-radius: 20px;
+            transition: all 0.2s ease-in;
             &.active {
                 background: #fff;
                 color: #0077be;
                 border: 1px solid #0077be;
                 border-radius: 20px;
+                transition: all 0.2s ease-in;
             }
         }
         .lable-option-sidebar{
@@ -221,14 +222,26 @@ multi-well-histogram {
     // ::-webkit-scrollbar {
     //     display: none;
     // }
-
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+   
     ::-webkit-scrollbar {
         background: #f4f4f4;
-        width: 10px;
+        width: 5px;
     }
 
     ::-webkit-scrollbar-thumb {
         background-color: #dcdcdc;
+    }
+    .fix-header-table{
+        overflow-y: auto; 
+        display: flex;
+    flex: 1;
+    }
+    .fix-header-table th { 
+        position: sticky; 
+        top: 0; 
     }
 
     table {
@@ -238,7 +251,13 @@ multi-well-histogram {
         width: 100%;
         user-select: none;
     }
-
+    table th {
+        position: sticky;
+        top: 0;
+      }
+    thead {
+        border-bottom: 1px solid #ccc;
+    }
     td,
     th {
         border-bottom: 1px solid #f0f0f0;
@@ -277,6 +296,10 @@ multi-well-histogram {
         background-color: #ffffff;
         color: #0077be;
     }
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: rgb(200, 200, 200);
+        opacity: 1; /* Firefox */
+      }
 
 }
 
