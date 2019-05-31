@@ -1,0 +1,128 @@
+<div class="main">
+    <div class="main-body">
+        <div class="main-body-left border-style">
+            <side-bar my-default-width="200">
+                <wi-tree-view tree-root="self.treeConfig" get-label="self.getLabel" get-icon="self.getIcon"
+                    get-children="self.getChildren" run-match="self.runMatch" click-fn='self.clickFunction'>
+                    <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
+                        <span>WELL LIST</span>
+                        <span class="label-button ti-reload" ng-class="{'active-button':true}" aria-hidden="true"
+                            ng-click="self.refresh()"></span>
+                    </div>
+                </wi-tree-view>
+            </side-bar>
+        </div>
+        
+        <div class="main-body-center border-style" style="position: relative;">
+            <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
+                <span>WELL LIST</span>
+            </div>
+            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1}">
+            </wi-droppable>
+            <div style="position: absolute; height: 100%; right: 0; border-left: 1px solid #eee;">
+                <side-bar my-default-width="270" orientation="w" collapsed="false">
+                    <div class="label-list-view"
+                        style="border-bottom: 1px solid #f0f0f0; display :flex; justify-content: space-between; padding: 12px 15px;">
+                        <span ng-class="{'active' : self.selectionType === 'family-group'}" 
+                        ng-click="self.selectionType='family-group'"
+                        class="button-with-lable" style="margin-right: 10px;">FAMILY GROUP</span>
+                        <span ng-class="{'active' : self.selectionType === 'family'}"
+                        ng-click="self.selectionType='family'"
+                        class="button-with-lable" style="margin-right: 10px;">FAMILY</span>
+                        <span ng-class="{'active' : self.selectionType === 'curve'}" 
+                        ng-click="self.selectionType='curve'"
+                        class="button-with-lable">CURVE</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <div style=" display: flex;flex: 1;flex-direction: column; overflow: hidden">
+                            <div class="lable-option-sidebar">
+                                <span>INPUT</span>
+                            </div>
+                            <div class="lable-option-sidebar">
+                                <div class="selection-sidebar">
+                                    <span>X-Axis</span>
+                                    <input class="input-suggestions" list="suggestions">
+                                    <datalist id="suggestions">
+                                        <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
+                                            value="{{item.name}}">
+                                        </option>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar" style="overflow: auto;">
+                                <div style="border: 1px solid #e4e4e4; border-radius: 2px;">
+                                    <table>
+                                        <tr>
+                                            <th>Well</th>
+                                            <th>Dataset</th>
+                                            <th>Curve</th>
+                                        </tr>
+                                        <tr ng-repeat="well of self.wells">
+                                            <td>{{well.name}}</td>
+                                            <td>
+                                                <select ng-model="self.dataset[well]">
+
+                                                </select>
+                                            </td>
+                                            <td>{{self.getCurve(well).name}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style=" display: flex;flex: 1;flex-direction: column; overflow: hidden">
+                                <div class="lable-option-sidebar">
+                                    <span>INPUT</span>
+                                </div>
+                                <div class="lable-option-sidebar">
+                                    <div class="selection-sidebar">
+                                        <span>X-Axis</span>
+                                        <input class="input-suggestions" list="suggestions">
+                                        <datalist id="suggestions">
+                                            <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
+                                                value="{{item.name}}">
+                                            </option>
+                                        </datalist>
+                                    </div>
+                                </div>
+                                <div class="lable-option-sidebar" style="overflow: auto;">
+                                    <div style="border: 1px solid #e4e4e4; border-radius: 2px;">
+                                        <table>
+                                            <tr>
+                                                <th>Firstname</th>
+                                                <th>Lastname</th>
+                                                <th>Savings</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Peter</td>
+                                                <td>Griffin</td>
+                                                <td>$100</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Lois</td>
+                                                <td>Griffin</td>
+                                                <td>$150</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Joe</td>
+                                                <td>Swanson</td>
+                                                <td>$300</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Cleveland</td>
+                                                <td>Brown</td>
+                                                <td>$250</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+    
+                                </div>
+                            </div>
+                    </div>
+
+                </side-bar>
+            </div>
+        </div>
+    </div>
+</div>

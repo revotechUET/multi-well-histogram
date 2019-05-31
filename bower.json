@@ -1,0 +1,28 @@
+{
+  "name": "image-set-manager",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Hung <hungnk1996@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.7.8",
+    "bootstrap-css": "^3.3.7",
+    "font-awesome": "4",
+    "jquery-ui": "^1.12.1",
+    "katex": "^0.10.1",
+    "lodash": "^4.17.11",
+    "misc-component": "https://github.com/tunghoang/misc-component.git",
+    "async": "^2.6.2",
+    "themify-icons": "^0.1.2",
+    "ngclipboard": "^2.0.0"
+  }
+}
