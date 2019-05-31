@@ -1,102 +1,104 @@
 multi-well-histogram {
-   
-    
+
+
     .image-holder {
-        position: absolute;
-        width: 200px;
-        // height: 200px;
-        padding: 5px;
-        border: 2px solid #3b99fc;
+        position        : absolute;
+        width           : 200px;
+        // height       : 200px;
+        padding         : 5px;
+        border          : 2px solid #3b99fc;
         background-color: #ffffffe6;
-        top: 0;
-        right: 0;
-        cursor: grab;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        outline: none;
-        box-shadow: 0 3px 25px #00000026;
+        top             : 0;
+        right           : 0;
+        cursor          : grab;
+        border-radius   : 4px;
+        display         : flex;
+        align-items     : center;
+        outline         : none;
+        box-shadow      : 0 3px 25px #00000026;
     }
+
     button.disable {
-        color: #aaa;
+        color       : #aaa;
         border-color: #aaa;
     }
+
     .main {
-        display: flex;
-        height: 100%;
+        display       : flex;
+        height        : 100%;
         flex-direction: column;
 
         .main-toolbar {
-            flex-basis: 44px;
-            background: #0074c5;
-            display: flex;
+            flex-basis : 44px;
+            background : #0074c5;
+            display    : flex;
             align-items: center;
-            position: relative;
+            position   : relative;
 
             .menu-item {
-                margin: 0 15px;
-                color: #fff;
-                display: flex;
+                margin     : 0 15px;
+                color      : #fff;
+                display    : flex;
                 align-items: center;
-                cursor: pointer;
+                cursor     : pointer;
 
                 .select-proj4 {
-                    box-shadow: none;
-                    border: none;
+                    box-shadow   : none;
+                    border       : none;
                     border-radius: 0;
-                    font-size: 12px;
-                    color: #fff;
-                    background: none;
+                    font-size    : 12px;
+                    color        : #fff;
+                    background   : none;
                 }
 
                 .select-proj4:focus {
-                    border-color: none;
-                    outline: none;
+                    border-color      : none;
+                    outline           : none;
                     -webkit-box-shadow: none;
-                    box-shadow: none;
+                    box-shadow        : none;
 
                 }
             }
         }
 
         .main-body {
-            flex: 1;
-            display: flex;
+            flex      : 1;
+            display   : flex;
             overflow-x: auto;
             overflow-y: hidden;
-            position: relative;
+            position  : relative;
 
             .border-style {
-                border: 1px solid #eee;
+                border                 : 1px solid #eee;
                 border-top-right-radius: 3px;
-                border-top-left-radius: 3px;
+                border-top-left-radius : 3px;
             }
 
             .main-body-left {
-                display: flex;
-                z-index: 1;
-                height: calc(100%);
+                display    : flex;
+                z-index    : 1;
+                height     : calc(100%);
                 // position: absolute;
 
                 .input-search-list-view {
-                    background: #fff;
-                    width: 100%;
-                    height: 44px;
-                    border: 1px solid #ffffff4a;
+                    background   : #fff;
+                    width        : 100%;
+                    height       : 44px;
+                    border       : 1px solid #ffffff4a;
                     border-bottom: 1px solid #eaeaea;
-                    padding: 10px 20px 10px 15px;
-                    font-weight: bold;
+                    padding      : 10px 20px 10px 15px;
+                    font-weight  : bold;
                 }
 
                 ::-webkit-input-placeholder {
-                    opacity: 0.5;
-                    color: rgba(0, 0, 0, 0.253);
+                    opacity       : 0.5;
+                    color         : rgba(0, 0, 0, 0.253);
                     /* font-weight: 100; */
                 }
 
                 :focus::-webkit-input-placeholder {
-                    opacity: 0.5;
-                    color: rgba(0, 0, 0, 0.253);
+                    opacity       : 0.5;
+                    color         : rgba(0, 0, 0, 0.253);
                     /* font-weight: 100; */
                 }
 
@@ -106,93 +108,102 @@ multi-well-histogram {
             }
 
             .main-body-center {
-                margin: 0px 10px 0 15px;
-                flex: 1;
-                display: flex;
-                height: 100%;
-                position: relative;
+                margin        : 0px 10px 0 15px;
+                flex          : 1;
+                display       : flex;
+                height        : 100%;
+                position      : relative;
                 flex-direction: column;
-                min-width: 700px;
+                min-width     : 700px;
             }
         }
 
         .label-list-view {
-            padding: 16px 15px;
-            font-weight: bold;
-            background: #f4f4f4;
-            // border: 1px solid #eee;
-            display: flex;
-            align-items: center;
+            padding        : 16px 15px;
+            font-weight    : bold;
+            background     : #f4f4f4;
+            // border      : 1px solid #eee;
+            display        : flex;
+            align-items    : center;
             justify-content: space-between;
-            font-weight: 400;
+            font-weight    : 400;
         }
-        .label-info-image{
-            background: #fff;
-            min-width: 99px;
-            display: flex;
-            align-items: center;
-            border-radius: 3px;
-            padding: 5px 10px;
-            margin-right: 15px;
+
+        .label-info-image {
+            background     : #fff;
+            min-width      : 99px;
+            display        : flex;
+            align-items    : center;
+            border-radius  : 3px;
+            padding        : 5px 10px;
+            margin-right   : 15px;
             justify-content: space-between;
         }
-        
+
         .button-td {
-            cursor: pointer;
-            background: #f4f4f4;
-            padding: 3px 10px;
+            cursor       : pointer;
+            background   : #f4f4f4;
+            padding      : 3px 10px;
             border-radius: 2px;
-            border: 1px solid #e8e8e8;
+            border       : 1px solid #e8e8e8;
         }
-        .button-td:hover{
+
+        .button-td:hover {
             background: #87c1ff;
-            color: #fff;
+            color     : #fff;
         }
+
         .label-button {
-            float: right;
-            font-size: 115%;
-            color: #bbbbbb;
-            margin: 2px 5px 0 15px;
+            float         : right;
+            font-size     : 115%;
+            color         : #bbbbbb;
+            margin        : 2px 5px 0 15px;
             pointer-events: none;
         }
+
         .button-with-lable {
-            cursor: pointer;
-            background: #f4f4f4;
-            font-size: 10px;
-            padding: 5px 10px;
-            border: 1px solid #e4e4e4;
+            cursor       : pointer;
+            background   : #f4f4f4;
+            font-size    : 10px;
+            padding      : 5px 10px;
+            border       : 1px solid #e4e4e4;
             border-radius: 20px;
-            transition: all 0.2s ease-in;
+            transition   : all 0.2s ease-in;
+
             &.active {
-                background: #fff;
-                color: #0077be;
-                border: 1px solid #0077be;
+                background   : #fff;
+                color        : #0077be;
+                border       : 1px solid #0077be;
                 border-radius: 20px;
-                transition: all 0.2s ease-in;
+                transition   : all 0.2s ease-in;
             }
         }
-        .lable-option-sidebar{
+
+        .lable-option-sidebar {
             font-weight: bold;
-            font-size: 12px;
-            color: rgb(100, 100, 100);
-            padding: 11px 16px;
+            font-size  : 12px;
+            color      : rgb(100, 100, 100);
+            padding    : 11px 16px;
         }
-        .selection-sidebar{
-            border: 1px solid #e4e4e4;
+
+        .selection-sidebar {
+            border       : 1px solid #e4e4e4;
             border-radius: 2px;
-            padding: 5px 10px;
-            align-items: center;
-            display: flex;
-            & > input:focus {
+            padding      : 5px 10px;
+            align-items  : center;
+            display      : flex;
+
+            &>input:focus {
                 outline: none;
             }
         }
+
         .input-suggestions {
             margin-left: 10px;
-            border: none;
-            flex: 1;
-            color: #0077be;
-            text-align: right;
+            border     : none;
+            flex       : 1;
+            color      : #0077be;
+            text-align : right;
         }
     }
 
@@ -205,101 +216,107 @@ multi-well-histogram {
     }
 
     .height-50 {
-        height: 50%;
+        height  : 50%;
         overflow: auto;
     }
 
     .height-60 {
-        height: 60%;
+        height  : 60%;
         overflow: auto;
     }
 
     .height-40 {
-        height: 100%;
+        height  : 100%;
         overflow: auto;
     }
 
-    // ::-webkit-scrollbar {
-    //     display: none;
-    // }
-    ::-webkit-scrollbar {
-        width: 7px;
-    }
-   
     ::-webkit-scrollbar {
         background: #f4f4f4;
-        width: 5px;
+        width     : 5px;
     }
 
     ::-webkit-scrollbar-thumb {
         background-color: #dcdcdc;
     }
-    .fix-header-table{
-        overflow-y: auto; 
-        display: flex;
-    flex: 1;
+
+    .fix-header-table {
+        overflow-y: auto;
+        display   : flex;
+        flex      : 1;
     }
-    .fix-header-table th { 
-        position: sticky; 
-        top: 0; 
+
+    .fix-header-table th {
+        position: sticky;
+        top     : 0;
     }
 
     table {
-        // font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        // font-family : "Trebuchet MS", Arial, Helvetica, sans-serif;
         border-collapse: collapse;
-        table-layout: fixed;
-        width: 100%;
-        user-select: none;
+        table-layout   : fixed;
+        width          : 100%;
+        user-select    : none;
+
+        
     }
+    
     table th {
         position: sticky;
-        top: 0;
-      }
+        top     : 0;
+    }
+
     thead {
         border-bottom: 1px solid #ccc;
     }
+
     td,
     th {
-        border-bottom: 1px solid #f0f0f0;
-        border-right: 1px solid #f0f0f0;
-        padding-top: 10px;
+        border-bottom : 1px solid #f0f0f0;
+        border-right  : 1px solid #f0f0f0;
+        padding-top   : 10px;
         padding-bottom: 9px;
-        padding-left: 14px;
-        overflow: hidden;
-        
+        padding-left  : 14px;
+        overflow      : hidden;
+
     }
 
     tr {
         border-right: 4px solid #fff;
+
         &.updated {
             background-color: #c2eaff70;
         }
-        &.created{
+
+        &.created {
             background-color: #abeaab29;
         }
+
         &.deleted {
             background-color: #f4f4f4;
-            pointer-events:none;
-            color: #d8d3d3;
+            pointer-events  : none;
+            color           : #d8d3d3;
         }
     }
 
     tr:hover {
         border-right: 4px solid #0077be;
-        background: #f9f9f9;
+        background  : #f9f9f9;
     }
 
     th {
-        padding-top: 9px;
-        padding-bottom: 10px;
-        text-align: left;
+        padding-top     : 9px;
+        padding-bottom  : 10px;
+        text-align      : left;
         background-color: #ffffff;
-        color: #0077be;
+        color           : #0077be;
     }
-    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: rgb(200, 200, 200);
-        opacity: 1; /* Firefox */
-      }
+
+    ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color  : rgb(158, 158, 158);
+        opacity: 1;
+        /* Firefox */
+    }
 
 }
 
@@ -307,35 +324,37 @@ multi-well-histogram {
 /* change style special of wi-base-treeview for basemap */
 wi-tree-view {
     & div input {
-        width: 100%;
-        line-height: 1.4;
-        padding: 10px 10px 10px 14px;
-        border: none;
+        width        : 100%;
+        line-height  : 1.4;
+        padding      : 10px 10px 10px 14px;
+        border       : none;
         border-bottom: 1px solid #f0f0f0;
-        outline: none;
-        box-sizing: border-box;
+        outline      : none;
+        box-sizing   : border-box;
 
         &::placeholder {
             color: #cecece;
         }
     }
 }
+
 side-bar>div div.content {
-    overflow-x: hidden;
-    height: 100%;
-    display: flex;
-    overflow-y: auto;
+    overflow-x     : hidden;
+    height         : 100%;
+    display        : flex;
+    overflow-y     : auto;
     /* padding-left: 15px; */
-    flex-direction: column;
+    flex-direction : column;
 }
+
 wi-droppable {
     height: 100%;
 }
 
 wi-tree-node {
     &>div {
-        cursor: default;
-        //margin: 0 0 0 15px;
+        cursor      : default;
+        //margin    : 0 0 0 15px;
         padding-left: 12px;
 
     }
@@ -343,16 +362,16 @@ wi-tree-node {
     .node-caret,
     .node-label,
     .node-icon {
-        display: flex;
+        display      : flex;
         padding-right: 10px;
-        font-size: 12px;
+        font-size    : 12px;
     }
 
     .node-caret {
-        color: #cccbcb;
+        color    : #cccbcb;
         font-size: 14px;
-        cursor: pointer;
-        width: 16px;
+        cursor   : pointer;
+        width    : 16px;
     }
 
     .invisible {
@@ -360,14 +379,14 @@ wi-tree-node {
     }
 
     .node-content {
-        border-bottom: 1px solid #f0f0f0;
-        position: relative;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        // padding: 11px;
-        display: flex;
-        align-items: center;
+        border-bottom      : 1px solid #f0f0f0;
+        position           : relative;
+        white-space        : nowrap;
+        text-overflow      : ellipsis;
+        overflow           : hidden;
+        // padding         : 11px;
+        display            : flex;
+        align-items        : center;
         transition-property: padding, margin;
         transition-duration: 0.2s;
 
@@ -390,21 +409,21 @@ wi-tree-node {
 
         &.selected {
             background: linear-gradient(to left, #f0f0f0, #fff);
-            //padding: 11px;
+            //padding : 11px;
 
             &::after {
                 background-color: #0077be;
-                line-height: 3em;
+                line-height     : 3em;
             }
         }
 
         &::after {
-            content: "2r";
-            color: transparent;
-            display: block;
+            content : "2r";
+            color   : transparent;
+            display : block;
             position: absolute;
-            top: 0;
-            width: 4px;
+            top     : 0;
+            width   : 4px;
         }
 
         &::after {
@@ -417,17 +436,17 @@ wi-tree-node {
     }
 
     .dragging {
-        border: none;
+        border          : none;
         background-color: transparent;
-        z-index: 1;
+        z-index         : 1;
 
         &.selected {
             background: transparent;
-            //padding: 11px;
+            //padding : 11px;
 
             &::after {
                 background-color: transparent;
-                line-height: 2.3em;
+                line-height     : 2.3em;
             }
         }
     }
