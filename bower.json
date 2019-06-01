@@ -23,6 +23,7 @@
     "misc-component": "https://github.com/tunghoang/misc-component.git",
     "async": "^2.6.2",
     "themify-icons": "^0.1.2",
-    "ngclipboard": "^2.0.0"
+    "ngclipboard": "^2.0.0",
+    "plot-toolkit": "https://github.com/tunghoang/plot-toolkit.git"
   }
 }

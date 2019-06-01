@@ -4,7 +4,7 @@ require('./style.less');
 
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView',
-    'wiApi', 'editable', 'wiDialog', 'wiDroppable'
+    'wiApi', 'editable', 'wiDialog', 'wiDroppable', 'plot-toolkit'
 ]);
 app.component(componentName, {
     template: require('./template.html'),
@@ -65,7 +65,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             getSelectionList(self.selectionType, self.treeConfig);
         })
         self.wells = self.wells || [];
-        self.selectionType = self.selectionType || 'Wells';
+        self.selectionType = self.selectionType || 'curve';
+        self.tabName = self.tabName || 'Wells';
         if (self.token)
             wiToken.setToken(self.token);
         // getTree();

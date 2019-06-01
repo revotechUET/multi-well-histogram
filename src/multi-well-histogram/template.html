@@ -4,7 +4,26 @@
             <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
                 <span>WELL LIST</span>
             </div>
-            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1}">
+            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1, position: 'relative'}">
+                <layer-collection padding="50">
+                    <axis-layer min-val="0" max-val="100" 
+                                n-ticks="2" minor-ticks="10" 
+                                precision="4" grid="true" loga="true"
+                                placement="1"></axis-layer>
+                    <axis-layer min-val="0" max-val="10" 
+                                n-ticks="10" minor-ticks="10" 
+                                precision="4" grid="1"
+                                axis-direction="'up'"
+                                placement="0"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" 
+                                n-ticks="10" minor-ticks="10" 
+                                precision="4" grid="1"
+                                axis-direction="'up'"
+                                placement="1"></axis-layer>
+                </layer-collection>
+                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.filter}}</p>
+                <p style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">Frequence</p>
+                <p style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">Percentage (%)</p>
             </wi-droppable>
             <div style="position: absolute; height: 100%; right: 0; border-left: 1px solid #eee;">
                 <side-bar my-default-width="350" orientation="w" collapsed="false">
@@ -13,17 +32,17 @@
                         display :flex;
                         justify-content: space-between;
                         padding: 8px 15px;">
-                        <span ng-class="{'active' : self.selectionType === 'Wells'}"
-                            ng-click="setTab(1); self.selectionType='Wells'" class="tab-with-lable"
+                        <span ng-class="{'active' : self.tabName === 'Wells'}"
+                            ng-click="setTab(1); self.tabName='Wells'" class="tab-with-lable"
                             style="margin-right: 8px;">Wells</span>
-                        <span ng-class="{'active' : self.selectionType === 'Zone'}"
-                            ng-click="setTab(2); self.selectionType='Zone'" class="tab-with-lable"
+                        <span ng-class="{'active' : self.tabName === 'Zone'}"
+                            ng-click="setTab(2); self.tabName='Zone'" class="tab-with-lable"
                             style="margin-right: 8px;">Zone</span>
-                        <span ng-class="{'active' : self.selectionType === 'Config'}"
-                            ng-click="setTab(3); self.selectionType='Config'" class="tab-with-lable"
+                        <span ng-class="{'active' : self.tabName === 'Config'}"
+                            ng-click="setTab(3); self.tabName='Config'" class="tab-with-lable"
                             style="margin-right: 8px;">Config</span>
-                        <span ng-class="{'active' : self.selectionType === 'Statistics'}"
-                            ng-click="setTab(4); self.selectionType='Statistics'"
+                        <span ng-class="{'active' : self.tabName === 'Statistics'}"
+                            ng-click="setTab(4); self.tabName='Statistics'"
                             class="tab-with-lable">Statistics</span>
                     </div>
 
