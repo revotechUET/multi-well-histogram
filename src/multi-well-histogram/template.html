@@ -1,23 +1,5 @@
 <div class="main">
     <div class="main-body">
-<!--
-        <div class="main-body-left border-style">
-            <side-bar my-default-width="200">
-                <wi-tree-view tree-root="self.treeConfig" get-label="self.getLabel" get-icon="self.getIcon"
-                    get-children="self.getChildren" run-match="self.runMatch" click-fn='self.clickFunction'>
-                    <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
-                        <span>WELL LIST</span>
-                        <span class="label-button ti-reload"
-                            ng-class="{'active-button':true}" 
-                            aria-hidden="true"
-                            ng-click="self.refresh()">
-                        </span>
-                    </div>
-                </wi-tree-view>
-            </side-bar>
-        </div>
--->
-
         <div class="main-body-center border-style" style="position: relative;">
             <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
                 <span>WELL LIST</span>
@@ -25,94 +7,79 @@
             <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1}">
             </wi-droppable>
             <div style="position: absolute; height: 100%; right: 0; border-left: 1px solid #eee;">
-                <side-bar my-default-width="270" orientation="w" collapsed="false">
-                    <div class="label-list-view"
-                        style="border-bottom: 1px solid #f0f0f0;
-                               display :flex;
-                               justify-content:space-between;
-                               padding: 12px 15px;
-                               flex: 1;">
-                        <span ng-class="{'active' : self.selectionType === 'family-group'}"
-                            ng-click="self.selectionType='family-group'" class="button-with-lable"
-                            style="margin-right: 10px;">FAMILY GROUP</span>
-                        <span ng-class="{'active' : self.selectionType === 'family'}"
-                            ng-click="self.selectionType='family'" class="button-with-lable"
-                            style="margin-right: 10px;">FAMILY</span>
-                        <span ng-class="{'active' : self.selectionType === 'curve'}"
-                            ng-click="self.selectionType='curve'" class="button-with-lable">CURVE</span>
+                <side-bar my-default-width="350" orientation="w" collapsed="false">
+
+                    <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;
+                        display :flex;
+                        justify-content: space-between;
+                        padding: 8px 15px;">
+                        <span ng-class="{'active' : self.selectionType === 'Wells'}"
+                            ng-click="setTab(1); self.selectionType='Wells'" class="tab-with-lable"
+                            style="margin-right: 8px;">Wells</span>
+                        <span ng-class="{'active' : self.selectionType === 'Zone'}"
+                            ng-click="setTab(2); self.selectionType='Zone'" class="tab-with-lable"
+                            style="margin-right: 8px;">Zone</span>
+                        <span ng-class="{'active' : self.selectionType === 'Config'}"
+                            ng-click="setTab(3); self.selectionType='Config'" class="tab-with-lable"
+                            style="margin-right: 8px;">Config</span>
+                        <span ng-class="{'active' : self.selectionType === 'Statistics'}"
+                            ng-click="setTab(4); self.selectionType='Statistics'"
+                            class="tab-with-lable">Statistics</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; height: 100%;">
-                        <div style=" display: flex;flex: 1;flex-direction: column; overflow: hidden; margin-bottom: 20px;">
-                            <div class="lable-option-sidebar">
-                                <span>INPUT</span>
-                            </div>
-                            <div class="lable-option-sidebar">
-                                <div class="selection-sidebar">
-                                    <span>X-Axis</span>
-                                    <input ng-model="self.filter" class="input-suggestions" placeholder="Select well..." list="suggestions">
-                                    <datalist id="suggestions">
-                                        <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
-                                            value="{{item.name}}">
-                                        </option>
-                                    </datalist>
-                                </div>
-                            </div>
 
-                            <div onmouseover='this.style.overflow="auto"' onmouseout='this.style.overflow="hidden"'>
-                                <wi-tree-view tree-root="self.treeConfig" 
-                                    get-label="self.getLabel"
-                                    filter="self.filter"
-                                    get-icon="self.getIcon"
-                                    get-children="self.getChildren"
-                                    keep-children='true'
-                                    uncollapsible='true'
-                                    run-match="self.runMatch"
-                                    hide-unmatched="true"
-                                    hide-search='false'
-                                    click-fn='self.clickFunction'>
-                                </wi-tree-view>
-                            </div>
-
-
+                    <div ng-show="isSet(1)" style="overflow: auto;">
+                        <div class="lable-option-sidebar">
+                            <span>INPUT</span>
                         </div>
-                        <div style="border-bottom: 1px solid #eee;"></div>
-                        <div style=" display: flex;flex: 1;flex-direction: column; overflow: hidden; ">
-                            <div class="lable-option-sidebar">
-                                <span>INPUT</span>
-                            </div>
-                            <div class="lable-option-sidebar">
-                                <div class="selection-sidebar">
-                                    <span>X-Axis</span>
-                                    <input class="input-suggestions" placeholder="Select well..." list="suggestions">
-                                    <datalist id="suggestions">
-                                        <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
-                                            value="{{item.name}}">
-                                        </option>
-                                    </datalist>
-                                </div>
-                            </div>
-                            <div onmouseover="this.style.overflow='overlay'" 
-                                    onmouseout="this.style.overflow='hidden'">
-                                <div style="padding: 0 7px;">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Firstname</th>
-                                                <th>Lastname</th>
-                                                <th>Savings</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="overflow: auto;">
-                                            <tr>
-                                                <td>Peter</td>
-                                                <td>Griffin</td>
-                                                <td>$100</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <div class="lable-option-sidebar">
+                            <div class="selection-sidebar">
+                                <span>X-Axis</span>
+                                <input ng-model="self.filter" class="input-suggestions" placeholder="Select well..."
+                                    list="suggestions">
+                                <datalist id="suggestions">
+                                    <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
+                                        value="{{item.name}}">
+                                    </option>
+                                </datalist>
                             </div>
                         </div>
+                        <div style="border: 1px solid #eee; margin: 5px 15px;">
+                                <wi-tree-view tree-root="self.treeConfig" get-label="self.getLabel" filter="self.filter"
+                                get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'
+                                uncollapsible='true' run-match="self.runMatch" hide-unmatched="false" hide-search='true'
+                                click-fn='self.clickFunction'>
+    
+                            </wi-tree-view>
+                        </div>
+                        
+                    </div>
+                    <div ng-show="isSet(2)" style="overflow: hidden;">
+                        <div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'">
+                            <div style="padding: 0 7px;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Firstname</th>
+                                            <th>Lastname</th>
+                                            <th>Savings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="overflow: auto;">
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="isSet(3)" style="overflow: hidden;">
+                        3
+                    </div>
+                    <div ng-show="isSet(4)" style="overflow: hidden;">
+                        4
                     </div>
                 </side-bar>
             </div>
