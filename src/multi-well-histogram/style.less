@@ -350,7 +350,7 @@ side-bar>div div.content {
 wi-droppable {
     height: 100%;
 }
-
+/*
 wi-tree-node {
     &>div {
         cursor      : default;
@@ -451,4 +451,22 @@ wi-tree-node {
         }
     }
 
+}
+*/
+wi-tree-node {
+    .node-content {
+        &,
+        &::after {
+            line-height: 3em;
+        }
+        /*
+        &.selected {
+            background: linear-gradient(to left, #f0f0f0, #fff);
+
+            &::after {
+                background-color: #0077be;
+                line-height     : 3em;
+            }
+        }*/
+    }
 }
