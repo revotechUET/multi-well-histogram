@@ -65,8 +65,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             getSelectionList(self.selectionType, self.treeConfig);
         })
         self.wells = self.wells || [];
-        self.selectionType = self.selectionType || 'curve';
-        self.tabName = self.tabName || 'Wells';
+        self.selectionTab = self.selectionTab || 'Wells';
+        self.selectionType = self.selectionType || 'family-group';
         if (self.token)
             wiToken.setToken(self.token);
         // getTree();
