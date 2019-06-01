@@ -51,8 +51,8 @@
                                     <span>X-Axis</span>
                                     <input ng-model="self.filter" class="input-suggestions" placeholder="Select well..." list="suggestions">
                                     <datalist id="suggestions">
-                                        <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
-                                            value="{{item.name}}">
+                                        <option ng-repeat="item in self.selectionList"
+                                            value="{{item}}">
                                         </option>
                                     </datalist>
                                 </div>
