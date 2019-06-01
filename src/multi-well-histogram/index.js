@@ -26,6 +26,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     //--------------
     $scope.tab = 1;
+    self.selectionTab = self.selectionTab || 'Wells';
 
     $scope.setTab = function(newTab){
       $scope.tab = newTab;
@@ -65,7 +66,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             getSelectionList(self.selectionType, self.treeConfig);
         })
         self.wells = self.wells || [];
-        self.selectionTab = self.selectionTab || 'Wells';
         self.selectionType = self.selectionType || 'family-group';
         if (self.token)
             wiToken.setToken(self.token);

@@ -4,26 +4,23 @@
             <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
                 <span>WELL LIST</span>
             </div>
-            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1, position: 'relative'}">
+            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop"
+                container-style="{display:'flex',flex: 1, position: 'relative'}">
                 <layer-collection padding="50">
-                    <axis-layer min-val="0" max-val="100" 
-                                n-ticks="2" minor-ticks="10" 
-                                precision="4" grid="true" loga="true"
-                                placement="1"></axis-layer>
-                    <axis-layer min-val="0" max-val="10" 
-                                n-ticks="10" minor-ticks="10" 
-                                precision="4" grid="1"
-                                axis-direction="'up'"
-                                placement="0"></axis-layer>
-                    <axis-layer min-val="0" max-val="100" 
-                                n-ticks="10" minor-ticks="10" 
-                                precision="4" grid="1"
-                                axis-direction="'up'"
-                                placement="1"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" n-ticks="2" minor-ticks="10" precision="4" grid="true"
+                        loga="true" placement="1"></axis-layer>
+                    <axis-layer min-val="0" max-val="10" n-ticks="10" minor-ticks="10" precision="4" grid="1"
+                        axis-direction="'up'" placement="0"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="10" precision="4" grid="1"
+                        axis-direction="'up'" placement="1"></axis-layer>
                 </layer-collection>
                 <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.filter}}</p>
-                <p style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">Frequence</p>
-                <p style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">Percentage (%)</p>
+                <p
+                    style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">
+                    Frequence</p>
+                <p
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">
+                    Percentage (%)</p>
             </wi-droppable>
             <div style="position: absolute; height: 100%; right: 0; border-left: 1px solid #eee;">
                 <side-bar my-default-width="350" orientation="w" collapsed="false">
@@ -48,7 +45,7 @@
 
                     <div ng-show="isSet(1)" style="overflow: auto;">
                         <div class="lable-option-sidebar"
-                            style="padding: 25px 16px; display: flex; justify-content: space-between;">
+                            style="padding: 23px 16px 16px 16px; display: flex; justify-content: space-between;">
                             <span>INPUT</span>
                             <div>
                                 <span ng-class="{'active' : self.selectionType === 'family-group'}"
@@ -58,8 +55,7 @@
                                     ng-click="self.selectionType='family'" class="button-with-lable"
                                     style="margin-right: 8px;">family</span>
                                 <span ng-class="{'active' : self.selectionType === 'Curve'}"
-                                    ng-click="self.selectionType='Curve'" class="button-with-lable"
-                                    style="margin-right: 8px;">Curve</span>
+                                    ng-click="self.selectionType='Curve'" class="button-with-lable">Curve</span>
                             </div>
 
                         </div>
@@ -69,8 +65,7 @@
                                 <input ng-model="self.filter" class="input-suggestions" placeholder="Select well..."
                                     list="suggestions">
                                 <datalist id="suggestions">
-                                    <option ng-repeat="item in self.selectionList"
-                                        value="{{item}}">
+                                    <option ng-repeat="item in self.selectionList" value="{{item}}">
                                     </option>
                                 </datalist>
                             </div>
@@ -137,9 +132,45 @@
 
                             </div>
                         </div>
+                        <div class="lable-option-sidebar" style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.selectConfigLogs}"
+                                    ng-click="self.selectConfigLogs = !self.selectConfigLogs" class="button-with-lable"
+                                    style="margin-right: 8px;">Logs</span>
+                                <span ng-class="{'active' : self.selectConfigSG}"
+                                    ng-click="self.selectConfigSG = !self.selectConfigSG" class="button-with-lable"
+                                    style="margin-right: 8px;">Show Grid</span>
+                                <span ng-class="{'active' : self.selectConfigFH}"
+                                    ng-click="self.selectConfigFH = !self.selectConfigFH" class="button-with-lable">Flip
+                                    Horizontally</span>
+                            </div>
+                        </div>
+                        <div class="lable-option-sidebar"
+                            style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.selectConfig === 'option1'}"
+                                    ng-click="self.selectConfig='option1'" class="button-with-lable"
+                                    style="margin-right: 8px;"> Frequency count</span>
+                                <span ng-class="{'active' : self.selectConfig === 'option2'}"
+                                    ng-click="self.selectConfig='option2'" class="button-with-lable">Percentile</span>
+                            </div>
+
+                        </div>
+                        <div class="lable-option-sidebar"
+                            style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.selectConfig2 === 'option3'}"
+                                    ng-click="self.selectConfig2='option3'" class="button-with-lable"
+                                    style="margin-right: 8px;">  Interval Depth</span>
+                                <span ng-class="{'active' : self.selectConfig2 === 'option4'}"
+                                    ng-click="self.selectConfig2='option4'" class="button-with-lable">Zonal Depth</span>
+                            </div>
+
+                        </div>
                     </div>
-                    <div ng-show="isSet(4)" style="overflow: hidden;">
-                        <div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'">
+                    <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
+                        onmouseout="this.style.overflow='hidden'">
+                        <div>
                             <div style="padding: 0 7px;">
                                 <table>
                                     <thead>
@@ -155,6 +186,109 @@
                                             <td>Griffin</td>
                                             <td>$100</td>
                                         </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$8888</td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
