@@ -23,6 +23,19 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
+
+    //--------------
+    $scope.tab = 1;
+
+    $scope.setTab = function(newTab){
+      $scope.tab = newTab;
+    };
+
+    $scope.isSet = function(tabNum){
+      return $scope.tab === tabNum;
+    };
+
+    //--------------
     this.getDataset = function(well) {
         wiApi.getWellPromise(well.idWell).then((well) => {
             self.datasets[well] = well.datasets;
@@ -52,7 +65,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             getSelectionList(self.selectionType, self.treeConfig);
         })
         self.wells = self.wells || [];
-        self.selectionType = self.selectionType || 'family-group';
+        self.selectionType = self.selectionType || 'Wells';
         if (self.token)
             wiToken.setToken(self.token);
         // getTree();
@@ -89,9 +102,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.selectionList = Object.keys(selectionHash);
                 break;
         }
-
     }
-
 
     this.runMatch = function (node, criteria) {
         return node.name.includes(criteria);
@@ -154,5 +165,5 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     function isWell(node) {
         return true;
     }
-
+  
 }

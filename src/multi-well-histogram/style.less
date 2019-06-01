@@ -1,6 +1,5 @@
 multi-well-histogram {
 
-
     .image-holder {
         position        : absolute;
         width           : 200px;
@@ -174,7 +173,24 @@ multi-well-histogram {
                 background   : #fff;
                 color        : #0077be;
                 border       : 1px solid #0077be;
-                border-radius: 20px;
+                transition   : all 0.2s ease-in;
+            }
+        }
+        .tab-with-lable {
+            cursor       : pointer;
+            background   : #f4f4f4;
+            font-size    : 12px;
+            padding      : 7px 10px;
+            border       : 1px solid #e4e4e4;
+            border-radius: 2px;
+            transition   : all 0.2s ease-in;
+            flex: 1;
+            text-align: center;
+
+            &.active {
+                background   : #fff;
+                color        : #0077be;
+                border       : 1px solid #0077be;
                 transition   : all 0.2s ease-in;
             }
         }
@@ -257,9 +273,9 @@ multi-well-histogram {
         width          : 100%;
         user-select    : none;
 
-        
+
     }
-    
+
     table th {
         position: sticky;
         top     : 0;
@@ -350,7 +366,7 @@ side-bar>div div.content {
 wi-droppable {
     height: 100%;
 }
-/*
+
 wi-tree-node {
     &>div {
         cursor      : default;
@@ -451,22 +467,4 @@ wi-tree-node {
         }
     }
 
-}
-*/
-wi-tree-node {
-    .node-content {
-        &,
-        &::after {
-            line-height: 3em;
-        }
-        /*
-        &.selected {
-            background: linear-gradient(to left, #f0f0f0, #fff);
-
-            &::after {
-                background-color: #0077be;
-                line-height     : 3em;
-            }
-        }*/
-    }
 }
