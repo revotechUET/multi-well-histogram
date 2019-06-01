@@ -106,7 +106,21 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
 
     this.runMatch = function (node, criteria) {
-        return node.name.includes(criteria);
+        let family;
+        switch(self.selectionType) {
+            case 'family-group': 
+                family = wiApi.getFamily(node.idFamily);
+                if (!family) return null;
+                return family.familyGroup.trim().toLowerCase() === criteria.trim().toLowerCase();
+            
+            case 'family': 
+                family = wiApi.getFamily(node.idFamily);
+                if (!family) return null;
+                return family.name.trim().toLowerCase() === criteria.trim().toLowerCase();
+            
+            case 'curve':
+                return node.name.trim().toLowerCase() === criteria.trim().toLowerCase();
+        }
     }
     this.getLabel = function (node) {
         return node.name;
