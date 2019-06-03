@@ -96,7 +96,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.curveNames = self.curveNames || [];
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone'};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5};
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -288,6 +288,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.runLayerMatch = function (node, criteria) {
         return node.name.includes(criteria);
     }
+    let _layerTree = [];
+    this.getLayerTree = function() {
+        if(self.getStackMode() === 'all') {
+            _layerTree[0] = self.histogramList;
+            return _layerTree;
+        }
+        return self.histogramList;
+    }
     this.getLayerLabel = (node) => node.name
     this.getLayerIcon = (node) => ( (node && !node._notUsed) ? 'layer-16x16': 'fa fa-eye-slash' )
     this.getConfigLeft = function() {
@@ -342,14 +350,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.histogramList = [];
     this.genHistogramList = async function() {
         this.histogramList.length = 0;
+        let allHistogramList = []
         _histogramGen = null;
         try {
-            let max = 0;
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
                 let curve = getCurve(well, self.wellSpec[i]);
                 if (!curve) {
-                    self.histogramList.push([]);
+                    allHistogramList.push([]);
                     continue;
                 }
                 let datasetTop = self.wellSpec[i].datasetTop;
@@ -371,26 +379,66 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     });
                     return !z._notUsed;
                 });
+                let wellHistogramList = [];
                 for (let j = 0; j < zones.length; j++) {
                     let zone = zones[j];
                     let dataArray = filterData(curveData, zone);
                     let bins = genBins(dataArray);
-                    let maybeMax = d3.max(bins.map(b => b.length));
-                    max = (max > maybeMax) ? max : maybeMax;
                     bins.color = self.getColor(zone, well);
                     bins.name = `${well.name}.${zone.zone_template.name}`;
-                    self.histogramList.push(bins);
+                    wellHistogramList.push(bins);
                 }
+                if (self.getStackMode() === 'well') {
+                    wellHistogramList.name = well.name;
+                    allHistogramList.push(wellHistogramList);
+                }
+                else allHistogramList.push(...wellHistogramList);
+            }
+            allHistogramList.name = 'All';
+            let max = 0;
+            switch(self.getStackMode()) {
+                case 'none':
+                    for (let bins of allHistogramList) {
+                        let maybeMax = d3.max(bins.map(b => b.length));
+                        max = (max > maybeMax) ? max : maybeMax;
+                    }
+                    break;
+                case 'well':
+                {
+                    for (let groupOfBins of allHistogramList) {
+                        let aggregate = aggregateHistogramList(groupOfBins);
+                        let maybeMax = d3.max(aggregate);
+                        max = (max > maybeMax) ? max : maybeMax;
+                    }
+                }
+                break;
+                case 'all': 
+                {
+                    let aggregate = aggregateHistogramList(allHistogramList);
+                    max = d3.max(aggregate);
+                }
+                break;
+                    
             }
             $timeout(() => {
                 self.minY = 0;
                 self.maxY = max;
+                self.histogramList = allHistogramList;
             });
         }
         catch(e) {
             console.error(e);
         }
         console.log('end');
+    }
+    function aggregateHistogramList(histogramList) {
+        let aggregate = [];
+        for (let bins of histogramList) {
+            for (let j = 0; j < bins.length; j++) {
+                aggregate[j] = ((aggregate[j] || 0) + bins[j].length);
+            }
+        }
+        return aggregate;
     }
     function genZonationAllZS(top, bottom, color = 'blue') {
         return {
@@ -446,10 +494,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return cMode === 'zone' ? zone.zone_template.background:(cMode === 'well'?well.color:'blue');
     }
     this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
+    this.getStackMode = () => (self.config.stackMode || self.defaultConfig.stackMode || 'none')
+    this.getBinGap = () => (self.config.binGap || self.defaultConfig.binGap)
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)
 
     this.colorFn = function(bin, bins) {
+        if (self.getStackMode() === 'none');
         return bins.color;
     }
 
