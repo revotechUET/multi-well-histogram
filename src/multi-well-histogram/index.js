@@ -28,7 +28,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
-
+    self.statisticHeaders = ['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
+    self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
     $scope.tab = 4;
     self.selectionTab = self.selectionTab || 'Stats';
@@ -471,6 +472,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             default: 
                 return "this default";
         }
+    }
+    let _headers = [];
+    self.getHeaders = function (){
+        _headers.length = 0;
+        Object.assign(_headers, self.statisticHeaders.filter((item, idx) => self.statisticHeaderMasks[idx]));
+        return _headers;
     }
   
 }
