@@ -257,7 +257,22 @@ multi-well-histogram {
             margin        : 2px 5px 0 15px;
             pointer-events: none;
         }
-
+        .button-with-lable-layer {
+            cursor       : pointer;
+            background   : #f4f4f4;
+            font-size    : 10px;
+            padding      : 5px 7px;
+            margin-left: 5px;
+            border       : 1px solid #e4e4e4;
+            border-radius: 2px;
+            transition   : all 0.2s ease-in;
+            &:hover {
+                background: #fff;
+                color     : #0077be;
+                border    : 1px solid #0077be;
+                transition: all 0.2s ease-in;
+            }
+        }
         .button-with-lable {
             cursor       : pointer;
             background   : #f4f4f4;
