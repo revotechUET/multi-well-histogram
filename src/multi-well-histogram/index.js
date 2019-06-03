@@ -95,7 +95,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.curveNames = self.curveNames || [];
-        self.config = self.config || {grid:true, displayMode: 'line'};
+        self.config = self.config || {grid:true, displayMode: 'line', colorMode: 'zone'};
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -261,6 +261,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
         self.zoneTree = (selectedItemProps || {}).zones;
+        self.zonesetName = (selectedItemProps || {}).name || 'ZonationAll';
     }
     this.runZoneMatch = function (node, criteria) {
         return true;
@@ -392,6 +393,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     function genZonationAllZS(top, bottom, color = 'blue') {
         return {
+            name: 'ZonationAll',
             zones: [{
                 startDepth: top,
                 endDepth: bottom,

@@ -309,7 +309,7 @@
                     <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
                         onmouseout="this.style.overflow='hidden'" style="flex:1">
                         <div>
-                            <wi-table-view ng-if="self.histogramList.length" row-count="4" col-count="15"
+                            <wi-table-view ng-if="self.histogramList.length" row-count="self.getZoneNames().length" col-count="15"
                                 col-headers="['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', '10', 'p50', 'p90']"
                                 row-headers="self.getZoneNames()" accessor="self.statsValue">
                             </wi-table-view>
