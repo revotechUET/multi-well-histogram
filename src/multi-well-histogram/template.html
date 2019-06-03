@@ -26,7 +26,8 @@
                     <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4" 
                         grid="!!self.config.grid"
                         axis-direction="'up'" placement="1"></axis-layer>
-                    <canvas-barchart-layer ng-repeat="bins in self.histogramList" 
+                    <canvas-barchart-layer ng-if="self.getDisplayMode() === 'bar'"
+                        ng-repeat="bins in self.histogramList" 
                         min-val="self.getLeft()" 
                         max-val="self.getRight()" 
                         min-y='self.minY || 0'
@@ -35,6 +36,17 @@
                         autofit='false'
                         bins="bins" bin-gap="10" color-func="self.colorFn">
                     </canvas-barchart-layer>
+                    <line-point-layer ng-if="self.getDisplayMode() === 'line'" 
+                        ng-repeat="bins in self.histogramList" 
+                        min-val="self.getLeft()"
+                        max-val="self.getRight()"
+                        min-y='self.minY || 0'
+                        max-y='self.maxY || 100'
+                        loga="self.getLoga()" 
+                        autofit='false' get-x='self.getBinX' get-y='self.getBinY'
+                        line-data="bins" line-color="bins.color" line-width='2' line-dash="'2 0'"
+                        color-func="self.colorFn">
+                    </line-point-layer>
                 </layer-collection>
                 <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}</p>
                 <p
@@ -63,6 +75,9 @@
                         <span ng-class="{'active' : isSet(4)}"
                             ng-click="setTab(4)"
                             class="tab-with-lable">Statistics</span>
+                        <span ng-class="{'active' : isSet(5)}"
+                            ng-click="setTab(5)"
+                            class="tab-with-lable">Layers</span>
                     </div>
 
                     <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
@@ -139,12 +154,12 @@
                                 get-label="self.getZoneLabel" 
                                 filter="self.zoneFilter"
                                 get-icon="self.getZoneIcon" 
-                                get-children="self.getZoneChildren" 
+                                get-children="self.noChildren" 
                                 keep-children='true'
                                 run-match="self.runZoneMatch" 
                                 hide-unmatched="true" 
                                 hide-search='false'
-                                click-fn='self.clickZoneFunction'>
+                                click-fn='self.click2Toggle'>
                             </wi-tree-view>
                         </div>
                         <div ng-hide="self.zoneTree" style="border: 1px solid #e4e4e4; margin: 5px 15px;">
@@ -270,6 +285,24 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                    <div ng-show="isSet(5)" style="flex:1">
+                        <div class="lable-option-sidebar">
+                            <span>Zones</span>
+                        </div>
+                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 5px 15px;">
+                            <wi-tree-view tree-root="self.histogramList" 
+                                get-label="self.getLayerLabel" 
+                                filter="self.layerFilter"
+                                get-icon="self.getLayerIcon" 
+                                get-children="self.noChildren" 
+                                keep-children='true'
+                                run-match="self.runLayerMatch" 
+                                hide-unmatched="true" 
+                                hide-search='false'
+                                click-fn='self.click2Toggle'>
+                            </wi-tree-view>
                         </div>
                     </div>
                     <div style="display: flex;">

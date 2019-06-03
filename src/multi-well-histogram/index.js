@@ -96,7 +96,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.curveNames = self.curveNames || [];
-        self.config = self.config || {grid:true};
+        self.config = self.config || {grid:true, displayMode: 'line'};
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -273,13 +273,22 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return (node && !node._notUsed) ? 'zone-16x16': 'fa fa-times-circle'
     }
     const EMPTY_ARRAY = []
-    this.getZoneChildren = function (node) {
+    this.noChildren = function (node) {
         return EMPTY_ARRAY;
     }
-    this.clickZoneFunction = function ($event, node, selectedObjs) {
+    this.click2Toggle = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
     }
     
+    this.runLayerMatch = function (node, criteria) {
+        return node.name.includes(criteria);
+    }
+    this.getLayerLabel = function (node) {
+        return node.name;
+    }
+    this.getLayerIcon = function (node) {
+        return (node && !node._notUsed) ? 'zone-16x16': 'fa fa-times-circle'
+    }
     this.getConfigLeft = function() {
         self.config = self.config || {};
         return isNaN(self.config.left) ? "[empty]": wiApi.bestNumberFormat(self.config.left, 3);
@@ -368,6 +377,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let maybeMax = d3.max(bins.map(b => b.length));
                     max = (max > maybeMax) ? max : maybeMax;
                     bins.color = self.getColorMode() === 'zone' ? zone.zone_template.background:well.color;
+                    bins.name = `${well.name}.${zone.zone_template.name}`;
                     self.histogramList.push(bins);
                 }
             }
@@ -429,6 +439,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 10)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
+    this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
+    this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
+    this.getBinY = (bin) => (bin.length)
 
     this.colorFn = function(bin, bins) {
         return bins.color;
