@@ -288,7 +288,24 @@
                         </div>
                     </div>
                     <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
-                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 5px 15px; overflow: auto;">
+                        
+                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
+                            <div class="lable-option-sidebar"
+                            style="padding: 23px 16px 16px 16px; display: flex; justify-content: space-between;">
+                            <span>INPUT</span>
+                            <div>
+                                <span ng-class="{'active' : self.selectionType === 'family-group'}"
+                                    ng-click="self.selectionType='family-group'" class="button-with-lable"
+                                    style="margin-right: 8px;">family-group</span>
+                                <span ng-class="{'active' : self.selectionType === 'family'}"
+                                    ng-click="self.selectionType='family'" class="button-with-lable"
+                                    style="margin-right: 8px;">family</span>
+                                <span ng-class="{'active' : self.selectionType === 'curve'}"
+                                    ng-click="self.selectionType='curve'" class="button-with-lable"
+                                    style="margin-right: 8px;">curve</span>
+                            </div>
+
+                        </div>
                             <wi-tree-view tree-root="self.histogramList" 
                                 get-label="self.getLayerLabel" 
                                 filter="self.layerFilter"
