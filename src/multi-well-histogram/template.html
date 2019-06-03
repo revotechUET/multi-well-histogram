@@ -9,46 +9,28 @@
             <wi-droppable style="display:flex;    width: 100%;;" on-drop="self.onDrop"
                 container-style="{display:'flex',flex: 1, position: 'relative'}">
                 <layer-collection v-padding="50" h-padding='100'>
-                    <axis-layer min-val="self.getLeft()" 
-                        max-val="self.config.right || self.defaultConfig.right || 1" 
-                        loga="self.getLoga()" 
-                        n-ticks="self.config.majorTicks || 10" 
-                        minor-ticks="self.config.minorTicks || 1" 
-                        precision="4" 
-                        grid="!!self.config.grid"
-                        placement="1"></axis-layer>
-                    <axis-layer 
-                        min-val='self.minY || 0'
-                        max-val='self.maxY || 100'
-                        n-ticks="10" minor-ticks="1" precision="4" 
-                        grid="!!self.config.grid"
-                        axis-direction="'up'" placement="0"></axis-layer>
-                    <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4" 
-                        grid="!!self.config.grid"
-                        axis-direction="'up'" placement="1"></axis-layer>
+                    <axis-layer min-val="self.getLeft()" max-val="self.config.right || self.defaultConfig.right || 1"
+                        loga="self.getLoga()" n-ticks="self.config.majorTicks || 10"
+                        minor-ticks="self.config.minorTicks || 1" precision="4" grid="!!self.config.grid" placement="1">
+                    </axis-layer>
+                    <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
+                        precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
+                        grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
                     <canvas-barchart-layer ng-if="self.getDisplayMode() === 'bar' && !bins._notUsed"
-                        ng-repeat="bins in self.histogramList"
-                        min-val="self.getLeft()" 
-                        max-val="self.getRight()" 
-                        min-y='self.minY || 0'
-                        max-y='self.maxY || 100'
-                        loga="self.getLoga()" 
-                        autofit='false'
+                        ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                        min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
                         bins="bins" bin-gap="10" color-func="self.colorFn">
                     </canvas-barchart-layer>
-                    <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed" 
-                        ng-repeat="bins in self.histogramList" 
-                        min-val="self.getLeft()"
-                        max-val="self.getRight()"
-                        min-y='self.minY || 0'
-                        max-y='self.maxY || 100'
-                        loga="self.getLoga()" 
-                        autofit='false' get-x='self.getBinX' get-y='self.getBinY'
-                        line-data="bins" line-color="bins.color" line-width='2' line-dash="'2 0'"
-                        color-func="self.colorFn">
+                    <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
+                        ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                        min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                        get-x='self.getBinX' get-y='self.getBinY' line-data="bins" line-color="bins.color"
+                        line-width='2' line-dash="'2 0'" color-func="self.colorFn">
                     </line-point-layer>
                 </layer-collection>
-                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}</p>
+                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}
+                </p>
                 <p
                     style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">
                     Frequence</p>
@@ -63,26 +45,19 @@
                         display :flex;
                         justify-content: space-between;
                         padding: 8px 15px;">
-                        <span ng-class="{'active' : isSet(1)}"
-                            ng-click="setTab(1)" class="tab-with-lable"
+                        <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-lable"
                             style="margin-right: 8px;">Wells</span>
-                        <span ng-class="{'active' : isSet(2)}"
-                            ng-click="setTab(2)" class="tab-with-lable"
+                        <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-lable"
                             style="margin-right: 8px;">Zone</span>
-                        <span ng-class="{'active' : isSet(3)}"
-                            ng-click="setTab(3)" class="tab-with-lable"
+                        <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-lable"
                             style="margin-right: 8px;">Config</span>
-                        <span ng-class="{'active' : isSet(4)}"
-                            ng-click="setTab(4)"
-                            class="tab-with-lable">Stats</span>
-                        <span ng-class="{'active' : isSet(5)}"
-                            ng-click="setTab(5)"
-                            class="tab-with-lable">Layers</span>
+                        <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-lable">Stats</span>
+                        <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-lable">Layers</span>
                     </div>
 
                     <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
                         <div class="lable-option-sidebar"
-                            style="padding: 23px 16px 16px 16px; display: flex; justify-content: space-between;">
+                            style="margin-top: 10px; display: flex; justify-content: space-between;">
                             <span>INPUT</span>
                             <div>
                                 <span ng-class="{'active' : self.selectionType === 'family-group'}"
@@ -100,25 +75,16 @@
                         <div class="lable-option-sidebar">
                             <div class="selection-sidebar">
                                 <span>X-Axis</span>
-                                <wi-dropdown-list 
-                                    style="flex:1; margin-left: 10px;"
-                                    items='self.selectionList'
-                                    current-select="self.selectionValue"
-                                    on-item-changed="self.onInputSelectionChanged">
+                                <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.selectionList'
+                                    current-select="self.selectionValue" on-item-changed="self.onInputSelectionChanged">
                                 </wi-dropdown-list>
                             </div>
                         </div>
-                        <div style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto;" ng-repeat='well in self.treeConfig'>
-                            <wi-tree-view tree-root="well" 
-                                get-label="self.getLabel" 
-                                filter="self.selectionValue"
-                                get-icon="self.getIcon" 
-                                get-children="self.getChildren" 
-                                keep-children='true'
-                                uncollapsible='true' 
-                                run-match="self.runMatch" 
-                                hide-unmatched="true" 
-                                hide-search='true'
+                        <div style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto;"
+                            ng-repeat='well in self.treeConfig'>
+                            <wi-tree-view tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
+                                get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'
+                                uncollapsible='true' run-match="self.runMatch" hide-unmatched="true" hide-search='true'
                                 click-fn='self.clickFunction'>
                                 <div style="border-bottom: 1px solid #e4e4e4;
                                 display: flex;
@@ -130,8 +96,10 @@
                                 text-align: center;">
                                     <div ng-bind="well.name"></div>
                                     <div style="display: flex;">
-                                        <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;" ng-bind="self.wellSpec[$index].datasetName"></div>
-                                        <div style="border-radius: 2px;padding: 1px 10px;" ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
+                                        <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
+                                            ng-bind="self.wellSpec[$index].datasetName"></div>
+                                        <div style="border-radius: 2px;padding: 1px 10px;"
+                                            ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
                                     </div>
                                 </div>
                             </wi-tree-view>
@@ -141,25 +109,17 @@
                         <div class="lable-option-sidebar">
                             <div class="selection-sidebar">
                                 <span>Zoneset</span>
-                                <wi-dropdown-list 
-                                    style="flex:1; margin-left: 10px;"
-                                    items='self.zonesetList'
-                                    current-select="self.zonesetName"
-                                    on-item-changed="self.onZonesetSelectionChanged">
+                                <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.zonesetList'
+                                    current-select="self.zonesetName" on-item-changed="self.onZonesetSelectionChanged">
                                 </wi-dropdown-list>
                             </div>
                         </div>
-                        <div ng-show="self.zoneTree" style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto; ">
-                            <wi-tree-view tree-root="self.zoneTree" 
-                                get-label="self.getZoneLabel" 
-                                filter="self.zoneFilter"
-                                get-icon="self.getZoneIcon" 
-                                get-children="self.noChildren" 
-                                keep-children='true'
-                                run-match="self.runZoneMatch" 
-                                hide-unmatched="true" 
-                                hide-search='false'
-                                click-fn='self.click2Toggle'>
+                        <div ng-show="self.zoneTree"
+                            style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto; ">
+                            <wi-tree-view tree-root="self.zoneTree" get-label="self.getZoneLabel"
+                                filter="self.zoneFilter" get-icon="self.getZoneIcon" get-children="self.noChildren"
+                                keep-children='true' run-match="self.runZoneMatch" hide-unmatched="true"
+                                hide-search='false' click-fn='self.click2Toggle'>
                             </wi-tree-view>
                         </div>
                         <div ng-hide="self.zoneTree" style="border: 1px solid #e4e4e4; margin: 5px 15px;">
@@ -167,155 +127,218 @@
                         </div>
 
                     </div>
-                    <div ng-show="isSet(3)" style="overflow: auto; flex: 1;">
-                        <div class="lable-option-sidebar">
+                    <div ng-show="isSet(3)" style="
+                    overflow: hidden;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;">
+                        <div class="lable-option-sidebar" style="margin-top: 10px;">
                             <span>OPTIONS</span>
                         </div>
-                        <div class="lable-option-sidebar">
-                            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
-                                    item-label="'Left'" item-value="self.getConfigLeft" 
-                                    set-value="self.setConfigLeft" enabled="true"
-                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
-                                </editable>
-                            </div>
-                            <div style="margin-bottom: 15px; "></div>
-                            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
-                                    item-label="'Right'" item-value="self.getConfigRight" 
-                                    set-value="self.setConfigRight" enabled="true"
-                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
-                                </editable>
-                            </div>
-                            <div style="margin-bottom: 15px; "></div>
+                        <div style="overflow: auto;">
+                            <div class="lable-option-sidebar">
+                                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                        item-label="'Left'" item-value="self.getConfigLeft"
+                                        set-value="self.setConfigLeft" enabled="true" label-style="{}"
+                                        content-style="{flex:1,float:'none','text-align':'right'}">
+                                    </editable>
+                                </div>
+                                <div style="margin-bottom: 15px; "></div>
+                                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                        item-label="'Right'" item-value="self.getConfigRight"
+                                        set-value="self.setConfigRight" enabled="true" label-style="{}"
+                                        content-style="{flex:1,float:'none','text-align':'right'}">
+                                    </editable>
+                                </div>
+                                <div style="margin-bottom: 15px; "></div>
 
-                            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
-                                    item-label="'Divisions'" item-value="self.getConfigDivisions" 
-                                    set-value="self.setConfigDivisions" enabled="true"
-                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
-                                </editable>
-                            </div>
-                            <div style="margin-bottom: 15px; "></div>
+                                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                        item-label="'Divisions'" item-value="self.getConfigDivisions"
+                                        set-value="self.setConfigDivisions" enabled="true" label-style="{}"
+                                        content-style="{flex:1,float:'none','text-align':'right'}">
+                                    </editable>
+                                </div>
+                                <div style="margin-bottom: 15px; "></div>
 
-                            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
-                                    item-label="'Title'" item-value="self.getConfigTitle" 
-                                    set-value="self.setConfigTitle" enabled="true"
-                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
-                                </editable>
+                                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                        item-label="'Title'" item-value="self.getConfigTitle"
+                                        set-value="self.setConfigTitle" enabled="true" label-style="{}"
+                                        content-style="{flex:1,float:'none','text-align':'right'}">
+                                    </editable>
+
+                                </div>
+                                <div style="margin-bottom: 15px; "></div>
+
+                                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                        item-label="'X Label'" item-value="self.getConfigXLabel"
+                                        set-value="self.setConfigXLabel" enabled="true" label-style="{}"
+                                        content-style="{flex:1,float:'none','text-align':'right'}">
+                                    </editable>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between;   flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Scale and Grid
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.config.loga}"
+                                        ng-click="self.config.loga = !self.config.loga" class="button-with-lable"
+                                        style="margin-right: 8px;">Log Scale</span>
+                                    <span ng-class="{'active' : self.config.grid}"
+                                        ng-click="self.config.grid = !self.config.grid" class="button-with-lable"
+                                        style="margin-right: 8px;">Show Grid</span>
+                                    <span ng-class="{'active' : self.config.flipHorizontal}"
+                                        ng-click="self.config.flipHorizontal = !self.config.flipHorizontal"
+                                        class="button-with-lable">Flip-H</span>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between; flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Display Mode
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span ng-class="{'active' : self.config.displayMode === 'bar'}"
+                                        ng-click="self.config.displayMode='bar'" class="button-with-lable"
+                                        style="margin-right: 8px;"> Bar Mode</span>
+                                    <span ng-class="{'active' : self.config.displayMode === 'line'}"
+                                        ng-click="self.config.displayMode='line'" class="button-with-lable">Line
+                                        Mode</span>
+                                </div>
 
                             </div>
-                            <div style="margin-bottom: 15px; "></div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between; flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Assistive Lines
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.config.showCumulative}"
+                                        ng-click="self.config.showCumulative = !self.config.showCumulative"
+                                        class="button-with-lable" style="margin-right: 8px;"> Show Cumulative</span>
+                                    <span ng-class="{'active' : self.config.showGaussian}"
+                                        ng-click="self.config.showGaussian = !self.config.showGaussian"
+                                        class="button-with-lable" style="margin-right: 8px;"> Show Gaussian</span>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between;  flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Color Mode
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.config.colorMode === 'zone'}"
+                                        ng-click="self.config.colorMode='zone'" class="button-with-lable"
+                                        style="margin-right: 8px;"> Zone Color</span>
+                                    <span ng-class="{'active' : self.config.colorMode === 'well'}"
+                                        style="margin-right: 8px;" ng-click="self.config.colorMode='well'"
+                                        class="button-with-lable">Well Color</span>
+                                    <span ng-class="{'active' : self.config.colorMode === 'user'}"
+                                        ng-click="self.config.colorMode='user'" class="button-with-lable">User
+                                        Defined</span>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between; flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Stack Mode
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.config.stackMode === 'none'}"
+                                        ng-click="self.config.stackMode='none'" class="button-with-lable"
+                                        style="margin-right: 8px;">No Stack</span>
+                                    <span ng-class="{'active' : self.config.stackMode === 'well'}"
+                                        style="margin-right: 8px;" ng-click="self.config.stackMode='well'"
+                                        class="button-with-lable">Well</span>
+                                    <span ng-class="{'active' : self.config.stackMode === 'all'}"
+                                        ng-click="self.config.stackMode='all'" class="button-with-lable">All</span>
+                                </div>
+                            </div>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between;  flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Histogram Mode
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.selectConfig === 'option1'}"
+                                        ng-click="self.selectConfig='option1'" class="button-with-lable"
+                                        style="margin-right: 8px;"> Frequency count</span>
+                                    <span ng-class="{'active' : self.selectConfig === 'option2'}"
+                                        ng-click="self.selectConfig='option2'"
+                                        class="button-with-lable">Percentile</span>
+                                </div>
 
-                            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
-                                    item-label="'X Label'" item-value="self.getConfigXLabel" 
-                                    set-value="self.setConfigXLabel" enabled="true"
-                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
-                                </editable>
                             </div>
-                        </div>
-                        <div class="lable-option-sidebar" style="padding: 20px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
-                            <div>
-                                <span ng-class="{'active' : self.config.loga}"
-                                    ng-click="self.config.loga = !self.config.loga" class="button-with-lable"
-                                    style="margin-right: 8px;">Log Scale</span>
-                                <span ng-class="{'active' : self.config.grid}"
-                                    ng-click="self.config.grid = !self.config.grid" class="button-with-lable"
-                                    style="margin-right: 8px;">Show Grid</span>
-                                <span ng-class="{'active' : self.config.flipHorizontal}"
-                                    ng-click="self.config.flipHorizontal = !self.config.flipHorizontal" 
-                                    class="button-with-lable">Flip Horizontally</span>
+                            <div class="lable-option-sidebar"
+                                style="padding: 20px 16px; display: flex; justify-content: space-between;  flex-direction: column;">
+                                <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Depth Limitation Mode
+                                    <div
+                                        style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                    </div>
+                                </div>
+                                <div>
+                                    <span ng-class="{'active' : self.selectConfig2 === 'option3'}"
+                                        ng-click="self.selectConfig2='option3'" class="button-with-lable"
+                                        style="margin-right: 8px;"> Interval Depth</span>
+                                    <span ng-class="{'active' : self.selectConfig2 === 'option4'}"
+                                        ng-click="self.selectConfig2='option4'" class="button-with-lable">Zonal
+                                        Depth</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="lable-option-sidebar"
-                        style="padding: 20px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
-                            <div>
-                                <span ng-class="{'active' : self.config.displayMode === 'bar'}"
-                                    ng-click="self.config.displayMode='bar'" class="button-with-lable"
-                                    style="margin-right: 8px;">  Bar Mode</span>
-                                <span ng-class="{'active' : self.config.displayMode === 'line'}"
-                                    ng-click="self.config.displayMode='line'" class="button-with-lable">Line Mode</span>
-                            </div>
-
-                        </div>
-                        <div class="lable-option-sidebar"
-                            style="padding: 20px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
-                            <div>
-                                <span ng-class="{'active' : self.selectConfig === 'option1'}"
-                                    ng-click="self.selectConfig='option1'" class="button-with-lable"
-                                    style="margin-right: 8px;"> Frequency count</span>
-                                <span ng-class="{'active' : self.selectConfig === 'option2'}"
-                                    ng-click="self.selectConfig='option2'" class="button-with-lable">Percentile</span>
-                            </div>
-
-                        </div>
-                        <div class="lable-option-sidebar"
-                            style="padding: 20px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
-                            <div>
-                                <span ng-class="{'active' : self.selectConfig2 === 'option3'}"
-                                    ng-click="self.selectConfig2='option3'" class="button-with-lable"
-                                    style="margin-right: 8px;">  Interval Depth</span>
-                                <span ng-class="{'active' : self.selectConfig2 === 'option4'}"
-                                    ng-click="self.selectConfig2='option4'" class="button-with-lable">Zonal Depth</span>
-                            </div>
-
                         </div>
                     </div>
                     <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
                         onmouseout="this.style.overflow='hidden'" style="flex:1">
                         <div>
-                            <div style="padding: 0 7px;">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Firstname</th>
-                                            <th>Lastname</th>
-                                            <th>Savings</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="overflow: auto;">
-                                        <tr>
-                                            <td>Peter</td>
-                                            <td>Griffin</td>
-                                            <td>$100</td>
-                                        </tr>
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
+                            <wi-table-view ng-if="self.histogramList.length" row-count="4" col-count="15"
+                                col-headers="['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', '10', 'p50', 'p90']"
+                                row-headers="self.getZoneNames()" accessor="self.statsValue">
+                            </wi-table-view>
                         </div>
                     </div>
                     <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
-                        
-                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
-                            <div class="lable-option-sidebar"
-                            style="padding: 23px 16px 16px 16px; display: flex; justify-content: space-between;">
-                            <span>INPUT</span>
-                            <div>
-                                <span ng-class="{'active' : self.selectionType === 'family-group'}"
-                                    ng-click="self.selectionType='family-group'" class="button-with-lable"
-                                    style="margin-right: 8px;">family-group</span>
-                                <span ng-class="{'active' : self.selectionType === 'family'}"
-                                    ng-click="self.selectionType='family'" class="button-with-lable"
-                                    style="margin-right: 8px;">family</span>
-                                <span ng-class="{'active' : self.selectionType === 'curve'}"
-                                    ng-click="self.selectionType='curve'" class="button-with-lable"
-                                    style="margin-right: 8px;">curve</span>
-                            </div>
 
-                        </div>
-                            <wi-tree-view tree-root="self.histogramList" 
-                                get-label="self.getLayerLabel" 
-                                filter="self.layerFilter"
-                                get-icon="self.getLayerIcon" 
-                                get-children="self.noChildren" 
-                                keep-children='true'
-                                run-match="self.runLayerMatch" 
-                                hide-unmatched="true" 
-                                hide-search='false'
-                                click-fn='self.click2Toggle'>
+                        <div ng-show="self.histogramList"
+                            style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
+                            <div class="lable-option-sidebar"
+                                style="margin-top: 10px; display: flex; justify-content: space-between;">
+                                <span>INPUT</span>
+                                <div>
+                                    <span ng-class="{'active' : self.selectionLayer === 'mark'}"
+                                        ng-click="self.selectionLayer='mark'" class="button-with-lable"
+                                        style="margin-right: 8px;">Mask</span>
+                                    <span ng-class="{'active' : self.selectionLayer === 'select-all'}"
+                                        ng-click="self.selectionLayer='select-all'" class="button-with-lable"
+                                        style="margin-right: 8px;">Select All</span>
+                                    <span ng-class="{'active' : self.selectionLayer === 'clear'}"
+                                        ng-click="self.selectionLayer='clear'" class="button-with-lable"
+                                        style="margin-right: 8px;">Clear All</span>
+                                </div>
+
+                            </div>
+                            <wi-tree-view tree-root="self.histogramList" get-label="self.getLayerLabel"
+                                filter="self.layerFilter" get-icon="self.getLayerIcon" get-children="self.noChildren"
+                                keep-children='true' run-match="self.runLayerMatch" hide-unmatched="true"
+                                hide-search='false' click-fn='self.click2Toggle'>
                             </wi-tree-view>
                         </div>
                     </div>

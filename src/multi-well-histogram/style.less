@@ -18,6 +18,9 @@ multi-well-histogram {
     }
 
     wi-dropdown-list {
+        &:focus {
+            outline: none !important;
+        }
 
         .ui-select-bootstrap>.ui-select-match>.btn {
             border    : none;
@@ -280,6 +283,7 @@ multi-well-histogram {
             border-bottom: 2px solid #f4f4f4;
             transition   : all 0.2s ease-in;
             flex         : 1;
+            font-weight: bold;
             text-align   : center;
 
             &.active {
@@ -294,9 +298,9 @@ multi-well-histogram {
             font-weight: bold;
             font-size: 12px;
             color: #646464;
-            position: sticky;
-            z-index: 1;
-            top: 0;
+            // position: sticky;
+            // z-index: 1;
+            // top: 0;
             background: #fff;
             padding: 11px 16px;
         }

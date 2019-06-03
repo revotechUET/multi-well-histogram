@@ -3,7 +3,7 @@ module.exports.name = componentName;
 require('./style.less');
 
 var app = angular.module(componentName, [
-    'sideBar', 'wiTreeView',
+    'sideBar', 'wiTreeView', 'wiTableView',
     'wiApi', 'editable', 'wiDialog', 'editable',
     'wiDroppable', 'wiDropdownList','plot-toolkit'
 ]);
@@ -29,10 +29,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.selectedNode = null;
     self.datasets = {};
 
-    window.MWHist = self;
     //--------------
-    $scope.tab = 1;
-    self.selectionTab = self.selectionTab || 'Wells';
+    $scope.tab = 4;
+    self.selectionTab = self.selectionTab || 'Stats';
 
     $scope.setTab = function(newTab){
       $scope.tab = newTab;
@@ -451,6 +450,27 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     function isWell(node) {
         return true;
+    }
+    let _zoneNames = []
+    self.getZoneNames = function() {
+        _zoneNames.length = 0;
+        Object.assign(_zoneNames, self.histogramList.map(bins => bins.name));
+        return _zoneNames;
+    }
+    self.statsValue = function ([row, col]) {
+        return "1";
+        switch(col){
+            case 0: 
+                return 'Hoang';
+            case 1: 
+                return 42;
+            case 2:
+                return 'CB';
+            case 3:
+                return 1;
+            default: 
+                return "this default";
+        }
     }
   
 }
