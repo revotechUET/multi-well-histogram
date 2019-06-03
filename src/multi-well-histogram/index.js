@@ -287,7 +287,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return node.name;
     }
     this.getLayerIcon = function (node) {
-        return (node && !node._notUsed) ? 'zone-16x16': 'fa fa-times-circle'
+        return (node && !node._notUsed) ? 'layer-16x16': 'fa fa-times-circle'
     }
     this.getConfigLeft = function() {
         self.config = self.config || {};

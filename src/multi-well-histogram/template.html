@@ -26,8 +26,8 @@
                     <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4" 
                         grid="!!self.config.grid"
                         axis-direction="'up'" placement="1"></axis-layer>
-                    <canvas-barchart-layer ng-if="self.getDisplayMode() === 'bar'"
-                        ng-repeat="bins in self.histogramList" 
+                    <canvas-barchart-layer ng-if="self.getDisplayMode() === 'bar' && !bins._notUsed"
+                        ng-repeat="bins in self.histogramList"
                         min-val="self.getLeft()" 
                         max-val="self.getRight()" 
                         min-y='self.minY || 0'
@@ -36,7 +36,7 @@
                         autofit='false'
                         bins="bins" bin-gap="10" color-func="self.colorFn">
                     </canvas-barchart-layer>
-                    <line-point-layer ng-if="self.getDisplayMode() === 'line'" 
+                    <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed" 
                         ng-repeat="bins in self.histogramList" 
                         min-val="self.getLeft()"
                         max-val="self.getRight()"
