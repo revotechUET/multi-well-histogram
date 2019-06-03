@@ -1,4 +1,97 @@
 multi-well-histogram {
+
+    /* change style special of wi-base-treeview for basemap */
+    wi-tree-view {
+        & div input {
+            width        : 100%;
+            line-height  : 1.4;
+            padding      : 10px 10px 10px 14px;
+            border       : none;
+            border-bottom: 1px solid #f0f0f0;
+            outline      : none;
+            box-sizing   : border-box;
+
+            &::placeholder {
+                color: #cecece;
+            }
+        }
+    }
+
+    wi-dropdown-list {
+
+        .ui-select-bootstrap>.ui-select-match>.btn {
+            border    : none;
+            box-shadow: none;
+            outline   : none;
+        }
+
+        .btn-default.focus,
+        .btn-default:focus {
+            color           : #333;
+            background-color: #fff;
+            border-color    : #fff;
+        }
+
+        .form-control {
+            border: none;
+        }
+
+        :focus {
+            outline: none;
+        }
+
+        .form-control:focus {
+            border    : none;
+            box-shadow: none;
+        }
+
+        .btn-default:hover {
+            color           : #333;
+            background-color: #fff;
+            border-color    : #fff;
+        }
+    }
+
+    side-bar>div div.content {
+        overflow-x     : hidden;
+        height         : 100%;
+        display        : flex;
+        overflow-y     : auto;
+        /* padding-left: 15px; */
+        flex-direction : column;
+    }
+
+    wi-droppable {
+        height: 100%;
+    }
+
+    wi-tree-node {
+
+        .node-caret,
+        .node-label,
+        .node-icon {
+            display      : flex;
+            padding-right: 10px;
+            font-size    : 12px;
+        }
+
+        .node-caret {
+            color    : #cccbcb;
+            font-size: 14px;
+            cursor   : pointer;
+            width    : 16px;
+        }
+
+        .node-content {
+
+            &,
+            &::after {
+                line-height: 3em;
+            }
+
+        }
+    }
+
     .ui-select-match-text {
         text-align: right;
     }
@@ -98,9 +191,20 @@ multi-well-histogram {
                 display       : flex;
                 height        : 100%;
                 position      : relative;
-                flex-direction: column;
+                flex-direction: row;
                 min-width     : 700px;
             }
+        }
+
+        .button-update {
+            background   : #0077be;
+            color        : #fff;
+            font-weight  : bold;
+            flex         : 1;
+            padding      : 10px;
+            text-align   : center;
+            margin       : 9px 15px 15px 15px;
+            border-radius: 2px;
         }
 
         .label-list-view {
@@ -183,15 +287,19 @@ multi-well-histogram {
 
         .lable-option-sidebar {
             font-weight: bold;
-            font-size  : 12px;
-            color      : rgb(100, 100, 100);
-            padding    : 11px 16px;
+            font-size: 12px;
+            color: #646464;
+            position: sticky;
+            z-index: 1;
+            top: 0;
+            background: #fff;
+            padding: 11px 16px;
         }
 
         .selection-sidebar {
             border       : 1px solid #e4e4e4;
             border-radius: 2px;
-            padding      : 5px 10px;
+            padding      : 1px 10px;
             align-items  : center;
             display      : flex;
 
@@ -228,6 +336,7 @@ multi-well-histogram {
         position: sticky;
         top     : 0;
     }
+
 
     table {
         // font-family : "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -298,136 +407,3 @@ multi-well-histogram {
     }
 
 }
-
-
-/* change style special of wi-base-treeview for basemap */
-wi-tree-view {
-    & div input {
-        width        : 100%;
-        line-height  : 1.4;
-        padding      : 10px 10px 10px 14px;
-        border       : none;
-        border-bottom: 1px solid #f0f0f0;
-        outline      : none;
-        box-sizing   : border-box;
-
-        &::placeholder {
-            color: #cecece;
-        }
-    }
-}
-
-side-bar>div div.content {
-    overflow-x     : hidden;
-    height         : 100%;
-    display        : flex;
-    overflow-y     : auto;
-    /* padding-left: 15px; */
-    flex-direction : column;
-}
-
-wi-droppable {
-    height: 100%;
-}
-/*
-wi-tree-node {
-    &>div {
-        cursor      : default;
-        //margin    : 0 0 0 15px;
-        padding-left: 12px;
-
-    }
-
-    .node-caret,
-    .node-label,
-    .node-icon {
-        display      : flex;
-        padding-right: 10px;
-        font-size    : 12px;
-    }
-
-    .node-caret {
-        color    : #cccbcb;
-        font-size: 14px;
-        cursor   : pointer;
-        width    : 16px;
-    }
-
-    .invisible {
-        visibility: hidden;
-    }
-
-    .node-content {
-        border-bottom      : 1px solid #f0f0f0;
-        position           : relative;
-        white-space        : nowrap;
-        text-overflow      : ellipsis;
-        overflow           : hidden;
-        // padding         : 11px;
-        display            : flex;
-        align-items        : center;
-        transition-property: padding, margin;
-        transition-duration: 0.2s;
-
-        &,
-        &::after {
-            line-height: 3em;
-        }
-
-        &.search-mode>div {
-            opacity: 0.2;
-        }
-
-        &.search-mode.highlight {
-            color: #0077be;
-
-            &>div {
-                opacity: 1;
-            }
-        }
-
-        &.selected {
-            background: linear-gradient(to left, #f0f0f0, #fff);
-            //padding : 11px;
-
-            &::after {
-                background-color: #0077be;
-                line-height     : 3em;
-            }
-        }
-
-        &::after {
-            content : "2r";
-            color   : transparent;
-            display : block;
-            position: absolute;
-            top     : 0;
-            width   : 4px;
-        }
-
-        &::after {
-            right: 0;
-        }
-    }
-
-    .node-content:hover {
-        background: linear-gradient(to left, #f0f0f0, #fff);
-    }
-
-    .dragging {
-        border          : none;
-        background-color: transparent;
-        z-index         : 1;
-
-        &.selected {
-            background: transparent;
-            //padding : 11px;
-
-            &::after {
-                background-color: transparent;
-                line-height     : 2.3em;
-            }
-        }
-    }
-}
-*/
