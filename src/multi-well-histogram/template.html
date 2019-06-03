@@ -57,7 +57,7 @@
                     Percentage (%)</p>
             </wi-droppable>
             <div style=" height: 100%; right: 0; border-left: 1px solid #eee;">
-                <side-bar my-default-width="300" orientation="w" collapsed="false">
+                <side-bar my-default-width="350" orientation="w" collapsed="false">
 
                     <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;
                         display :flex;
@@ -74,7 +74,7 @@
                             style="margin-right: 8px;">Config</span>
                         <span ng-class="{'active' : isSet(4)}"
                             ng-click="setTab(4)"
-                            class="tab-with-lable">Statistics</span>
+                            class="tab-with-lable">Stats</span>
                         <span ng-class="{'active' : isSet(5)}"
                             ng-click="setTab(5)"
                             class="tab-with-lable">Layers</span>
@@ -287,11 +287,8 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="isSet(5)" style="flex:1">
-                        <div class="lable-option-sidebar">
-                            <span>Zones</span>
-                        </div>
-                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 5px 15px;">
+                    <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
+                        <div ng-show="self.histogramList" style="border: 1px solid #eee; margin: 5px 15px; overflow: auto;">
                             <wi-tree-view tree-root="self.histogramList" 
                                 get-label="self.getLayerLabel" 
                                 filter="self.layerFilter"
