@@ -307,7 +307,21 @@
                         </div>
                     </div>
                     <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
-                        onmouseout="this.style.overflow='hidden'" style="flex:1">
+                        onmouseout="this.style.overflow='hidden'" style="flex:1; padding: 15px;">
+                        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Stack Mode
+                                <div
+                                    style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                                </div>
+                            </div>
+                        <span  style="margin-right: 8px;">avgdev</span>
+                        <span  style="margin-right: 8px;">stddev</span>
+                        <span  style="margin-right: 8px;">var</span>
+                        <span  style="margin-right: 8px;">skew</span>
+                        <span  style="margin-right: 8px;">kurtosis</span>
+                        <span  style="margin-right: 8px;">median</span>
+                        <span  style="margin-right: 8px;">p10</span>
+                        <span  style="margin-right: 8px;">p50</span>
+                        <span  style="margin-right: 8px;">p90</span>
                         <div>
                             <wi-table-view ng-if="self.histogramList.length" row-count="self.getZoneNames().length" col-count="15"
                                 col-headers="['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', '10', 'p50', 'p90']"

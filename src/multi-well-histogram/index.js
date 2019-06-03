@@ -358,7 +358,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 let zoneset = getZoneset(well, self.zonesetName);
                 zoneset = zoneset || genZonationAllZS(datasetTop, datasetBottom, well.color);
 
-                let curveData = await wiApi.getCurveDataPromise(curve.idCurve);
+                let curveData = await wiApi.getCachedCurveDataPromise(curve.idCurve);
                 curveData = curveData.filter(d => _.isFinite(d.x))
                     .map(d => ({
                         ...d, 
