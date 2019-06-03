@@ -28,7 +28,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
-
+    self.statisticHeaders = ['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
+    self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
     $scope.tab = 4;
     self.selectionTab = self.selectionTab || 'Stats';
@@ -69,7 +70,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 getTree(function() {
                     getSelectionList(self.selectionType, self.treeConfig);
                     getZonesetsFromWells(self.treeConfig);
-
+                    
                     $scope.$watch(() => (self.selectionType), () => {
                         getSelectionList(self.selectionType, self.treeConfig);
                         updateDefaultConfig();
@@ -95,7 +96,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.curveNames = self.curveNames || [];
-        self.config = self.config || {grid:true, displayMode: 'line', colorMode: 'zone'};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone'};
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -276,8 +277,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.noChildren = function (node) {
         return EMPTY_ARRAY;
     }
-    this.click2Toggle = function ($event, node, selectedObjs) {
+    this.click2ToggleZone = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
+    }
+    this.click2ToggleLayer = function ($event, node, selectedObjs) {
+        node._notUsed = !node._notUsed;
+        self.selectedLayers = Object.values(selectedObjs).map(o => o.data);
     }
     
     this.runLayerMatch = function (node, criteria) {
@@ -368,7 +373,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let z = self.zoneTree.find(z1 => {
                         return z1.zone_template.name === zone.zone_template.name
                     });
-                    return !z._notUse;
+                    return !z._notUsed;
                 });
                 for (let j = 0; j < zones.length; j++) {
                     let zone = zones[j];
@@ -376,7 +381,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let bins = genBins(dataArray);
                     let maybeMax = d3.max(bins.map(b => b.length));
                     max = (max > maybeMax) ? max : maybeMax;
-                    bins.color = self.getColorMode() === 'zone' ? zone.zone_template.background:well.color;
+                    bins.color = self.getColor(zone, well);
                     bins.name = `${well.name}.${zone.zone_template.name}`;
                     self.histogramList.push(bins);
                 }
@@ -440,6 +445,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 10)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
+    this.getColor = (zone, well) => {
+        let cMode = self.getColorMode();
+        return cMode === 'zone' ? zone.zone_template.background:(cMode === 'well'?well.color:'blue');
+    }
     this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)
@@ -448,11 +457,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return bins.color;
     }
 
-    self.onDrop = function (event, ui, nodeArray) {
-    }
-    function isWell(node) {
-        return true;
-    }
     let _zoneNames = []
     self.getZoneNames = function() {
         _zoneNames.length = 0;
@@ -474,5 +478,25 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 return "this default";
         }
     }
-  
+    let _headers = [];
+    self.getHeaders = function (){
+        _headers.length = 0;
+        Object.assign(_headers, self.statisticHeaders.filter((item, idx) => self.statisticHeaderMasks[idx]));
+        return _headers;
+    }
+    this.hideSelectedLayer = function() {
+        self.selectedLayers.forEach(layer => layer._notUsed = true);
+    }
+    this.showSelectedLayer = function() {
+        self.selectedLayers.forEach(layer => layer._notUsed = false);
+        $timeout(() => {});
+    }
+    this.hideAllLayer = function() {
+        self.histogramList.forEach(bins => bins._notUsed = true);
+        $timeout(() => {});
+    }
+    this.showAllLayer = function() {
+        self.histogramList.forEach(bins => bins._notUsed = false);
+        $timeout(() => {});
+    }
 }

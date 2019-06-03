@@ -119,7 +119,7 @@
                             <wi-tree-view tree-root="self.zoneTree" get-label="self.getZoneLabel"
                                 filter="self.zoneFilter" get-icon="self.getZoneIcon" get-children="self.noChildren"
                                 keep-children='true' run-match="self.runZoneMatch" hide-unmatched="true"
-                                hide-search='false' click-fn='self.click2Toggle'>
+                                hide-search='false' click-fn='self.click2ToggleZone'>
                             </wi-tree-view>
                         </div>
                         <div ng-hide="self.zoneTree" style="border: 1px solid #e4e4e4; margin: 5px 15px;">
@@ -308,24 +308,23 @@
                     </div>
                     <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
                         onmouseout="this.style.overflow='hidden'" style="flex:1; padding: 15px;">
-                        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Stack Mode
-                                <div
-                                    style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-                                </div>
+                        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Table Header
+                            <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                             </div>
-                        <span  style="margin-right: 8px;">avgdev</span>
-                        <span  style="margin-right: 8px;">stddev</span>
-                        <span  style="margin-right: 8px;">var</span>
-                        <span  style="margin-right: 8px;">skew</span>
-                        <span  style="margin-right: 8px;">kurtosis</span>
-                        <span  style="margin-right: 8px;">median</span>
-                        <span  style="margin-right: 8px;">p10</span>
-                        <span  style="margin-right: 8px;">p50</span>
-                        <span  style="margin-right: 8px;">p90</span>
-                        <div>
-                            <wi-table-view ng-if="self.histogramList.length" row-count="self.getZoneNames().length" col-count="15"
-                                col-headers="['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', '10', 'p50', 'p90']"
-                                row-headers="self.getZoneNames()" accessor="self.statsValue">
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap;">
+                            <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header" 
+                                ng-class="{'active' : self.statisticHeaderMasks[$index]}"
+                                ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
+                                {{header}}</span>
+                        </div>
+
+                        <div style="overflow: auto;">
+                            <wi-table-view ng-if="self.histogramList.length" 
+                                row-count="4" 
+                                col-count="self.getHeaders().length"
+                                col-headers="self.getHeaders()" row-headers="self.getZoneNames()"
+                                accessor="self.statsValue">
                             </wi-table-view>
                         </div>
                     </div>
@@ -337,22 +336,25 @@
                                 style="margin-top: 10px; display: flex; justify-content: space-between;">
                                 <span>INPUT</span>
                                 <div>
-                                    <span ng-class="{'active' : self.selectionLayer === 'mark'}"
-                                        ng-click="self.selectionLayer='mark'" class="button-with-lable"
-                                        style="margin-right: 8px;">Mask</span>
-                                    <span ng-class="{'active' : self.selectionLayer === 'select-all'}"
-                                        ng-click="self.selectionLayer='select-all'" class="button-with-lable"
-                                        style="margin-right: 8px;">Select All</span>
-                                    <span ng-class="{'active' : self.selectionLayer === 'clear'}"
-                                        ng-click="self.selectionLayer='clear'" class="button-with-lable"
-                                        style="margin-right: 8px;">Clear All</span>
+                                    <span class="active"
+                                        ng-click="self.hideSelectedLayer()" class="button-with-lable"
+                                        style="margin-right: 8px;">Hide</span>
+                                    <span class="active"
+                                        ng-click="self.showSelectedLayer()" class="button-with-lable"
+                                        style="margin-right: 8px;">Show</span>
+                                    <span class="active"
+                                        ng-click="self.hideAllLayer()" class="button-with-lable"
+                                        style="margin-right: 8px;">Hide All</span>
+                                    <span class="active"
+                                        ng-click="self.showAllLayer()" class="button-with-lable"
+                                        style="margin-right: 8px;">Show All</span>
                                 </div>
 
                             </div>
                             <wi-tree-view tree-root="self.histogramList" get-label="self.getLayerLabel"
                                 filter="self.layerFilter" get-icon="self.getLayerIcon" get-children="self.noChildren"
                                 keep-children='true' run-match="self.runLayerMatch" hide-unmatched="true"
-                                hide-search='false' click-fn='self.click2Toggle'>
+                                hide-search='false' click-fn='self.click2ToggleLayer'>
                             </wi-tree-view>
                         </div>
                     </div>
