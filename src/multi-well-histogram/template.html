@@ -1,29 +1,48 @@
 <div class="main">
     <div class="main-body">
         <div class="main-body-center border-style" style="position: relative;">
+            <!--
             <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;">
                 <span>WELL LIST</span>
             </div>
-            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop" container-style="{display:'flex',flex: 1, position: 'relative'}">
-                <layer-collection padding="50">
-                    <axis-layer min-val="0" max-val="100" 
-                                n-ticks="2" minor-ticks="10" 
-                                precision="4" grid="true" loga="true"
-                                placement="1"></axis-layer>
-                    <axis-layer min-val="0" max-val="10" 
-                                n-ticks="10" minor-ticks="10" 
-                                precision="4" grid="1"
-                                axis-direction="'up'"
-                                placement="0"></axis-layer>
-                    <axis-layer min-val="0" max-val="100" 
-                                n-ticks="10" minor-ticks="10" 
-                                precision="4" grid="1"
-                                axis-direction="'up'"
-                                placement="1"></axis-layer>
+            -->
+            <wi-droppable style="display:flex;flex:1;" on-drop="self.onDrop"
+                container-style="{display:'flex',flex: 1, position: 'relative'}">
+                <layer-collection v-padding="50" h-padding='100'>
+                    <axis-layer min-val="self.getLeft()" 
+                        max-val="self.config.right || self.defaultConfig.right || 1" 
+                        loga="self.getLoga()" 
+                        n-ticks="self.config.majorTicks || 10" 
+                        minor-ticks="self.config.minorTicks || 1" 
+                        precision="4" 
+                        grid="!!self.config.grid"
+                        placement="1"></axis-layer>
+                    <axis-layer 
+                        min-val='self.minY || 0'
+                        max-val='self.maxY || 100'
+                        n-ticks="10" minor-ticks="1" precision="4" 
+                        grid="!!self.config.grid"
+                        axis-direction="'up'" placement="0"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4" 
+                        grid="!!self.config.grid"
+                        axis-direction="'up'" placement="1"></axis-layer>
+                    <canvas-barchart-layer ng-repeat="bins in self.histogramList" 
+                        min-val="self.getLeft()" 
+                        max-val="self.getRight()" 
+                        min-y='self.minY || 0'
+                        max-y='self.maxY || 100'
+                        loga="self.getLoga()" 
+                        autofit='false'
+                        bins="bins" bin-gap="10" color-func="self.colorFn">
+                    </canvas-barchart-layer>
                 </layer-collection>
-                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.filter}}</p>
-                <p style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">Frequence</p>
-                <p style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">Percentage (%)</p>
+                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}</p>
+                <p
+                    style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">
+                    Frequence</p>
+                <p
+                    style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">
+                    Percentage (%)</p>
             </wi-droppable>
             <div style="position: absolute; height: 100%; right: 0; border-left: 1px solid #eee;">
                 <side-bar my-default-width="350" orientation="w" collapsed="false">
@@ -46,9 +65,9 @@
                             class="tab-with-lable">Statistics</span>
                     </div>
 
-                    <div ng-show="isSet(1)" style="overflow: auto;">
+                    <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
                         <div class="lable-option-sidebar"
-                            style="padding: 25px 16px; display: flex; justify-content: space-between;">
+                            style="padding: 23px 16px 16px 16px; display: flex; justify-content: space-between;">
                             <span>INPUT</span>
                             <div>
                                 <span ng-class="{'active' : self.selectionType === 'family-group'}"
@@ -66,81 +85,159 @@
                         <div class="lable-option-sidebar">
                             <div class="selection-sidebar">
                                 <span>X-Axis</span>
-                                <input ng-model="self.filter" class="input-suggestions" placeholder="Select well..."
-                                    list="suggestions">
-                                <datalist id="suggestions">
-                                    <option ng-repeat="item in self.selectionList"
-                                        value="{{item}}">
-                                    </option>
-                                </datalist>
+                                <wi-dropdown-list 
+                                    style="flex:1; margin-left: 10px;"
+                                    items='self.selectionList'
+                                    current-select="self.selectionValue"
+                                    on-item-changed="self.onInputSelectionChanged">
+                                </wi-dropdown-list>
                             </div>
                         </div>
-                        <div style="border: 1px solid #eee; margin: 5px 15px;">
-                            <wi-tree-view ng-repeat='well in self.treeConfig' tree-root="[well]" 
+                        <div style="border: 1px solid #eee; margin: 5px 15px;flex:1;overflow:auto;" ng-repeat='well in self.treeConfig'>
+                            <wi-tree-view tree-root="well" 
                                 get-label="self.getLabel" 
-                                filter="self.filter"
+                                filter="self.selectionValue"
                                 get-icon="self.getIcon" 
                                 get-children="self.getChildren" 
                                 keep-children='true'
                                 uncollapsible='true' 
                                 run-match="self.runMatch" 
                                 hide-unmatched="true" 
-                                hide-search='false'
-                                click-fn='self.clickFunction'>
-                                <div style="border-top: 1px solid black;"></div>
-                            </wi-tree-view>
-                        </div>
-
-                    </div>
-                    <div ng-show="isSet(2)" style="overflow: auto;">
-                        <div class="lable-option-sidebar">
-                            <span>INPUT</span>
-                        </div>
-                        <div class="lable-option-sidebar">
-                            <div class="selection-sidebar">
-                                <span>X-Axis</span>
-                                <input ng-model="self.filter" class="input-suggestions" placeholder="Select zone..."
-                                    list="suggestions">
-                                <datalist id="suggestions">
-                                    <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
-                                        value="{{item.name}}">
-                                    </option>
-                                </datalist>
-                            </div>
-                        </div>
-                        <div style="border: 1px solid #eee; margin: 5px 15px;">
-                            <wi-tree-view tree-root="self.treeConfig" 
-                                get-label="self.getLabel" 
-                                filter="self.filter"
-                                get-icon="self.getIcon" 
-                                get-children="self.getChildren" 
-                                keep-children='true'
-                                uncollapsible='true' 
-                                run-match="self.runMatch" 
-                                hide-unmatched="false" 
                                 hide-search='true'
                                 click-fn='self.clickFunction'>
+                                <div style="
+                                    border-bottom: 1px solid #ccc;
+                                    display:flex;flex-direction:row;
+                                    padding: 10px 0;
+                                    text-align:center;">
+                                    <div style="flex:1; overflow:hidden;" ng-bind="well.name"></div>
+                                    <div style="flex:1; overflow:hidden;" ng-bind="self.wellSpec[$index].datasetName"></div>
+                                    <div style="flex:1; overflow:hidden;" ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
+                                </div>
                             </wi-tree-view>
                         </div>
-
                     </div>
-                    <div ng-show="isSet(3)" style="overflow: hidden;">
+                    <div ng-show="isSet(2)" style="overflow: auto;flex: 1;">
                         <div class="lable-option-sidebar">
-                            <span>lABLE</span>
+                            <span>Zones</span>
                         </div>
                         <div class="lable-option-sidebar">
                             <div class="selection-sidebar">
-                                <span>Left</span>
-                                <input type="number" step="0.01" ng-model="self.filter" class="input-suggestions"
-                                    placeholder="0.001" list="suggestions">
-                                <datalist id="suggestions">
-                                    <option ng-repeat="item in self.treeConfig" ng-click="setChange(item.name)"
-                                        value="{{item.name}}">
-                                    </option>
-                                </datalist>
+                                <span>Zoneset</span>
+                                <wi-dropdown-list 
+                                    style="flex:1; margin-left: 10px;"
+                                    items='self.zonesetList'
+                                    current-select="self.zonesetName"
+                                    on-item-changed="self.onZonesetSelectionChanged">
+                                </wi-dropdown-list>
                             </div>
                         </div>
-                        <!-- <div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'">
+                        <div ng-show="self.zoneTree" style="border: 1px solid #eee; margin: 5px 15px;">
+                            <wi-tree-view tree-root="self.zoneTree" 
+                                get-label="self.getZoneLabel" 
+                                filter="self.zoneFilter"
+                                get-icon="self.getZoneIcon" 
+                                get-children="self.getZoneChildren" 
+                                keep-children='true'
+                                run-match="self.runZoneMatch" 
+                                hide-unmatched="true" 
+                                hide-search='false'
+                                click-fn='self.clickZoneFunction'>
+                            </wi-tree-view>
+                        </div>
+                        <div ng-hide="self.zoneTree" style="border: 1px solid #eee; margin: 5px 15px;">
+                            zonationAll
+                        </div>
+
+                    </div>
+                    <div ng-show="isSet(3)" style="overflow: hidden;flex: 1;">
+                        <div class="lable-option-sidebar">
+                            <span>OPTIONS</span>
+                        </div>
+                        <div class="lable-option-sidebar">
+                            <div class="selection-sidebar">
+                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
+                                    item-label="'Left'" item-value="self.getConfigLeft" 
+                                    set-value="self.setConfigLeft" enabled="true"
+                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
+                                </editable>
+                            </div>
+                            <div style="margin-bottom: 15px; "></div>
+                            <div class="selection-sidebar">
+                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
+                                    item-label="'Right'" item-value="self.getConfigRight" 
+                                    set-value="self.setConfigRight" enabled="true"
+                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
+                                </editable>
+                            </div>
+                            <div style="margin-bottom: 15px; "></div>
+
+                            <div class="selection-sidebar">
+                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
+                                    item-label="'Divisions'" item-value="self.getConfigDivisions" 
+                                    set-value="self.setConfigDivisions" enabled="true"
+                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
+                                </editable>
+                            </div>
+                            <div style="margin-bottom: 15px; "></div>
+
+                            <div class="selection-sidebar">
+                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
+                                    item-label="'Title'" item-value="self.getConfigTitle" 
+                                    set-value="self.setConfigTitle" enabled="true"
+                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
+                                </editable>
+
+                            </div>
+                            <div style="margin-bottom: 15px; "></div>
+
+                            <div class="selection-sidebar">
+                                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;" 
+                                    item-label="'X Label'" item-value="self.getConfigXLabel" 
+                                    set-value="self.setConfigXLabel" enabled="true"
+                                    label-style="{}" content-style="{flex:1,float:'none','text-align':'right'}">
+                                </editable>
+                            </div>
+                        </div>
+                        <div class="lable-option-sidebar" style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.config.loga}"
+                                    ng-click="self.config.loga = !self.config.loga" class="button-with-lable"
+                                    style="margin-right: 8px;">Log Scale</span>
+                                <span ng-class="{'active' : self.config.grid}"
+                                    ng-click="self.config.grid = !self.config.grid" class="button-with-lable"
+                                    style="margin-right: 8px;">Show Grid</span>
+                                <span ng-class="{'active' : self.config.flipHorizontal}"
+                                    ng-click="self.config.flipHorizontal = !self.config.flipHorizontal" 
+                                    class="button-with-lable">Flip Horizontally</span>
+                            </div>
+                        </div>
+                        <div class="lable-option-sidebar"
+                            style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.selectConfig === 'option1'}"
+                                    ng-click="self.selectConfig='option1'" class="button-with-lable"
+                                    style="margin-right: 8px;"> Frequency count</span>
+                                <span ng-class="{'active' : self.selectConfig === 'option2'}"
+                                    ng-click="self.selectConfig='option2'" class="button-with-lable">Percentile</span>
+                            </div>
+
+                        </div>
+                        <div class="lable-option-sidebar"
+                            style="padding: 30px 16px; display: flex; justify-content: space-between; border-bottom: 1px solid #eee;">
+                            <div>
+                                <span ng-class="{'active' : self.selectConfig2 === 'option3'}"
+                                    ng-click="self.selectConfig2='option3'" class="button-with-lable"
+                                    style="margin-right: 8px;">  Interval Depth</span>
+                                <span ng-class="{'active' : self.selectConfig2 === 'option4'}"
+                                    ng-click="self.selectConfig2='option4'" class="button-with-lable">Zonal Depth</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
+                        onmouseout="this.style.overflow='hidden'" style="flex:1">
+                        <div>
                             <div style="padding: 0 7px;">
                                 <table>
                                     <thead>
@@ -156,15 +253,115 @@
                                             <td>Griffin</td>
                                             <td>$100</td>
                                         </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$100</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peter</td>
+                                            <td>Griffin</td>
+                                            <td>$8888</td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
-
-                    <div ng-show="isSet(4)" style="overflow: hidden;">
-                        4
-                    </div>
+                    <div style="padding:5px;"><button class='btn btn-default' ng-click="self.genHistogramList()">Update</button></div>
                 </side-bar>
             </div>
         </div>
