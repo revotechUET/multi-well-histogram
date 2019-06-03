@@ -4,7 +4,7 @@ require('./style.less');
 
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView', 'wiTableView',
-    'wiApi', 'editable', 'wiDialog', 'editable',
+    'wiApi', 'editable', 'wiDialog',
     'wiDroppable', 'wiDropdownList','plot-toolkit'
 ]);
 app.component(componentName, {
@@ -288,12 +288,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.runLayerMatch = function (node, criteria) {
         return node.name.includes(criteria);
     }
-    this.getLayerLabel = function (node) {
-        return node.name;
-    }
-    this.getLayerIcon = function (node) {
-        return (node && !node._notUsed) ? 'layer-16x16': 'fa fa-times-circle'
-    }
+    this.getLayerLabel = (node) => node.name
+    this.getLayerIcon = (node) => ( (node && !node._notUsed) ? 'layer-16x16': 'fa fa-eye-slash' )
     this.getConfigLeft = function() {
         self.config = self.config || {};
         return isNaN(self.config.left) ? "[empty]": wiApi.bestNumberFormat(self.config.left, 3);
