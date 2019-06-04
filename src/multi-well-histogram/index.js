@@ -2,6 +2,8 @@ var componentName = 'multiWellHistogram';
 module.exports.name = componentName;
 require('./style.less');
 
+const _DECIMAL_LEN = 4;
+
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView', 'wiTableView',
     'wiApi', 'editable', 'wiDialog',
@@ -480,13 +482,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         return d3.mean(data, function (d) {
             return Math.abs(d - mean)
-        }).toFixed(4);
+        }).toFixed(_DECIMAL_LEN);
     }
 	function calPercentile(data, p) {
         return 1;
         return d3.quantile(data.sort(function (a, b) {
             return a - b;
-        }), p).toFixed(4);
+        }), p).toFixed(_DECIMAL_LEN);
     }
     function aggregateHistogramList(histogramList) {
         let aggregate = [];
@@ -569,7 +571,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return _zoneNames;
     }
     self.statsValue = function ([row, col]) {
-        // return _headers[col];
         switch(_headers[col]){
             case 'top': 
 				return flattenHistogramList[row].top;
