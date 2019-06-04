@@ -2,7 +2,7 @@
   "name": "multi-well-histogram",
   "version": "0.0.1",
   "scripts": {
-	"run-dev": "webpack -w --mode=development"
+    "run-dev": "webpack -w --mode=development"
   },
   "devDependencies": {
     "css-loader": "^2.1.1",
