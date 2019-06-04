@@ -72,14 +72,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 getTree(function() {
                     getSelectionList(self.selectionType, self.treeConfig);
                     getZonesetsFromWells(self.treeConfig);
+                    updateDefaultConfig();
                     
-                    $scope.$watch(() => (self.selectionType), () => {
-                        getSelectionList(self.selectionType, self.treeConfig);
-                        updateDefaultConfig();
-                    });
-                    $scope.$watch(() => (self.selectionValue), () => {
-                        updateDefaultConfig();
-                    });
                     /*
                     $scope.$watch(() => (
                         `${self.getLeft()}-${self.getRight()}-${self.getLoga()}-${self.getDivisions()}-${self.selectionValue}`
@@ -90,6 +84,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
                 });
             }, true);
+            $scope.$watch(() => (self.selectionType), () => {
+                getSelectionList(self.selectionType, self.treeConfig);
+                updateDefaultConfig();
+            });
+            $scope.$watch(() => (self.selectionValue), () => {
+                updateDefaultConfig();
+            });
         }, 500);
 
         self.defaultConfig = self.defaultConfig || {};
@@ -190,10 +191,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         for (let w of self.wellSpec) {
             promises.push(
                 wiApi.getWellPromise(w.idWell || w)
-                    .then(well => (self.treeConfig.push(well)))
+                    .then(well => ($timeout(() => self.treeConfig.push(well))))
             );
         }
-        Promise.all(promises).then(() => callback && callback()).catch(e => console.error(e)).finally(() => wiLoading.hide());
+        Promise.all(promises)
+            .then(() => callback && callback())
+            .catch(e => console.error(e))
+            .finally(() => wiLoading.hide());
     }
     function getZonesetsFromWells(wells) {
         let zsList;
@@ -230,10 +234,15 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             return true;
         });
     }
+    this.getWellSpec = getWellSpec;
+    function getWellSpec(well) {
+        if (!well) return {};
+        return self.wellSpec.find(wsp => wsp.idWell === well.idWell);
+    }
     this.getCurve = getCurve;
-    function getCurve(well, wellSpec) {
-        if (!well || !wellSpec) return null;
-
+    function getCurve(well) {
+        let wellSpec = getWellSpec(well);
+        if (!Object.keys(wellSpec).length) return {};
         let curves = getCurvesInWell(well).filter(c => self.runMatch(c, self.selectionValue));
         let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) : curves[0];
         if (!curve) {
@@ -256,6 +265,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wellSpec.datasetTop = parseFloat(dataset.top);
         wellSpec.datasetBottom = parseFloat(dataset.bottom);
         wellSpec.datasetStep = parseFloat(dataset.step);
+        console.log(curve.name, curve.idCurve);
         return curve;
     }
     function getZoneset(well, zonesetName = "") {
@@ -349,7 +359,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return (self.config.xLabel || "").length ? self.config.xLabel : "[empty]";
     }
     this.setConfigXLabel = function(notUse, newValue) {
-        self.config.xLabel = parseInt(newValue);
+        self.config.xLabel = newValue;
     }
     function clearDefaultConfig() {
         self.defaultConfig = {};

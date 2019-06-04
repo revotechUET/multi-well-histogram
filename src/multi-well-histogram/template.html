@@ -45,7 +45,7 @@
                         line-width='2' line-dash="'2 0'" color-func="self.colorFn">
                     </line-point-layer>
                 </layer-collection>
-                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}
+                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.config.xLabel || self.selectionValue}}
                 </p>
                 <p style="position: absolute; top: 20px; right: 50%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
                 {{self.config.title || 'New Histogram'}}</p>
@@ -111,9 +111,8 @@
                                         
                                     <div style="display: flex; align-items: center;">
                                         <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
-                                            ng-bind="self.wellSpec[$index].datasetName"></div>
-                                        <div style="border-radius: 2px;padding: 1px 10px;"
-                                            ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
+                                            ng-bind="self.getWellSpec(well).datasetName"></div>
+                                        <div style="border-radius: 2px;padding: 1px 10px;">{{self.getCurve(well).name}}</div>
                                         <span ng-class="{'fa fa-eye-slash': well._notUsed, 'fa fa-eye': !well._notUsed }" ng-click="self.toggleWell(well)" style="color: rgb(163, 163, 163);cursor: pointer; margin-right: 10px;">
                                         </span>
                                         <span class="fa fa-times-circle" ng-click="self.removeWell(well)" style="color: rgb(163, 163, 163);cursor: pointer;">
