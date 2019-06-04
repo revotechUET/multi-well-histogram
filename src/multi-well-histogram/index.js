@@ -5,7 +5,7 @@ require('./style.less');
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView', 'wiTableView',
     'wiApi', 'editable', 'wiDialog',
-    'wiDroppable', 'wiDropdownList','plot-toolkit'
+    'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading'
 ]);
 app.component(componentName, {
     template: require('./template.html'),
@@ -23,7 +23,7 @@ app.component(componentName, {
     transclude: true
 });
 
-function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog) {
+function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoading) {
     let self = this;
     self.treeConfig = [];
     self.selectedNode = null;
@@ -182,6 +182,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     self.refresh = getTree;
     function getTree(callback) {
+        wiLoading.show($element.find('.main')[0]);
         self.treeConfig = [];
         let promises = [];
         for (let w of self.wellSpec) {
@@ -190,7 +191,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     .then(well => (self.treeConfig.push(well)))
             );
         }
-        Promise.all(promises).then(() => callback && callback()).catch(e => console.error(e));
+        Promise.all(promises).then(() => callback && callback()).catch(e => console.error(e)).finally(() => wiLoading.hide());
     }
     function getZonesetsFromWells(wells) {
         let zsList;
@@ -368,7 +369,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         this.histogramList.length = 0;
         let allHistogramList = []
         _histogramGen = null;
+        wiLoading.show($element.find('.main')[0]);
         try {
+            
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
                 if (well._notUsed) {
@@ -472,6 +475,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         catch(e) {
             console.error(e);
         }
+        wiLoading.hide();
         console.log('end');
     }
 	function calAverageDeviation(data) {
