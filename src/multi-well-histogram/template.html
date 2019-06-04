@@ -366,7 +366,7 @@
 
                         <div style="overflow: auto;">
                             <wi-table-view ng-if="self.histogramList.length" 
-                                row-count="4" 
+                                row-count="self.getZoneNames().length" 
                                 col-count="self.getHeaders().length"
                                 col-headers="self.getHeaders()" row-headers="self.getZoneNames()"
                                 accessor="self.statsValue">

@@ -362,6 +362,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
 
     this.histogramList = [];
+	var flattenHistogramList = [];
     this.genHistogramList = async function() {
         this.histogramList.length = 0;
         let allHistogramList = []
@@ -400,6 +401,21 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let bins = genBins(dataArray);
                     bins.color = self.getColor(zone, well);
                     bins.name = `${well.name}.${zone.zone_template.name}`;
+					bins.top = zone.startDepth;
+					bins.bottom = zone.endDepth;
+					bins.numPoints = dataArray.length;
+					bins.avg = d3.mean(dataArray, d => d.x);
+					bins.min = d3.min(dataArray, d => d.x);
+					bins.max = d3.max(dataArray, d => d.x);
+					bins.stddev = d3.deviation(dataArray, d => d.x);
+					bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
+					bins.var = d3.variance(dataArray, d => d.x);
+					bins.median = d3.median(dataArray, d => d.x);
+					bins.skew = ss.sampleSkewness(dataArray.map(d => d.x));
+					bins.kurtosis = ss.sampleKurtosis(dataArray.map(d => d.x));
+					bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
+					bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
+					bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
                     wellHistogramList.push(bins);
                 }
                 if (self.getStackMode() === 'well') {
@@ -410,12 +426,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             }
             allHistogramList.name = 'All';
             let max = 0;
+			let flatten = [];
             switch(self.getStackMode()) {
                 case 'none':
                     for (let bins of allHistogramList) {
                         let maybeMax = d3.max(bins.map(b => b.length));
                         max = (max > maybeMax) ? max : maybeMax;
                     }
+					flatten = allHistogramList;
                     break;
                 case 'well':
                 {
@@ -423,6 +441,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         let aggregate = aggregateHistogramList(groupOfBins);
                         let maybeMax = d3.max(aggregate);
                         max = (max > maybeMax) ? max : maybeMax;
+						flatten = flatten.concat(groupOfBins);
                     }
                 }
                 break;
@@ -430,6 +449,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 {
                     let aggregate = aggregateHistogramList(allHistogramList);
                     max = d3.max(aggregate);
+					flatten = allHistogramList;
                 }
                 break;
                     
@@ -438,12 +458,25 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.minY = 0;
                 self.maxY = max;
                 self.histogramList = allHistogramList;
+				flattenHistogramList = flatten;
             });
         }
         catch(e) {
             console.error(e);
         }
         console.log('end');
+    }
+	function calAverageDeviation(data) {
+        let mean = d3.mean(data);
+
+        return d3.mean(data, function (d) {
+            return Math.abs(d - mean)
+        }).toFixed(4);
+    }
+	function calPercentile(data, p) {
+        return d3.quantile(data.sort(function (a, b) {
+            return a - b;
+        }), p).toFixed(4);
     }
     function aggregateHistogramList(histogramList) {
         let aggregate = [];
@@ -521,20 +554,44 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     let _zoneNames = []
     self.getZoneNames = function() {
         _zoneNames.length = 0;
+		// console.log(self.histogramList);
         Object.assign(_zoneNames, self.histogramList.map(bins => bins.name));
         return _zoneNames;
     }
     self.statsValue = function ([row, col]) {
-        return "1";
-        switch(col){
-            case 0: 
-                return 'Hoang';
-            case 1: 
-                return 42;
-            case 2:
-                return 'CB';
-            case 3:
-                return 1;
+        // return _headers[col];
+        switch(_headers[col]){
+            case 'top': 
+				return flattenHistogramList[row].top;
+            case 'bottom': 
+				return flattenHistogramList[row].bottom;
+                return bottom;
+            case '#pts':
+                return flattenHistogramList[row].numPoints;
+            case 'avg':
+                return flattenHistogramList[row].avg
+			case 'min':
+                return flattenHistogramList[row].min
+			case 'max':
+                return flattenHistogramList[row].max
+            case 'avgdev': 
+                return flattenHistogramList[row].avgdev;
+            case 'stddev': 
+                return flattenHistogramList[row].stddev;
+            case 'var':
+                return flattenHistogramList[row].var;
+            case 'skew':
+                return flattenHistogramList[row].skew;
+			case 'kurtosis':
+                return flattenHistogramList[row].kurtosis;
+			case 'median':
+				return flattenHistogramList[row].median;
+            case 'p10': 
+				return flattenHistogramList[row].p10;
+            case 'p50': 
+				return flattenHistogramList[row].p50;
+            case 'p90': 
+				return flattenHistogramList[row].p90;
             default: 
                 return "this default";
         }
