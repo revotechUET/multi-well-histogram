@@ -420,8 +420,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
                         bins.var = d3.variance(dataArray, d => d.x);
                         bins.median = d3.median(dataArray, d => d.x);
-                        bins.skew = ss.sampleSkewness(dataArray.map(d => d.x));
-                        bins.kurtosis = ss.sampleKurtosis(dataArray.map(d => d.x));
+                        bins.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray.map(d => d.x)) : undefined;
+                        bins.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray.map(d => d.x)) : undefined;
                         bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
                         bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
                         bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
@@ -481,7 +481,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         console.log('end');
     }
 	function calAverageDeviation(data) {
-        return 1;
+		if (data.length < 1) return;
         let mean = d3.mean(data);
 
         return d3.mean(data, function (d) {
@@ -489,7 +489,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }).toFixed(_DECIMAL_LEN);
     }
 	function calPercentile(data, p) {
-        return 1;
+		if (data.length < 1) return;
         return d3.quantile(data.sort(function (a, b) {
             return a - b;
         }), p).toFixed(_DECIMAL_LEN);
@@ -575,41 +575,45 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return _zoneNames;
     }
     self.statsValue = function ([row, col]) {
-        switch(_headers[col]){
-            case 'top': 
-				return flattenHistogramList[row].top;
-            case 'bottom': 
-				return flattenHistogramList[row].bottom;
-                return bottom;
-            case '#pts':
-                return flattenHistogramList[row].numPoints;
-            case 'avg':
-                return flattenHistogramList[row].avg
-			case 'min':
-                return flattenHistogramList[row].min
-			case 'max':
-                return flattenHistogramList[row].max
-            case 'avgdev': 
-                return flattenHistogramList[row].avgdev;
-            case 'stddev': 
-                return flattenHistogramList[row].stddev;
-            case 'var':
-                return flattenHistogramList[row].var;
-            case 'skew':
-                return flattenHistogramList[row].skew;
-			case 'kurtosis':
-                return flattenHistogramList[row].kurtosis;
-			case 'median':
-				return flattenHistogramList[row].median;
-            case 'p10': 
-				return flattenHistogramList[row].p10;
-            case 'p50': 
-				return flattenHistogramList[row].p50;
-            case 'p90': 
-				return flattenHistogramList[row].p90;
-            default: 
-                return "this default";
-        }
+		try {
+			switch(_headers[col]){
+				case 'top': 
+					return flattenHistogramList[row].top || 'N/A';
+				case 'bottom': 
+					return flattenHistogramList[row].bottom || 'N/A';
+					return bottom;
+				case '#pts':
+					return flattenHistogramList[row].numPoints || 'N/A';
+				case 'avg':
+					return flattenHistogramList[row].avg || 'N/A'
+				case 'min':
+					return flattenHistogramList[row].min || 'N/A'
+				case 'max':
+					return flattenHistogramList[row].max || 'N/A'
+				case 'avgdev': 
+					return flattenHistogramList[row].avgdev || 'N/A';
+				case 'stddev': 
+					return flattenHistogramList[row].stddev || 'N/A';
+				case 'var':
+					return flattenHistogramList[row].var || 'N/A';
+				case 'skew':
+					return flattenHistogramList[row].skew || 'N/A';
+				case 'kurtosis':
+					return flattenHistogramList[row].kurtosis || 'N/A';
+				case 'median':
+					return flattenHistogramList[row].median || 'N/A';
+				case 'p10': 
+					return flattenHistogramList[row].p10 || 'N/A';
+				case 'p50': 
+					return flattenHistogramList[row].p50 || 'N/A';
+				case 'p90': 
+					return flattenHistogramList[row].p90 || 'N/A';
+				default: 
+					return "this default";
+			}
+		} catch {
+			return 'N/A';
+		}
     }
     let _headers = [];
     self.getHeaders = function (){
