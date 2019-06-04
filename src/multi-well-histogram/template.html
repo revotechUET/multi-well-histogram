@@ -96,21 +96,17 @@
                                 </wi-dropdown-list>
                             </div>
                         </div>
-                        <div style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto;"
+                        <div style="overflow: auto; display:flex; flex-direction: column;">
+                            <div style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;"
                             ng-repeat='well in self.treeConfig'>
-                            <wi-tree-view tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
-                                get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'
-                                uncollapsible='true' run-match="self.runMatch" hide-unmatched="true" hide-search='true'
-                                click-fn='self.clickFunction'>
-                                <div style="border-bottom: 1px solid #e4e4e4;
-                                display: flex;
-                                flex-direction: row;
-                                padding: 8px 15px;
-                                background: #f4f4f4;
-                                align-items: center;
-                                justify-content: space-between;
-                                text-align: center;">
-                                    <div ng-bind="well.name"></div>
+                                <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
+                                   
+                                    <div style="display: flex; align-items: center;">
+                                         <!-- <i class="fa fa-caret-down"></i> -->
+                                            <i class="fa fa-caret-right" ng-click="well == !well" style="margin-right: 10px; cursor: pointer;"></i>
+                                            <div ng-bind="well.name"> </div>
+                                    </div>
+                                        
                                     <div style="display: flex;">
                                         <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
                                             ng-bind="self.wellSpec[$index].datasetName"></div>
@@ -118,8 +114,14 @@
                                             ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
                                     </div>
                                 </div>
-                            </wi-tree-view>
+                                <wi-tree-view ng-show="well" tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
+                                    get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'
+                                    uncollapsible='true' run-match="self.runMatch" hide-unmatched="true" hide-search='true'
+                                    click-fn='self.clickFunction'>
+                                </wi-tree-view>
+                            </div>
                         </div>
+                        
                     </div>
                     <div ng-show="isSet(2)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
                         <div class="lable-option-sidebar">
@@ -129,6 +131,12 @@
                                     current-select="self.zonesetName" on-item-changed="self.onZonesetSelectionChanged">
                                 </wi-dropdown-list>
                             </div>
+                        </div>
+                        <div style="display: flex; padding: 0 16px 7px 16px;">
+                            <span ng-click="self.hideSelectedZone()" class="button-with-lable-layer" style="margin-left: 0;">Hide</span>
+                            <span ng-click="self.showSelectedZone()" class="button-with-lable-layer" style="margin-left: 10px;">Show</span>
+                            <span ng-click="self.hideAllZone()" class="button-with-lable-layer" style="margin-left: 10px;">Hide All</span>
+                            <span ng-click="self.showAllZone()" class="button-with-lable-layer" style="margin-left: 10px;">Show All</span>
                         </div>
                         <div ng-show="self.zoneTree"
                             style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto; ">
@@ -312,12 +320,33 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <span ng-class="{'active' : self.selectConfig2 === 'option3'}"
-                                        ng-click="self.selectConfig2='option3'" class="button-with-lable"
+                                    <div ng-show="self.config.limitType === 'interval'">
+                                        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                                item-label="'Top'" item-value="self.getConfigLimitTop"
+                                                set-value="self.setConfigLimitTop" enabled="true" label-style="{}"
+                                                content-style="{flex:1,float:'none','text-align':'right'}">
+                                            </editable>
+                                        </div>
+                                        <div style="margin-bottom: 15px; "></div>
+                                        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                                            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                                                item-label="'Bottom'" item-value="self.getConfigLimitBottom"
+                                                set-value="self.setConfigLimitBottom" enabled="true" label-style="{}"
+                                                content-style="{flex:1,float:'none','text-align':'right'}">
+                                            </editable>
+                                        </div>
+                                        <div style="margin-bottom: 15px; "></div>
+                                    </div>
+                                    <span ng-class="{'active' : self.config.limitType === 'interval'}"
+                                        ng-click="self. config.limitType = 'interval'" class="button-with-lable"
                                         style="margin-right: 8px;"> Interval Depth</span>
-                                    <span ng-class="{'active' : self.selectConfig2 === 'option4'}"
-                                        ng-click="self.selectConfig2='option4'" class="button-with-lable">Zonal
+                                    <span ng-class="{'active' : self.config.limitType === 'zonal'}"
+                                        ng-click="self.config.limitType = 'zonal'" class="button-with-lable">Zonal
                                         Depth</span>
+                                    <div style="margin-bottom: 15px; "></div>
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -345,20 +374,14 @@
                         </div>
                     </div>
                     <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
-
+                        <div style="display: flex; padding: 16px 16px 0px 16px;">
+                            <span ng-click="self.hideSelectedLayer()" class="button-with-lable-layer" style="margin-left: 0px;">Hide</span>
+                            <span ng-click="self.showSelectedLayer()" class="button-with-lable-layer" style="margin-left: 10px;">Show</span>
+                            <span ng-click="self.hideAllLayer()" class="button-with-lable-layer" style="margin-left: 10px;">Hide All</span>
+                            <span ng-click="self.showAllLayer()" class="button-with-lable-layer" style="margin-left: 10px;">Show All</span>
+                        </div>
                         <div ng-show="self.histogramList"
                             style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
-                            <div class="lable-option-sidebar"
-                                style="margin-top: 5px; display: flex; justify-content: space-between;">
-                                <span>LAYERS</span>
-                                <div>
-                                    <span ng-click="self.hideSelectedLayer()" class="button-with-lable-layer">Hide</span>
-                                    <span ng-click="self.showSelectedLayer()" class="button-with-lable-layer">Show</span>
-                                    <span ng-click="self.hideAllLayer()" class="button-with-lable-layer">Hide All</span>
-                                    <span ng-click="self.showAllLayer()" class="button-with-lable-layer">Show All</span>
-                                </div>
-
-                            </div>
                             <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                                 filter="self.layerFilter" get-icon="self.getLayerIcon" get-children="self.noChildren"
                                 keep-children='true' run-match="self.runLayerMatch" hide-unmatched="true"

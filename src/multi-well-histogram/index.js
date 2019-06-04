@@ -31,8 +31,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.statisticHeaders = ['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
     self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
-    $scope.tab = 4;
-    self.selectionTab = self.selectionTab || 'Stats';
+    $scope.tab = 1;
+    self.selectionTab = self.selectionTab || 'Wells';
 
     $scope.setTab = function(newTab){
       $scope.tab = newTab;
@@ -270,15 +270,15 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getZoneLabel = function (node) {
         return node.zone_template.name;
     }
-    this.getZoneIcon = function (node) {
-        return (node && !node._notUsed) ? 'zone-16x16': 'fa fa-times-circle'
-    }
+   
+    this.getZoneIcon = (node) => ( (node && !node._notUsed) ? 'zone-16x16': 'fa fa-eye-slash' )
     const EMPTY_ARRAY = []
     this.noChildren = function (node) {
         return EMPTY_ARRAY;
     }
     this.click2ToggleZone = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
+        self.selectedZones = Object.values(selectedObjs).map(o => o.data);
     }
     this.click2ToggleLayer = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
@@ -301,6 +301,20 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getConfigLeft = function() {
         self.config = self.config || {};
         return isNaN(self.config.left) ? "[empty]": wiApi.bestNumberFormat(self.config.left, 3);
+    }
+    this.getConfigLimitTop = function () {
+        self.config = self.config || {};
+        return isNaN(self.config.limitTop) ? "[empty]": wiApi.bestNumberFormat(self.config.limitTop, 3);
+    }
+    this.getConfigLimitBottom = function () {
+        self.config = self.config || {};
+        return isNaN(self.config.limitBottom) ? "[empty]": wiApi.bestNumberFormat(self.config.limitBottom, 3);
+    }
+    this.setConfigLimitTop = function (notUse, newValue) {
+        self.config.limitTop = parseFloat(newValue)
+    }
+    this.setConfigLimitBottom = function (notUse, newValue) {
+        self.config.limitBottom = parseFloat(newValue)
     }
     this.setConfigLeft = function(notUse, newValue) {
         self.config.left = parseFloat(newValue);
@@ -546,4 +560,24 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.histogramList.forEach(bins => bins._notUsed = false);
         $timeout(() => {});
     }
+
+    //--------------
+
+    this.hideSelectedZone = function() {
+        self.selectedZones.forEach(layer => layer._notUsed = true);
+    }
+    this.showSelectedZone = function() {
+        self.selectedZones.forEach(layer => layer._notUsed = false);
+        $timeout(() => {});
+    }
+    this.hideAllZone = function() {
+        self.zoneTree.forEach(bins => bins._notUsed = true);
+        $timeout(() => {});
+    }
+    this.showAllZone = function() {
+        self.zoneTree.forEach(bins => bins._notUsed = false);
+        $timeout(() => {});
+    }
+
+    
 }

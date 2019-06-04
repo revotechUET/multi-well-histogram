@@ -26,6 +26,19 @@ multi-well-histogram {
             border    : none;
             box-shadow: none;
             outline   : none;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .btn-default:active:focus {
+            background-color: #fff;
+        }
+        .btn-default.active, .btn-default:active, .open>.dropdown-toggle.btn-default {
+            color: #333;
+            background-color: #fff;
+            background-image: none;
+            border-color: #adadad;
         }
 
         .btn-default.focus,
@@ -265,6 +278,8 @@ multi-well-histogram {
             margin-left: 5px;
             border       : 1px solid #e4e4e4;
             border-radius: 2px;
+            flex: 1;
+            text-align: center;
             transition   : all 0.2s ease-in;
             &:hover {
                 background: #fff;
