@@ -102,8 +102,8 @@
                                 <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
                                    
                                     <div style="display: flex; align-items: center;">
-                                         <!-- <i class="fa fa-caret-down"></i> -->
-                                            <i class="fa fa-caret-right" ng-click="well == !well" style="margin-right: 10px; cursor: pointer;"></i>
+                                            
+                                            <i class="header-icon" ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}" ng-click="well._hidden = !well._hidden" ></i>
                                             <div ng-bind="well.name"> </div>
                                     </div>
                                         
@@ -114,7 +114,7 @@
                                             ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
                                     </div>
                                 </div>
-                                <wi-tree-view ng-show="well" tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
+                                <wi-tree-view ng-hide="well._hidden" tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
                                     get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'
                                     uncollapsible='true' run-match="self.runMatch" hide-unmatched="true" hide-search='true'
                                     click-fn='self.clickFunction'>

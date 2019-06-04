@@ -178,6 +178,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let wellSpec = self.wellSpec.find(wsp => wsp.idWell === treeRoot.idWell);
         wellSpec.idCurve = node.idCurve;
         wellSpec.idDataset = node.idDataset;
+        wellSpec.curveName = node.Name;
     }
     self.refresh = getTree;
     function getTree(callback) {
