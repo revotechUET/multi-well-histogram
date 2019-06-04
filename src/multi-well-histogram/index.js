@@ -371,9 +371,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         try {
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
+                if (well._notUsed) {
+                    continue;
+                }
                 let curve = getCurve(well, self.wellSpec[i]);
                 if (!curve) {
-                    allHistogramList.push([]);
                     continue;
                 }
                 let datasetTop = self.wellSpec[i].datasetTop;
@@ -404,20 +406,25 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     bins.name = `${well.name}.${zone.zone_template.name}`;
 					bins.top = zone.startDepth;
 					bins.bottom = zone.endDepth;
-					bins.numPoints = dataArray.length;
-					bins.avg = d3.mean(dataArray, d => d.x);
-					bins.min = d3.min(dataArray, d => d.x);
-					bins.max = d3.max(dataArray, d => d.x);
-					bins.stddev = d3.deviation(dataArray, d => d.x);
-					bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
-					bins.var = d3.variance(dataArray, d => d.x);
-					bins.median = d3.median(dataArray, d => d.x);
-					bins.skew = ss.sampleSkewness(dataArray.map(d => d.x));
-					bins.kurtosis = ss.sampleKurtosis(dataArray.map(d => d.x));
-					bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
-					bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
-					bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
-                    wellHistogramList.push(bins);
+                    bins.numPoints = dataArray.length;
+                    try {
+                        bins.avg = d3.mean(dataArray, d => d.x);
+                        bins.min = d3.min(dataArray, d => d.x);
+                        bins.max = d3.max(dataArray, d => d.x);
+                        bins.stddev = d3.deviation(dataArray, d => d.x);
+                        bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
+                        bins.var = d3.variance(dataArray, d => d.x);
+                        bins.median = d3.median(dataArray, d => d.x);
+                        bins.skew = ss.sampleSkewness(dataArray.map(d => d.x));
+                        bins.kurtosis = ss.sampleKurtosis(dataArray.map(d => d.x));
+                        bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
+                        bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
+                        bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
+                        wellHistogramList.push(bins);
+                    }
+                    catch(e) {
+                        console.error(e);
+                    }
                 }
                 if (self.getStackMode() === 'well') {
                     wellHistogramList.name = well.name;
@@ -468,6 +475,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         console.log('end');
     }
 	function calAverageDeviation(data) {
+        return 1;
         let mean = d3.mean(data);
 
         return d3.mean(data, function (d) {
@@ -475,6 +483,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }).toFixed(4);
     }
 	function calPercentile(data, p) {
+        return 1;
         return d3.quantile(data.sort(function (a, b) {
             return a - b;
         }), p).toFixed(4);
@@ -636,6 +645,26 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree.forEach(bins => bins._notUsed = false);
         $timeout(() => {});
     }
-
+    this.onDrop = function (event, helper, myData) {
+        let idWells = helper.data('idWells');
+        if (idWells && idWells.length) {
+            $timeout(() => {
+                for (let idWell of idWells) {
+                    if (!self.wellSpec.find(wsp => wsp.idWell === idWell)) {
+                        self.wellSpec.push({idWell});
+                    }
+                }
+            })
+        }
+    }
+    this.toggleWell = function(well) {
+        well._notUsed = !well._notUsed;
+    }
+    this.removeWell = function(well) {
+        let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell);
+        if(index >= 0) {
+            self.wellSpec.splice(index, 1);
+        }
+    }
     
 }

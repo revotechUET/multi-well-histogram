@@ -47,14 +47,16 @@
                 </layer-collection>
                 <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">{{self.selectionValue}}
                 </p>
+                <p style="position: absolute; top: 20px; right: 50%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
+                {{self.config.title || 'New Histogram'}}</p>
                 <p
                     style="position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: bottom;">
-                    Frequence</p>
+                    Frequency</p>
                 <p
                     style="position: absolute; right: 0; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: bottom;">
                     Percentage (%)</p>
             </wi-droppable>
-            <div style=" height: 100%; right: 0; border-left: 1px solid #eee;">
+            <div style=" height: 100%; right: 0; border-left: 1px solid #eee; box-shadow: 0 0 20px #0000001c;">
                 <side-bar my-default-width="350" orientation="w" collapsed="false">
 
                     <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;
@@ -83,8 +85,7 @@
                                     ng-click="self.selectionType='family'" class="button-with-lable"
                                     style="margin-right: 8px;">family</span>
                                 <span ng-class="{'active' : self.selectionType === 'curve'}"
-                                    ng-click="self.selectionType='curve'" class="button-with-lable"
-                                    style="margin-right: 8px;">curve</span>
+                                    ng-click="self.selectionType='curve'" class="button-with-lable">curve</span>
                             </div>
 
                         </div>
@@ -105,14 +106,20 @@
                                             
                                             <i class="header-icon" ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}" ng-click="well._hidden = !well._hidden" ></i>
                                             <div ng-bind="well.name"> </div>
+                                            
                                     </div>
                                         
-                                    <div style="display: flex;">
+                                    <div style="display: flex; align-items: center;">
                                         <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
                                             ng-bind="self.wellSpec[$index].datasetName"></div>
                                         <div style="border-radius: 2px;padding: 1px 10px;"
                                             ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
+                                        <span ng-class="{'fa fa-eye-slash': well._notUsed, 'fa fa-eye': !well._notUsed }" ng-click="self.toggleWell(well)" style="color: rgb(163, 163, 163);cursor: pointer; margin-right: 10px;">
+                                        </span>
+                                        <span class="fa fa-times-circle" ng-click="self.removeWell(well)" style="color: rgb(163, 163, 163);cursor: pointer;">
+                                        </span>
                                     </div>
+                                    
                                 </div>
                                 <wi-tree-view ng-hide="well._hidden" tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
                                     get-icon="self.getIcon" get-children="self.getChildren" keep-children='true'

@@ -99,7 +99,9 @@ multi-well-histogram {
         }
 
         .node-content {
-
+            &.search-mode>div {
+                opacity: 1;
+            }
             &,
             &::after {
                 line-height: 3em;
@@ -231,7 +233,7 @@ multi-well-histogram {
         .label-list-view {
             padding        : 16px 15px;
             font-weight    : bold;
-            background     : #f4f4f4;
+            background     : #fff;
             // border      : 1px solid #eee;
             display        : flex;
             align-items    : center;
@@ -312,10 +314,10 @@ multi-well-histogram {
 
         .tab-with-lable {
             cursor       : pointer;
-            background   : #f4f4f4;
+            background   : #fff;
             font-size    : 12px;
             padding      : 7px 10px;
-            border-bottom: 2px solid #f4f4f4;
+            border-bottom: 2px solid #fff;
             transition   : all 0.2s ease-in;
             flex         : 1;
             font-weight: bold;
