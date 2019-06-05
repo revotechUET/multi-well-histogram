@@ -3,49 +3,49 @@
         container-style="{display:'flex',flex: 1, position: 'relative'}">
         <div class="main-body">
             <div class="main-body-center border-style" style="position: relative;">
-                    <layer-collection v-padding="50" h-padding='40'>
-                        <axis-layer min-val="self.getLeft()"
-                            max-val="self.config.right || self.defaultConfig.right || 1" loga="self.getLoga()"
-                            n-ticks="self.config.majorTicks || 10" minor-ticks="self.config.minorTicks || 1"
-                            precision="4" grid="!!self.config.grid" placement="1">
-                        </axis-layer>
-                        <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
-                            precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
-                        <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
-                            grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
-                        <canvas-barchart-layer
-                            ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none' && !bins._notUsed"
-                            ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
-                            min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
-                            bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
-                        </canvas-barchart-layer>
-                        <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
-                            self.getStackMode() == 'well' && !groupOfBins._notUsed"
-                            ng-repeat="groupOfBins in self.histogramList" min-val="self.getLeft()"
-                            max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
-                            loga="self.getLoga()" autofit='false' bins="groupOfBins" bin-gap="self.getBinGap()"
-                            color-func="self.colorFn" multiple='true'>
-                        </canvas-barchart-layer>
-                        <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
-                            self.getStackMode() == 'all' && !self.histogramList._notUsed" min-val="self.getLeft()"
-                            max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
-                            loga="self.getLoga()" autofit='false' bins="self.histogramList" bin-gap="self.getBinGap()"
-                            color-func="self.colorFn" multiple='true'>
-                        </canvas-barchart-layer>
-                        <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
-                            ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
-                            min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
-                            get-x='self.getBinX' get-y='self.getBinY' line-data="bins" line-color="bins.color"
-                            line-width='2' line-dash="'2 0'" color-func="self.colorFn">
-                        </line-point-layer>
-                    </layer-collection>
-                    <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">
-                        {{self.selectionValue}} </p>
-                    <p
-                        style="position: absolute; top: 23px; right: 45%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
-                        {{self.config.title || 'New Histogram'}}</p>
-                    <p style="position: absolute;top: 23px;left: 15px; transform: translateY(-50%);">Frequency</p>
-                    <p style="position: absolute;top: 23px; right: 15px;transform: translateY(-50%);">Percentage (%)</p>
+                <layer-collection v-padding="50" h-padding='40'>
+                    <axis-layer min-val="self.getLeft()"
+                        max-val="self.config.right || self.defaultConfig.right || 1" loga="self.getLoga()"
+                        n-ticks="self.config.majorTicks || 10" minor-ticks="self.config.minorTicks || 1"
+                        precision="4" grid="!!self.config.grid" placement="1">
+                    </axis-layer>
+                    <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
+                        precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
+                    <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
+                        grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
+                    <canvas-barchart-layer
+                        ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none' && !bins._notUsed"
+                        ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                        min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                        bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
+                    </canvas-barchart-layer>
+                    <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
+                        self.getStackMode() == 'well' && !groupOfBins._notUsed"
+                        ng-repeat="groupOfBins in self.histogramList" min-val="self.getLeft()"
+                        max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
+                        loga="self.getLoga()" autofit='false' bins="groupOfBins" bin-gap="self.getBinGap()"
+                        color-func="self.colorFn" multiple='true'>
+                    </canvas-barchart-layer>
+                    <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
+                        self.getStackMode() == 'all' && !self.histogramList._notUsed" min-val="self.getLeft()"
+                        max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
+                        loga="self.getLoga()" autofit='false' bins="self.histogramList" bin-gap="self.getBinGap()"
+                        color-func="self.colorFn" multiple='true'>
+                    </canvas-barchart-layer>
+                    <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
+                        ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                        min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                        get-x='self.getBinX' get-y='self.getBinY' line-data="bins" line-color="bins.color"
+                        line-width='2' line-dash="'2 0'" color-func="self.colorFn">
+                    </line-point-layer>
+                </layer-collection>
+                <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">
+                    {{self.selectionValue}} </p>
+                <p
+                    style="position: absolute; top: 23px; right: 45%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
+                    {{self.config.title || 'New Histogram'}}</p>
+                <p style="position: absolute;top: 23px;left: 15px; transform: translateY(-50%);">Frequency</p>
+                <p style="position: absolute;top: 23px; right: 15px;transform: translateY(-50%);">Percentage (%)</p>
             </div>
             <div class="statistic-table">
                 <div style="font-size: 12px; display: flex; margin-bottom: 10px;">Statistics
