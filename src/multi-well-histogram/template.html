@@ -7,7 +7,7 @@
 					style="margin-left: 0; flex: 0">Save</span>
 			</div>
             <div class="main-body-center border-style" style="position: relative;">
-                <layer-collection v-padding="50" h-padding='40'>
+                <layer-collection v-padding="50" h-padding='60'>
                     <axis-layer min-val="self.getLeft()"
                         max-val="self.config.right || self.defaultConfig.right || 1" loga="self.getLoga()"
                         n-ticks="self.config.majorTicks || 10" minor-ticks="self.config.minorTicks || 1"
@@ -18,20 +18,25 @@
                     <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
                         grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
                     <canvas-barchart-layer
-                        ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none' && !bins._notUsed"
+                        ng-show="!bins._notUsed"
+                        ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none'"
                         ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
                         min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
                         bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
                     </canvas-barchart-layer>
-                    <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
-                        self.getStackMode() == 'well' && !groupOfBins._notUsed"
+                    <canvas-barchart-layer 
+                        ng-show="!groupOfBins._notUsed"
+                        ng-if="self.getDisplayMode() == 'bar' && 
+                        self.getStackMode() == 'well'"
                         ng-repeat="groupOfBins in self.histogramList" min-val="self.getLeft()"
                         max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
                         loga="self.getLoga()" autofit='false' bins="groupOfBins" bin-gap="self.getBinGap()"
                         color-func="self.colorFn" multiple='true'>
                     </canvas-barchart-layer>
-                    <canvas-barchart-layer ng-if="self.getDisplayMode() == 'bar' && 
-                        self.getStackMode() == 'all' && !self.histogramList._notUsed" min-val="self.getLeft()"
+                    <canvas-barchart-layer 
+                        ng-show="!self.histogramList._notUsed"
+                        ng-if="self.getDisplayMode() == 'bar' && 
+                        self.getStackMode() == 'all'" min-val="self.getLeft()"
                         max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100'
                         loga="self.getLoga()" autofit='false' bins="self.histogramList" bin-gap="self.getBinGap()"
                         color-func="self.colorFn" multiple='true'>
@@ -52,10 +57,10 @@
                 <p style="position: absolute;top: 23px; right: 15px;transform: translateY(-50%);">Percentage (%)</p>
             </div>
             <div class="statistic-table">
-                <div style="font-size: 12px; display: flex; margin-bottom: 10px;">Statistics
+                <!-- <div style="font-size: 12px; display: flex; margin-bottom: 10px;">Statistics
                     <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                     </div>
-                </div>
+                </div> -->
                 <!-- <div style="display: flex; flex-wrap: wrap;">
                     <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
                         ng-class="{'active' : self.statisticHeaderMasks[$index]}"
@@ -128,12 +133,12 @@
 
                                 <div style="display: flex; align-items: center;">
                                     <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
-                                        ng-bind="self.wellSpec[$index].datasetName"></div>
+                                        ng-bind="self.getWellSpec(well).datasetName"></div>
                                     <div style="border-radius: 2px;padding: 1px 10px;"
-                                        ng-bind="self.getCurve(well, self.wellSpec[$index]).name"></div>
-                                    <span ng-class="{'fa fa-eye-slash': well._notUsed, 'fa fa-eye': !well._notUsed }"
+                                        ng-bind="self.getCurve(well).name"></div>
+                                    <span ng-class="{'red-color fa fa-eye-slash': well._notUsed, 'blue-color fa fa-eye': !well._notUsed }"
                                         ng-click="self.toggleWell(well)"
-                                        style="color: rgb(163, 163, 163);cursor: pointer; margin-right: 10px;">
+                                        style="cursor: pointer; margin-right: 10px;">
                                     </span>
                                     <span class="fa fa-times-circle" ng-click="self.removeWell(well)"
                                         style="color: rgb(163, 163, 163);cursor: pointer;">

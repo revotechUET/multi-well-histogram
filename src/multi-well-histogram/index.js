@@ -73,15 +73,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     getSelectionList(self.selectionType, self.treeConfig);
                     getZonesetsFromWells(self.treeConfig);
                     updateDefaultConfig();
-                    
-                    /*
-                    $scope.$watch(() => (
-                        `${self.getLeft()}-${self.getRight()}-${self.getLoga()}-${self.getDivisions()}-${self.selectionValue}`
-                    ), () => {
-                        _histogramGen = null;
-                    });
-                    */
-
                 });
             }, true);
             $scope.$watch(() => (self.selectionType), () => {
@@ -91,6 +82,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             $scope.$watch(() => (self.selectionValue), () => {
                 updateDefaultConfig();
             });
+            // $scope.$watch(() => (
+            //     `${self.getLeft()}-${self.getRight()}-${self.getLoga()}-${self.getDivisions()}-${self.selectionValue}`
+            // ), () => {
+            //     _histogramGen = null;
+            // });
         }, 500);
 
         self.defaultConfig = self.defaultConfig || {};
@@ -291,6 +287,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return true;
     }
     this.getZoneLabel = function (node) {
+        if(!node || !node.zone_template){
+            return 'aaa';
+        }
         return node.zone_template.name;
     }
    
