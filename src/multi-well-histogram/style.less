@@ -156,6 +156,12 @@ multi-well-histogram {
                 }
             }
         }
+        .statistic-table {
+            margin: 10px 35px;
+            position: relative;
+            overflow: auto;
+            flex-basis: 200px;
+        }
 
         .main-body {
             flex      : 1;
@@ -163,6 +169,7 @@ multi-well-histogram {
             overflow-x: auto;
             overflow-y: hidden;
             position  : relative;
+            flex-direction: column;
 
             .border-style {
                 border                 : 1px solid #eee;
@@ -209,8 +216,8 @@ multi-well-histogram {
                 display       : flex;
                 height        : 100%;
                 position      : relative;
-                flex-direction: row;
-                min-width     : 700px;
+                flex-direction: column;
+                // min-width     : 700px;
             }
         }
 
