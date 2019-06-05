@@ -20,7 +20,8 @@ app.component(componentName, {
         zonesetName: "<",
         selectionType: "<",
         selectionValue: "<",
-		idHistogram: "<"
+		idHistogram: "<",
+		config: '<'
     },
     transclude: true
 });
@@ -604,7 +605,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					zonesetName: self.zonesetName,
 					selectionType: self.selectionType,
 					selectionValue: self.selectionValue,
-					title: name 
+					config: self.config	
 				}
 				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
 					self.setConfigTitle(null, name);
@@ -625,7 +626,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 				zonesetName: self.zonesetName,
 				selectionType: self.selectionType,
 				selectionValue: self.selectionValue,
-				title: name 
+				config: self.config	
 			}
 			wiApi.editAssetPromise(self.idHistogram, content).then(res => {
 				console.log(res);
