@@ -178,7 +178,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wellSpec.idDataset = node.idDataset;
         wellSpec.curveName = node.Name;
     }
-    self.refresh = getTree;
+    this.refresh = function(){
+        self.histogramList.length = 0;
+        self.treeConfig.length = 0;
+        getTree();
+    };
     async function getTree(callback) {
         wiLoading.show($element.find('.main')[0]);
         self.treeConfig = [];
@@ -365,7 +369,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.getConfigXLabel = function() {
         self.config = self.config || {};
-        return (self.config.xLabel || "").length ? self.config.xLabel : "[empty]";
+        return (self.config.xLabel || "").length ? self.config.xLabel : self.selectionValue;
     }
     this.setConfigXLabel = function(notUse, newValue) {
         self.config.xLabel = newValue;
@@ -685,9 +689,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return _headers;
     }
     this.hideSelectedLayer = function() {
+        if(!self.selectedLayers) return;
         self.selectedLayers.forEach(layer => layer._notUsed = true);
     }
     this.showSelectedLayer = function() {
+        if(!self.selectedLayers) return;
         self.selectedLayers.forEach(layer => layer._notUsed = false);
         $timeout(() => {});
     }
@@ -703,9 +709,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     //--------------
 
     this.hideSelectedZone = function() {
+        if(!self.selectedZones) return;
         self.selectedZones.forEach(layer => layer._notUsed = true);
     }
     this.showSelectedZone = function() {
+        if(!self.selectedZones) return;
         self.selectedZones.forEach(layer => layer._notUsed = false);
         $timeout(() => {});
     }

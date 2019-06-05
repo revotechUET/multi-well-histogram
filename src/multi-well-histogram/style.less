@@ -40,11 +40,16 @@ multi-well-histogram {
     wi-table-view {
         & div.cell {
             display: table-cell;
-            padding: 3px;
+            padding: 7px 10px;
             border-right: 1px solid #d4d4d4;
             border-bottom: 1px solid #d4d4d4;
             cursor: default;
             position: relative;
+            border-top: none;
+            border-left: none; 
+        }
+        & div.table {
+            margin-top: 0;
         }
     }
 
@@ -355,7 +360,7 @@ multi-well-histogram {
             cursor       : pointer;
             background   : #f4f4f4;
             font-size    : 12px;
-            padding      : 9px 10px 5px 10px;
+            padding      : 12px 10px 8px 10px;
             border-bottom: 2px solid #f4f4f4;
             transition   : all 0.2s ease-in;
             flex         : 1;

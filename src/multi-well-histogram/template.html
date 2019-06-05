@@ -3,16 +3,16 @@
         container-style="{display:'flex',flex: 1, position: 'relative'}">
         <div class="main-body">
             <div class="label-list-view ng-scope" 
-                style="border-bottom: 1px solid #f0f0f0;
-                display :flex;
-                background: #f4f4f4;
-                padding: 4px 15px;">
-                <span ng-click="self.save()" style="background: #fff;
+                style="display :flex; background: #f4f4f4; padding: 12px 15px; justify-content: flex-start;">
+                <!-- <span ng-click="self.save()" style="background: #fff;
                 padding: 3px 17px;
                 border-radius: 2px;
-                border: 1px solid #e4e4e4;">Save</span>
-                
+                border: 1px solid #e4e4e4;">Save</span> -->
+                <span ng-click="self.refresh()" class="reload-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+                <span ng-click="self.save()" class="save-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+                <!-- <span ng-click="" class="save-as-16x16" style="cursor: pointer; margin-right: 10px;"></span> -->
             </div>
+
 			<!-- <div style="display: flex; padding: 0 16px 7px 16px;">
 				<span ng-click="self.save()" class="button-with-lable-layer"
 					style="margin-left: 0; flex: 0">Save</span>
@@ -60,7 +60,7 @@
                     </line-point-layer>
                 </layer-collection>
                 <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">
-                    {{self.selectionValue}} </p>
+                    {{self.getConfigXLabel()}} </p>
                 <p
                     style="position: absolute; top: 23px; right: 45%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
                     {{self.getConfigTitle()}}</p>
