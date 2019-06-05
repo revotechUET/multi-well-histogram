@@ -395,11 +395,18 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.histogramList = [];
 	var flattenHistogramList = [];
+	var listWellStats = [];
+	var listAllStats = [];
     this.genHistogramList = async function() {
         this.histogramList.length = 0;
         let allHistogramList = []
+		listWellStats.length = 0;
+		listAllStats.length = 0;
         _histogramGen = null;
         wiLoading.show($element.find('.main')[0]);
+
+		let allZones = [];
+		let allDataArray = [];
         try {
             
             for (let i = 0; i < self.treeConfig.length; i++) {
@@ -430,36 +437,55 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     });
                     return !z._notUsed;
                 });
+				if (self.getStackMode() === 'all') {
+					allZones = [...allZones, ...zones];
+				}
                 let wellHistogramList = [];
+				let wellDataArray = [];
                 for (let j = 0; j < zones.length; j++) {
                     let zone = zones[j];
                     let dataArray = filterData(curveData, zone);
+					dataArray.top = zone.startDepth;
+					dataArray.bottom = zone.endDepth;
+					if (self.getStackMode() === 'well') {
+						wellDataArray = [...wellDataArray, ...dataArray];
+					} else if (self.getStackMode() === 'all') {
+						allDataArray = [...allDataArray, ...dataArray];
+					}
                     let bins = genBins(dataArray);
                     bins.color = self.getColor(zone, well);
                     bins.name = `${well.name}.${zone.zone_template.name}`;
-					bins.top = zone.startDepth;
-					bins.bottom = zone.endDepth;
-                    bins.numPoints = dataArray.length;
-                    try {
-                        bins.avg = d3.mean(dataArray, d => d.x);
-                        bins.min = d3.min(dataArray, d => d.x);
-                        bins.max = d3.max(dataArray, d => d.x);
-                        bins.stddev = d3.deviation(dataArray, d => d.x);
-                        bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
-                        bins.var = d3.variance(dataArray, d => d.x);
-                        bins.median = d3.median(dataArray, d => d.x);
-                        bins.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray.map(d => d.x)) : undefined;
-                        bins.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray.map(d => d.x)) : undefined;
-                        bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
-                        bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
-                        bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
-                        wellHistogramList.push(bins);
-                    }
-                    catch(e) {
-                        console.error(e);
-                    }
+
+					bins.stats = {};
+					bins.stats.top = zone.startDepth;
+					bins.stats.bottom = zone.endDepth;
+					let stats = setStats(dataArray.map(d => d.x));
+					bins.stats = Object.assign(bins.stats, stats);
+					wellHistogramList.push(bins);
+                    // try {
+                    //     bins.avg = d3.mean(dataArray, d => d.x);
+                    //     bins.min = d3.min(dataArray, d => d.x);
+                    //     bins.max = d3.max(dataArray, d => d.x);
+                    //     bins.stddev = d3.deviation(dataArray, d => d.x);
+                    //     bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
+                    //     bins.var = d3.variance(dataArray, d => d.x);
+                    //     bins.median = d3.median(dataArray, d => d.x);
+                    //     bins.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray.map(d => d.x)) : undefined;
+                    //     bins.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray.map(d => d.x)) : undefined;
+                    //     bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
+                    //     bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
+                    //     bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
+                    //     wellHistogramList.push(bins);
+                    // }
+                    // catch(e) {
+                    //     console.error(e);
+                    // }
                 }
                 if (self.getStackMode() === 'well') {
+					let stats = setStats(wellDataArray.map(d => d.x));
+					stats.top = d3.min(zones, z => z.startDepth);
+					stats.bottom = d3.max(zones, z => z.endDepth);
+					listWellStats.push(stats);
                     wellHistogramList.name = well.name;
                     allHistogramList.push(wellHistogramList);
                 }
@@ -491,6 +517,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let aggregate = aggregateHistogramList(allHistogramList);
                     max = d3.max(aggregate);
 					flatten = allHistogramList;
+
+					let stats = setStats(allDataArray.map(d => d.x));
+					stats.top = d3.min(allZones, z => z.startDepth);
+					stats.bottom = d3.max(allZones, z => z.endDepth);
+					listAllStats.push(stats);
                 }
                 break;
                     
@@ -508,6 +539,28 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wiLoading.hide();
         console.log('end');
     }
+	function setStats(dataArray) {
+		let stats = {};
+		try {
+			stats.numPoints = dataArray.length;
+			stats.avg = d3.mean(dataArray);
+			stats.min = d3.min(dataArray);
+			stats.max = d3.max(dataArray);
+			stats.stddev = d3.deviation(dataArray);
+			stats.avgdev = calAverageDeviation(dataArray);
+			stats.var = d3.variance(dataArray);
+			stats.median = d3.median(dataArray);
+			stats.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray) : undefined;
+			stats.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray) : undefined;
+			stats.p10 = calPercentile(dataArray, 0.1);
+			stats.p50 = calPercentile(dataArray, 0.5);
+			stats.p90 = calPercentile(dataArray, 0.9);
+		}
+		catch(e) {
+			console.error(e);
+		}
+		return stats;
+	}
 	function calAverageDeviation(data) {
 		if (data.length < 1) return;
         let mean = d3.mean(data);
@@ -648,38 +701,54 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return _zoneNames;
     }
     self.statsValue = function ([row, col]) {
+		let statsArray = [];
+		switch(self.getStackMode()) {
+			case 'none':
+				statsArray = flattenHistogramList.map(e => e.stats);
+				break;
+			case 'well':
+				statsArray = [...listWellStats];
+				break;
+			case 'all':
+				// statsArray = [...listAllStats];
+				statsArray = flattenHistogramList.map(e => e.stats);
+				break;
+			default:
+				statsArray = [];
+		}
+
 		try {
 			switch(_headers[col]){
 				case 'top': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].top, 4) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].top, 4) || 'N/A';
 				case 'bottom': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].bottom, 4) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].bottom, 4) || 'N/A';
 				case '#pts':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].numPoints, 4) || 'N/A';
+					return statsArray[row].numPoints || 'N/A';
 				case 'avg':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].avg) || 'N/A'
+					return wiApi.bestNumberFormat(statsArray[row].avg) || 'N/A'
 				case 'min':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].min) || 'N/A'
+					return wiApi.bestNumberFormat(statsArray[row].min) || 'N/A'
 				case 'max':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].max )|| 'N/A'
+					return wiApi.bestNumberFormat(statsArray[row].max )|| 'N/A'
 				case 'avgdev': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].avgdev) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].avgdev) || 'N/A';
 				case 'stddev': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].stddev) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].stddev) || 'N/A';
 				case 'var':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].var) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].var) || 'N/A';
 				case 'skew':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].skew) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].skew) || 'N/A';
 				case 'kurtosis':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].kurtosis) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].kurtosis) || 'N/A';
 				case 'median':
-					return wiApi.bestNumberFormat(flattenHistogramList[row].median) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].median) || 'N/A';
 				case 'p10': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].p10) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].p10) || 'N/A';
 				case 'p50': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].p50) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].p50) || 'N/A';
 				case 'p90': 
-					return wiApi.bestNumberFormat(flattenHistogramList[row].p90) || 'N/A';
+					return wiApi.bestNumberFormat(statsArray[row].p90) || 'N/A';
 				default: 
 					return "this default";
 			}
