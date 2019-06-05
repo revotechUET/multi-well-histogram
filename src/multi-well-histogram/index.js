@@ -289,7 +289,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetName = (selectedItemProps || {}).name || 'ZonationAll';
     }
     this.runZoneMatch = function (node, criteria) {
-        return true;
+        let keySearch = criteria.toLowerCase();
+        let searchArray = node.zone_template.name.toLowerCase();
+        return searchArray.includes(keySearch);
     }
     this.getZoneLabel = function (node) {
         if(!node || !node.zone_template){
@@ -313,7 +315,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     
     this.runLayerMatch = function (node, criteria) {
-        return node.name.includes(criteria);
+        let keySearch = criteria.toLowerCase();
+        let searchArray = node.name.toLowerCase();
+        return searchArray.includes(keySearch);
     }
     let _layerTree = [];
     this.getLayerTree = function() {
