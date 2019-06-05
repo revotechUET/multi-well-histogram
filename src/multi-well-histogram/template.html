@@ -2,10 +2,21 @@
     <wi-droppable style="display:flex; width: 100%;;" on-drop="self.onDrop"
         container-style="{display:'flex',flex: 1, position: 'relative'}">
         <div class="main-body">
-			<div style="display: flex; padding: 0 16px 7px 16px;">
+            <div class="label-list-view ng-scope" 
+                style="border-bottom: 1px solid #f0f0f0;
+                display :flex;
+                background: #f4f4f4;
+                padding: 4px 15px;">
+                <span ng-click="self.save()" style="background: #fff;
+                padding: 3px 17px;
+                border-radius: 2px;
+                border: 1px solid #e4e4e4;">Save</span>
+                
+            </div>
+			<!-- <div style="display: flex; padding: 0 16px 7px 16px;">
 				<span ng-click="self.save()" class="button-with-lable-layer"
 					style="margin-left: 0; flex: 0">Save</span>
-			</div>
+			</div> -->
             <div class="main-body-center border-style" style="position: relative;">
                 <layer-collection v-padding="50" h-padding='60'>
                     <axis-layer min-val="self.getLeft()"
@@ -78,10 +89,10 @@
         </div>
         <div style=" height: 100%; right: 0; border-left: 1px solid #eee; box-shadow: 0 0 20px #0000001c;">
             <side-bar my-default-width="350" orientation="w" collapsed="false">
-                <div class="label-list-view" style="border-bottom: 1px solid #f0f0f0;
+                <div class="label-list-view" style="border-bottom: 2px solid #f0f0f0;
                         display :flex;
                         justify-content: space-between;
-                        padding: 8px 15px;">
+                        padding: 0px 15px;">
                     <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-lable"
                         style="margin-right: 8px;">Wells</span>
                     <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-lable"

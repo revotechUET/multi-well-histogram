@@ -69,11 +69,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             wiToken.setToken(self.token);
         $timeout(() => {
             $scope.$watch(() => (self.wellSpec.map(wsp => wsp.idWell)), () => {
-                getTree(function() {
-                    getSelectionList(self.selectionType, self.treeConfig);
-                    getZonesetsFromWells(self.treeConfig);
-                    updateDefaultConfig();
-                });
+                getTree();
             }, true);
             $scope.$watch(() => (self.selectionType), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
@@ -82,6 +78,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             $scope.$watch(() => (self.selectionValue), () => {
                 updateDefaultConfig();
             });
+            $scope.$watch(() => (self.treeConfig.map(w => w.idWell)), () => {
+                getSelectionList(self.selectionType, self.treeConfig);
+                getZonesetsFromWells(self.treeConfig);
+                updateDefaultConfig();
+            }, true);
             // $scope.$watch(() => (
             //     `${self.getLeft()}-${self.getRight()}-${self.getLoga()}-${self.getDivisions()}-${self.selectionValue}`
             // ), () => {
