@@ -19,7 +19,8 @@ app.component(componentName, {
         wellSpec: "<",
         zonesetName: "<",
         selectionType: "<",
-        selectionValue: "<"
+        selectionValue: "<",
+		idHistogram: "<"
     },
     transclude: true
 });
@@ -357,7 +358,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.getConfigTitle = function() {
         self.config = self.config || {};
-        return (self.config.title || "").length ? self.config.title : "[empty]";
+        return (self.config.title || "").length ? self.config.title : "New Histogram";
     }
     this.setConfigTitle = function(notUse, newValue) {
         self.config.title = newValue;
@@ -584,6 +585,52 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if (self.getStackMode() === 'none');
         return bins.color;
     }
+
+	this.save = function() {
+		console.log('save');
+		if (!self.idHistogram) {
+			wiDialog.promptDialog({
+				title: 'New Histogram',
+				inputName: 'Histogram Name',
+				input: self.getConfigTitle(),
+			}, function(name) {
+				let type = 'HISTOGRAM';
+				let content = {
+					wellSpec: self.wellSpec,
+					zonesetName: self.zonesetName,
+					selectionType: self.selectionType,
+					selectionValue: self.selectionValue,
+					title: name 
+				}
+				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
+					self.setConfigTitle(null, name);
+					self.idHistogram = res.idParameterSet;
+					console.log(res);
+				})
+					.catch(e => {
+						console.error(e);
+						self.save();
+					})
+			});
+		}
+		else {
+			let type = 'HISTOGRAM';
+			let content = {
+				idParameterSet: self.idHistogram,
+				wellSpec: self.wellSpec,
+				zonesetName: self.zonesetName,
+				selectionType: self.selectionType,
+				selectionValue: self.selectionValue,
+				title: name 
+			}
+			wiApi.editAssetPromise(self.idHistogram, content).then(res => {
+				console.log(res);
+			})
+				.catch(e => {
+					console.error(e);
+				});
+		}
+	}
 
     let _zoneNames = []
     self.getZoneNames = function() {

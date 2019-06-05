@@ -2,6 +2,10 @@
     <wi-droppable style="display:flex; width: 100%;;" on-drop="self.onDrop"
         container-style="{display:'flex',flex: 1, position: 'relative'}">
         <div class="main-body">
+			<div style="display: flex; padding: 0 16px 7px 16px;">
+				<span ng-click="self.save()" class="button-with-lable-layer"
+					style="margin-left: 0; flex: 0">Save</span>
+			</div>
             <div class="main-body-center border-style" style="position: relative;">
                 <layer-collection v-padding="50" h-padding='40'>
                     <axis-layer min-val="self.getLeft()"
@@ -43,7 +47,7 @@
                     {{self.selectionValue}} </p>
                 <p
                     style="position: absolute; top: 23px; right: 45%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
-                    {{self.config.title || 'New Histogram'}}</p>
+                    {{self.getConfigTitle()}}</p>
                 <p style="position: absolute;top: 23px;left: 15px; transform: translateY(-50%);">Frequency</p>
                 <p style="position: absolute;top: 23px; right: 15px;transform: translateY(-50%);">Percentage (%)</p>
             </div>
