@@ -17,7 +17,6 @@ app.component(componentName, {
         token: "<",
         idProject: "<",
         wellSpec: "<",
-        curveNames: "<",
         zonesetName: "<",
         selectionType: "<",
         selectionValue: "<"
@@ -46,7 +45,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     //--------------
     this.getDataset = function(well) {
-        wiApi.getWellPromise(well.idWell).then((well) => {
+        wiApi.getCachedWellPromise(well.idWell).then((well) => {
             self.datasets[well] = well.datasets;
         }).catch(e => console.error(e));
     }
@@ -98,7 +97,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
-        self.curveNames = self.curveNames || [];
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5};
     }
 
@@ -107,7 +105,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
 
     function getSelectionList(selectionType, wellArray) {
-        console.log(wellArray);
         let selectionHash = {};
         let allCurves = [];
         wellArray.forEach(well => {
@@ -184,20 +181,32 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wellSpec.curveName = node.Name;
     }
     self.refresh = getTree;
-    function getTree(callback) {
+    async function getTree(callback) {
         wiLoading.show($element.find('.main')[0]);
         self.treeConfig = [];
         let promises = [];
-        for (let w of self.wellSpec) {
-            promises.push(
-                wiApi.getWellPromise(w.idWell || w)
-                    .then(well => ($timeout(() => self.treeConfig.push(well))))
-            );
-        }
-        Promise.all(promises)
+		for (let w of self.wellSpec) {
+			try {
+				let well = await wiApi.getCachedWellPromise(w.idWell || w);
+				$timeout(() => self.treeConfig.push(well));
+			}
+			catch(e) {
+				console.error(e);
+			}
+		}
+		callback && callback();
+		wiLoading.hide();
+        // for (let w of self.wellSpec) {
+        //     promises.push(
+        //         wiApi.getWellPromise(w.idWell || w)
+        //             .then(well => ($timeout(() => self.treeConfig.push(well))))
+        //     );
+        // }
+        /*Promise.all(promises)
             .then(() => callback && callback())
             .catch(e => console.error(e))
             .finally(() => wiLoading.hide());
+		*/
     }
     function getZonesetsFromWells(wells) {
         let zsList;
@@ -265,7 +274,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wellSpec.datasetTop = parseFloat(dataset.top);
         wellSpec.datasetBottom = parseFloat(dataset.bottom);
         wellSpec.datasetStep = parseFloat(dataset.step);
-        console.log(curve.name, curve.idCurve);
         return curve;
     }
     function getZoneset(well, zonesetName = "") {
@@ -580,7 +588,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     let _zoneNames = []
     self.getZoneNames = function() {
         _zoneNames.length = 0;
-		// console.log(self.histogramList);
         Object.assign(_zoneNames, self.histogramList.map(bins => bins.name));
         return _zoneNames;
     }
@@ -588,36 +595,35 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 		try {
 			switch(_headers[col]){
 				case 'top': 
-					return flattenHistogramList[row].top || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].top, 4) || 'N/A';
 				case 'bottom': 
-					return flattenHistogramList[row].bottom || 'N/A';
-					return bottom;
+					return wiApi.bestNumberFormat(flattenHistogramList[row].bottom, 4) || 'N/A';
 				case '#pts':
-					return flattenHistogramList[row].numPoints || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].numPoints, 4) || 'N/A';
 				case 'avg':
-					return flattenHistogramList[row].avg || 'N/A'
+					return wiApi.bestNumberFormat(flattenHistogramList[row].avg) || 'N/A'
 				case 'min':
-					return flattenHistogramList[row].min || 'N/A'
+					return wiApi.bestNumberFormat(flattenHistogramList[row].min) || 'N/A'
 				case 'max':
-					return flattenHistogramList[row].max || 'N/A'
+					return wiApi.bestNumberFormat(flattenHistogramList[row].max )|| 'N/A'
 				case 'avgdev': 
-					return flattenHistogramList[row].avgdev || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].avgdev) || 'N/A';
 				case 'stddev': 
-					return flattenHistogramList[row].stddev || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].stddev) || 'N/A';
 				case 'var':
-					return flattenHistogramList[row].var || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].var) || 'N/A';
 				case 'skew':
-					return flattenHistogramList[row].skew || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].skew) || 'N/A';
 				case 'kurtosis':
-					return flattenHistogramList[row].kurtosis || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].kurtosis) || 'N/A';
 				case 'median':
-					return flattenHistogramList[row].median || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].median) || 'N/A';
 				case 'p10': 
-					return flattenHistogramList[row].p10 || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].p10) || 'N/A';
 				case 'p50': 
-					return flattenHistogramList[row].p50 || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].p50) || 'N/A';
 				case 'p90': 
-					return flattenHistogramList[row].p90 || 'N/A';
+					return wiApi.bestNumberFormat(flattenHistogramList[row].p90) || 'N/A';
 				default: 
 					return "this default";
 			}
