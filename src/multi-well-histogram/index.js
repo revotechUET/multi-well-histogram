@@ -7,7 +7,7 @@ const _DECIMAL_LEN = 4;
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView', 'wiTableView',
     'wiApi', 'editable', 'wiDialog',
-    'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading'
+    'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading','angularResizable'
 ]);
 app.component(componentName, {
     template: require('./template.html'),
