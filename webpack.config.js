@@ -6,7 +6,7 @@ module.exports = {
 	},
 	output: {
 		path: __dirname + '/dist',
-		// path: __dirname + '../../wi-angular/watch/bower_components/multi-well-histogram/dist',
+		// path: __dirname + '../wi-angular/watch/bower_components/multi-well-histogram/dist',
 		filename: 'multi-well-histogram.js'
 	},
 	module: {

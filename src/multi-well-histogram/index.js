@@ -330,6 +330,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.getLayerLabel = (node) => node.name
     this.getLayerIcon = (node) => ( (node && !node._notUsed) ? 'layer-16x16': 'fa fa-eye-slash' )
+    this.getLayerIcons = (node) => ( ["rectangle"] )
+    this.getLayerIconStyle = (node) => ( {
+        'background-color': node.color
+    } )
     this.getConfigLeft = function() {
         self.config = self.config || {};
         return isNaN(self.config.left) ? "[empty]": wiApi.bestNumberFormat(self.config.left, 3);
@@ -487,6 +491,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					stats.bottom = d3.max(zones, z => z.endDepth);
 					listWellStats.push(stats);
                     wellHistogramList.name = well.name;
+                    wellHistogramList.color = well.color;
                     allHistogramList.push(wellHistogramList);
                 }
                 else allHistogramList.push(...wellHistogramList);
@@ -627,9 +632,22 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     function filterData(curveData, zone) {
         return curveData.filter(d => ((zone.startDepth - d.depth)*(zone.endDepth - d.depth) <= 0));
     }
+    function getCorrectValue(val1, val2) {
+        return _.isFinite(val1) ? val1 : val2;
 
-    this.getLeft = () => ( self.config.left || self.defaultConfig.left || 0 )
-    this.getRight = () => ( self.config.right || self.defaultConfig.right || 0 )
+    }
+    this.getLeft = () => {
+        if(self.config.flipHorizontal) {
+           return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 1) ;
+        }
+        return getCorrectValue(getCorrectValue(self.config.left, self.defaultConfig.left), 0) ;
+    }
+    this.getRight = () => {
+        if(self.config.flipHorizontal) {
+            return getCorrectValue(getCorrectValue(self.config.left, self.defaultConfig.left), 1) ;
+        }
+        return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
+     } 
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 10)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
@@ -699,6 +717,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         _zoneNames.length = 0;
         Object.assign(_zoneNames, self.histogramList.map(bins => bins.name));
         return _zoneNames;
+    }
+    self.getStatsRowIcons = function(rowIdx) {
+        return ['rectangle'];
+    }
+    self.getStatsIconStyle = function(rowIdx) {
+        return {
+            'background-color': self.histogramList[rowIdx].color
+        }
     }
     self.statsValue = function ([row, col]) {
 		let statsArray = [];
