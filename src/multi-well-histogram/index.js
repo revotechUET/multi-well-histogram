@@ -27,7 +27,7 @@ app.component(componentName, {
     transclude: true
 });
 
-function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoading) {
+function multiWellHistogramController($scope, $timeout, $element, ModalService, wiToken, wiApi, wiDialog, wiLoading) {
     let self = this;
     self.treeConfig = [];
     self.selectedNode = null;
@@ -713,6 +713,52 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 				});
 		}
 	}
+    this.saveAs = function() {
+        console.log("saveAs");
+        wiDialog.promptDialog({
+            title: 'New Histogram',
+            inputName: 'Histogram Name',
+            input: '',
+        }, function(name) {
+            let type = 'HISTOGRAM';
+            let content = {
+                wellSpec: self.wellSpec,
+                zonesetName: self.zonesetName,
+                selectionType: self.selectionType,
+                selectionValue: self.selectionValue,
+                config: self.config 
+            }
+            wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
+                self.setConfigTitle(null, name);
+                self.idHistogram = res.idParameterSet;
+                console.log(res);
+                self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
+            })
+                .catch(e => {
+                    console.error(e);
+                    /*wiDialog.confirmDialog(ModalService, 'Confirmation', 'Histogram already existed. Do you want to rewrite?', function(res) {
+                        if(res) {
+                            let type = 'HISTOGRAM';
+                            let content = {
+                                idParameterSet: self.idHistogram,
+                                wellSpec: self.wellSpec,
+                                zonesetName: self.zonesetName,
+                                selectionType: self.selectionType,
+                                selectionValue: self.selectionValue,
+                                config: self.config 
+                            }
+                            wiApi.editAssetPromise(self.idHistogram, content).then(res => {
+                                console.log(res);
+                            })
+                                .catch(e => {
+                                    console.error(e);
+                                });
+                        } else self.saveAs();
+                    })*/
+                    self.saveAs();
+                })
+        });
+    }
 
     let _zoneNames = []
     self.getZoneNames = function() {
