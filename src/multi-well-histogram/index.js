@@ -7,7 +7,7 @@ const _DECIMAL_LEN = 4;
 var app = angular.module(componentName, [
     'sideBar', 'wiTreeView', 'wiTableView',
     'wiApi', 'editable', 'wiDialog',
-    'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading','angularResizable'
+    'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading','angularResizable','wiDiscriminator'
 ]);
 app.component(componentName, {
     template: require('./template.html'),
@@ -45,7 +45,10 @@ function multiWellHistogramController($scope, $timeout, $element, ModalService, 
     $scope.isSet = function(tabNum){
       return $scope.tab === tabNum;
     };
-
+    this.discriminator = function () {
+        console.log("Các cháu ơi");
+        wiDialog.discriminator(function() {});
+    }
     //--------------
     this.getDataset = function(well) {
         wiApi.getCachedWellPromise(well.idWell).then((well) => {
@@ -736,25 +739,6 @@ function multiWellHistogramController($scope, $timeout, $element, ModalService, 
             })
                 .catch(e => {
                     console.error(e);
-                    /*wiDialog.confirmDialog(ModalService, 'Confirmation', 'Histogram already existed. Do you want to rewrite?', function(res) {
-                        if(res) {
-                            let type = 'HISTOGRAM';
-                            let content = {
-                                idParameterSet: self.idHistogram,
-                                wellSpec: self.wellSpec,
-                                zonesetName: self.zonesetName,
-                                selectionType: self.selectionType,
-                                selectionValue: self.selectionValue,
-                                config: self.config 
-                            }
-                            wiApi.editAssetPromise(self.idHistogram, content).then(res => {
-                                console.log(res);
-                            })
-                                .catch(e => {
-                                    console.error(e);
-                                });
-                        } else self.saveAs();
-                    })*/
                     self.saveAs();
                 })
         });
