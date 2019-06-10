@@ -21,7 +21,8 @@ app.component(componentName, {
         selectionType: "<",
         selectionValue: "<",
 		idHistogram: "<",
-		config: '<'
+		config: '<',
+        onSave: '<'
     },
     transclude: true
 });
@@ -686,6 +687,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					self.setConfigTitle(null, name);
 					self.idHistogram = res.idParameterSet;
 					console.log(res);
+                    self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
 				})
 					.catch(e => {
 						console.error(e);
