@@ -69,14 +69,10 @@
                     display :flex;
                     justify-content: space-between;
                     padding: 0px 15px;">
-                    <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label"
-                        style="margin-right: 8px;">Wells</span>
-                    <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label"
-                        style="margin-right: 8px;">Zone</span>
-                    <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label"
-                        style="margin-right: 8px;">Config</span>
-                    <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label"
-                        style="margin-right: 8px;">Stats</span>
+                    <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label">Wells</span>
+                    <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">Zone</span>
+                    <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label">Config</span>
+                    <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">Stats</span>
                     <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-label">Layers</span>
                 </div>
                 <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
@@ -105,7 +101,7 @@
                             </div>
                         </div>
                         <div style="overflow: auto; display:flex; flex-direction: column;">
-                            <div style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;"
+                            <div style="border: 1px solid #e4e4e4;margin: 5px 16px;border-radius: 2px;"
                                 ng-repeat='well in self.treeConfig'>
                                 <div
                                     style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
@@ -145,7 +141,7 @@
 
                     </div>
                     <div ng-show="isSet(2)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
-                        <div class="label-option-sidebar">
+                        <div class="label-option-sidebar" style="padding: 16px 16px;">
                             <div class="selection-sidebar">
                                 <span>Zoneset</span>
                                 <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.zonesetList'
@@ -153,15 +149,15 @@
                                 </wi-dropdown-list>
                             </div>
                         </div>
-                        <div style="display: flex; padding: 0 16px 7px 16px;">
+                        <div style="display: flex; padding: 0 16px 11px 16px;">
                             <span ng-click="self.hideSelectedZone()" class="button-with-label-layer"
                                 style="margin-left: 0;">Hide</span>
                             <span ng-click="self.showSelectedZone()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Show</span>
+                                style="margin-left: 15px;">Show</span>
                             <span ng-click="self.hideAllZone()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Hide All</span>
+                                style="margin-left: 15px;">Hide All</span>
                             <span ng-click="self.showAllZone()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Show All</span>
+                                style="margin-left: 15px;">Show All</span>
                         </div>
                         <div ng-show="self.zoneTree"
                             style="border: 1px solid #e4e4e4;margin: 5px 15px;border-radius: 2px;flex: 1;overflow: auto; ">
@@ -399,11 +395,11 @@
                             <span ng-click="self.hideSelectedLayer()" class="button-with-label-layer"
                                 style="margin-left: 0px;">Hide</span>
                             <span ng-click="self.showSelectedLayer()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Show</span>
+                                style="margin-left: 15px;">Show</span>
                             <span ng-click="self.hideAllLayer()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Hide All</span>
+                                style="margin-left: 15px;">Hide All</span>
                             <span ng-click="self.showAllLayer()" class="button-with-label-layer"
-                                style="margin-left: 10px;">Show All</span>
+                                style="margin-left: 15px;">Show All</span>
                         </div>
                         <div ng-show="self.histogramList"
                             style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
