@@ -45,9 +45,19 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     $scope.isSet = function(tabNum){
       return $scope.tab === tabNum;
     };
-    this.discriminator = function () {
-        console.log("Các cháu ơi");
-        wiDialog.discriminator(function() {});
+    this.discriminatorDialog = function(well) {
+        let wSpec = getWellSpec(well);
+        let datasetId = wSpec.idDataset;
+        let dataset = well.datasets.find(ds => ds.idDataset === wSpec.idDataset);
+
+        let curvesArr = dataset.curves.map( c => ({type:'curve',name:c.name}) );
+        wiDialog.discriminator(wSpec.discriminator, curvesArr, function(discrmnt) {
+            wSpec.discriminator = discrmnt;
+        });
+    }
+    this.hasDiscriminator = function(well) {
+        let wSpec = getWellSpec(well);
+        return wSpec.discriminator && Object.keys(wSpec.discriminator).length > 0;
     }
     //--------------
     this.getDataset = function(well) {
@@ -429,12 +439,18 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 let datasetTop = self.wellSpec[i].datasetTop;
                 let datasetBottom = self.wellSpec[i].datasetBottom;
                 let datasetStep = self.wellSpec[i].datasetStep;
+                let dataset = well.datasets.find(ds => ds.idDataset === self.wellSpec[i].idDataset);
 
                 let zoneset = getZoneset(well, self.zonesetName);
                 zoneset = zoneset || genZonationAllZS(datasetTop, datasetBottom, well.color);
 
                 let curveData = await wiApi.getCachedCurveDataPromise(curve.idCurve);
-                curveData = curveData.filter(d => _.isFinite(d.x))
+                if (self.hasDiscriminator(well)) {
+                    let discriminatorCurve = await wiApi.evalDiscriminatorPromise(dataset, self.wellSpec[i].discriminator);
+                    curveData = curveData.filter((d, idx) => discriminatorCurve[idx]);
+                }
+                curveData = curveData
+                    .filter(d => _.isFinite(d.x))
                     .map(d => ({
                         ...d, 
                         depth: datasetStep>0?(datasetTop + d.y * datasetStep):d.y
@@ -470,24 +486,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					let stats = setStats(dataArray.map(d => d.x));
 					bins.stats = Object.assign(bins.stats, stats);
 					wellHistogramList.push(bins);
-                    // try {
-                    //     bins.avg = d3.mean(dataArray, d => d.x);
-                    //     bins.min = d3.min(dataArray, d => d.x);
-                    //     bins.max = d3.max(dataArray, d => d.x);
-                    //     bins.stddev = d3.deviation(dataArray, d => d.x);
-                    //     bins.avgdev = calAverageDeviation(dataArray.map(d => d.x));
-                    //     bins.var = d3.variance(dataArray, d => d.x);
-                    //     bins.median = d3.median(dataArray, d => d.x);
-                    //     bins.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray.map(d => d.x)) : undefined;
-                    //     bins.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray.map(d => d.x)) : undefined;
-                    //     bins.p10 = calPercentile(dataArray.map(d => d.x), 0.1);
-                    //     bins.p50 = calPercentile(dataArray.map(d => d.x), 0.5);
-                    //     bins.p90 = calPercentile(dataArray.map(d => d.x), 0.9);
-                    //     wellHistogramList.push(bins);
-                    // }
-                    // catch(e) {
-                    //     console.error(e);
-                    // }
                 }
                 if (self.getStackMode() === 'well') {
 					let stats = setStats(wellDataArray.map(d => d.x));

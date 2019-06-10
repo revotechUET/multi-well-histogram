@@ -100,35 +100,30 @@
                                     current-select="self.selectionValue" on-item-changed="self.onInputSelectionChanged">
                                 </wi-dropdown-list>
                             </div>
-                            <div class="selection-sidebar discriminator" style="margin-left: 15px; cursor: pointer;width: 37px; justify-content: center;" 
-                                ng-class="{'discriminator-active' : x}"
-                                ng-click="self.discriminator(); x = !x">
-                                <span class="fa fa-filter"></span>
-                            </div>
                         </div>
                         <div style="overflow: auto; display:flex; flex-direction: column;">
                             <div style="border: 1px solid #e4e4e4;margin: 5px 16px;border-radius: 2px;"
                                 ng-repeat='well in self.treeConfig'>
-                                <div
-                                    style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
-
+                                <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
                                     <div style="display: flex; align-items: center;">
-
                                         <i class="header-icon"
                                             ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}"
                                             ng-click="well._hidden = !well._hidden"></i>
-                                        <div ng-bind="well.name"> </div>
-
+                                        <div ng-bind="well.name"></div>
                                     </div>
-
                                     <div style="display: flex; align-items: center;">
-                                        <div style="border-radius: 2px;padding: 1px 10px;  margin-right: 10px;"
+                                        <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
                                             ng-bind="self.getWellSpec(well).datasetName"></div>
-                                        <div style="border-radius: 2px;padding: 1px 10px;"
+                                        <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
                                             ng-bind="self.getCurve(well).name"></div>
                                         <span
                                             ng-class="{'red-color fa fa-eye-slash': well._notUsed, 'blue-color fa fa-eye': !well._notUsed }"
                                             ng-click="self.toggleWell(well)"
+                                            style="cursor: pointer; margin-right: 10px;">
+                                        </span>
+                                        <span class="fa fa-filter"
+                                            ng-class="{'blue-color': self.hasDiscriminator(well)}"
+                                            ng-click="self.discriminatorDialog(well)"
                                             style="cursor: pointer; margin-right: 10px;">
                                         </span>
                                         <span class="fa fa-times-circle" ng-click="self.removeWell(well)"
