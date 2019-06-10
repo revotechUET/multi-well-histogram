@@ -92,12 +92,15 @@
                             </div>
 
                         </div>
-                        <div class="label-option-sidebar">
-                            <div class="selection-sidebar">
+                        <div class="label-option-sidebar" style="display: flex;">
+                            <div class="selection-sidebar" style="flex: 1;">
                                 <span>X-Axis</span>
                                 <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.selectionList'
                                     current-select="self.selectionValue" on-item-changed="self.onInputSelectionChanged">
                                 </wi-dropdown-list>
+                            </div>
+                            <div class="selection-sidebar" style="margin-left: 15px; cursor: pointer;" ng-click="self.discriminator()">
+                                <span>Discriminator</span>
                             </div>
                         </div>
                         <div style="overflow: auto; display:flex; flex-direction: column;">
