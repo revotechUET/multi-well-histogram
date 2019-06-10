@@ -99,7 +99,9 @@
                                     current-select="self.selectionValue" on-item-changed="self.onInputSelectionChanged">
                                 </wi-dropdown-list>
                             </div>
-                            <div class="selection-sidebar" style="margin-left: 15px; cursor: pointer;" ng-click="self.discriminator()">
+                            <div class="selection-sidebar discriminator" style="margin-left: 15px; cursor: pointer;" 
+                                ng-class="{'discriminator-active' : self.discriminator}"
+                                ng-click="self.discriminator(); self.discriminator= !self.discriminator">
                                 <span>Discriminator</span>
                             </div>
                         </div>

@@ -27,7 +27,7 @@ app.component(componentName, {
     transclude: true
 });
 
-function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoading) {
+function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoadinggit) {
     let self = this;
     self.treeConfig = [];
     self.selectedNode = null;
