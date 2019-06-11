@@ -111,8 +111,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5};
-		self.assetInfo = await wiApi.getAssetPromise(self.idHistogram);
-		self.config.title = self.assetInfo.name;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -684,7 +682,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					zonesetName: self.zonesetName,
 					selectionType: self.selectionType,
 					selectionValue: self.selectionValue,
-					config: self.config	
+					config: {...self.config, title: name}	
 				}
 				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
 					self.setConfigTitle(null, name);
