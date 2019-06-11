@@ -79,7 +79,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let familyList = curves.map(c => wiApi.getFamily(c.idFamily));
         return familyList;
     }
-    this.$onInit = function () {
+    this.$onInit = async function () {
         if (self.token)
             wiToken.setToken(self.token);
         $timeout(() => {
@@ -111,6 +111,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5};
+		self.assetInfo = await wiApi.getAssetPromise(self.idHistogram);
+		self.config.title = self.assetInfo.name;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
