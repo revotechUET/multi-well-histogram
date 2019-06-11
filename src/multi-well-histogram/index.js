@@ -677,18 +677,19 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 				input: self.getConfigTitle(),
 			}, function(name) {
 				let type = 'HISTOGRAM';
+				self.config.title = name;
 				let content = {
 					wellSpec: self.wellSpec,
 					zonesetName: self.zonesetName,
 					selectionType: self.selectionType,
 					selectionValue: self.selectionValue,
-					config: {...self.config, title: name}	
+					config: self.config	
 				}
 				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
 					self.setConfigTitle(null, name);
 					self.idHistogram = res.idParameterSet;
-					console.log(res);
-                    self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
+                    // self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
+                    self.onSave && self.onSave(name);
 				})
 					.catch(e => {
 						console.error(e);
@@ -722,6 +723,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             input: '',
         }, function(name) {
             let type = 'HISTOGRAM';
+			self.config.title = name;
             let content = {
                 wellSpec: self.wellSpec,
                 zonesetName: self.zonesetName,
@@ -733,7 +735,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
                 console.log(res);
-                self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
+                // self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
+                self.onSave && self.onSave(name);
             })
                 .catch(e => {
                     console.error(e);
