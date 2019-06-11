@@ -104,14 +104,14 @@
                         <div style="overflow: auto; display:flex; flex-direction: column;">
                             <div style="border: 1px solid #e4e4e4;margin: 5px 16px;border-radius: 2px;"
                                 ng-repeat='well in self.treeConfig'>
-                                <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row;padding: 8px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
+                                <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row; position: relative; padding: 9px 15px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
                                     <div style="display: flex; align-items: center;">
                                         <i class="header-icon"
                                             ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}"
                                             ng-click="well._hidden = !well._hidden"></i>
                                         <div ng-bind="well.name"></div>
                                     </div>
-                                    <div style="display: flex; align-items: center;">
+                                    <div style="display: flex; align-items: center;position:absolute; right: 10px;">
                                         <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
                                             ng-bind="self.getWellSpec(well).datasetName"></div>
                                         <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
