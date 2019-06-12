@@ -22,7 +22,8 @@ app.component(componentName, {
         selectionValue: "<",
 		idHistogram: "<",
 		config: '<',
-        onSave: '<'
+        onSave: '<',
+		title: '<'
     },
     transclude: true
 });
@@ -110,7 +111,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || ''};
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -677,7 +678,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 				input: self.getConfigTitle(),
 			}, function(name) {
 				let type = 'HISTOGRAM';
-				self.config.title = name;
+				self.setConfigTitle(null, name);
 				let content = {
 					wellSpec: self.wellSpec,
 					zonesetName: self.zonesetName,
@@ -686,10 +687,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 					config: self.config	
 				}
 				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
-					self.setConfigTitle(null, name);
 					self.idHistogram = res.idParameterSet;
-                    // self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
-                    self.onSave && self.onSave(name);
+                    self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet, name);
 				})
 					.catch(e => {
 						console.error(e);
@@ -723,20 +722,18 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             input: '',
         }, function(name) {
             let type = 'HISTOGRAM';
-			self.config.title = name;
             let content = {
                 wellSpec: self.wellSpec,
                 zonesetName: self.zonesetName,
                 selectionType: self.selectionType,
                 selectionValue: self.selectionValue,
-                config: self.config 
+                config: {...self.config, title: name} 
             }
             wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
-                self.setConfigTitle(null, name);
+                // self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
                 console.log(res);
-                // self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet);
-                self.onSave && self.onSave(name);
+                self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet, name);
             })
                 .catch(e => {
                     console.error(e);
