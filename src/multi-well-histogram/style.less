@@ -352,6 +352,9 @@ multi-well-histogram {
             border       : 1px solid #f4f4f4;
             border-radius: 20px;
             transition   : all 0.2s ease-in;
+            &:hover {
+             border       : 1px solid #0077be;
+            }
 
             &.active {
                 background: #f4f4f4;
@@ -412,7 +415,10 @@ multi-well-histogram {
             padding      : 1px 10px;
             align-items  : center;
             display      : flex;
-
+            transition      : all 0.2s ease-in;
+            &:hover {
+                border       : 1px solid #0077be;
+                }
             &>input:focus {
                 outline: none;
             }
