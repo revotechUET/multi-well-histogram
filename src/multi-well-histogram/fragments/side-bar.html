@@ -1,0 +1,63 @@
+<side-bar my-default-width="370" orientation="w" collapsed="false">
+    <div class="label-list-view" style="border-bottom: 2px solid #f0f0f0; display :flex; justify-content: space-between; padding: 0px 15px;">
+        <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label">Wells</span>
+        <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">Zone</span>
+        <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label">Config</span>
+        <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">Stats</span>
+        <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-label">Layers</span>
+    </div>
+    <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+        <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
+            ${require('./tab1.html')}
+        </div>
+        <div ng-show="isSet(2)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
+            ${require('./tab2.html')}
+        </div>
+        <div ng-show="isSet(3)" style="
+    overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;">
+            ${require('./tab3.html')}
+        </div>
+        <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'"
+            onmouseout="this.style.overflow='hidden'" style="flex:1; padding: 15px;">
+            <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Table Header
+                <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap;">
+                <span ng-repeat="header in self.statisticHeaders track by $index"
+                    class="select-table-header" ng-class="{'active' : self.statisticHeaderMasks[$index]}"
+                    ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
+                    {{header}}</span>
+            </div>
+        </div>
+        <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
+            <div style="display: flex; padding: 16px 16px 0px 16px;">
+                <span ng-click="self.hideSelectedLayer()" class="button-with-label-layer"
+                    style="margin-left: 0px;">Hide</span>
+                <span ng-click="self.showSelectedLayer()" class="button-with-label-layer"
+                    style="margin-left: 15px;">Show</span>
+                <span ng-click="self.hideAllLayer()" class="button-with-label-layer"
+                    style="margin-left: 15px;">Hide All</span>
+                <span ng-click="self.showAllLayer()" class="button-with-label-layer"
+                    style="margin-left: 15px;">Show All</span>
+            </div>
+            <div ng-show="self.histogramList"
+                style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
+                <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
+                    filter="self.layerFilter" get-icon="self.getLayerIcon" get-icons="self.getLayerIcons"
+                    get-children="self.noChildren" icon-style="self.getLayerIconStyle" keep-children='true'
+                    run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
+                    click-fn='self.click2ToggleLayer'>
+                </wi-tree-view>
+            </div>
+        </div>
+        <div style="display: flex;">
+            <span class="button-update" ng-click="self.genHistogramList()">
+                Update
+            </span>
+        </div>
+    </div>
+</side-bar>

@@ -1,0 +1,60 @@
+<div class="label-list-view ng-scope"
+    style="display :flex; background: #f4f4f4; padding: 12px 15px; justify-content: flex-start;">
+    <span ng-click="self.refresh()" class="reload-16x16"
+        style="cursor: pointer; margin-right: 10px;"></span>
+    <span ng-click="self.save()" class="save-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+    <span ng-click="self.saveAs()" class="save-as-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column;">
+    <div class="main-body-center border-style" style="position: relative;">
+        <layer-collection v-padding="50" h-padding='60'>
+            <axis-layer min-val="self.getLeft()" max-val="self.getRight()" loga="self.getLoga()"
+                n-ticks="self.config.majorTicks || 10" minor-ticks="self.config.minorTicks || 1" precision="4"
+                grid="!!self.config.grid" placement="1">
+            </axis-layer>
+            <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
+                precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
+            <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
+                grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
+            <canvas-barchart-layer ng-show="!bins._notUsed"
+                ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none'"
+                ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
+            </canvas-barchart-layer>
+            <canvas-barchart-layer ng-show="!groupOfBins._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
+                self.getStackMode() == 'well'" ng-repeat="groupOfBins in self.histogramList"
+                min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
+                max-y='self.maxY || 100' loga="self.getLoga()" autofit='false' bins="groupOfBins"
+                bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
+            </canvas-barchart-layer>
+            <canvas-barchart-layer ng-show="!self.histogramList._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
+                self.getStackMode() == 'all'" min-val="self.getLeft()" max-val="self.getRight()"
+                min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                bins="self.histogramList" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
+            </canvas-barchart-layer>
+            <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
+                ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                get-x='self.getBinX' get-y='self.getBinY' line-data="bins" line-color="bins.color"
+                line-width='2' line-dash="'2 0'" color-func="self.colorFn">
+            </line-point-layer>
+        </layer-collection>
+        <p style="position: absolute;left: 50%; transform: translateX(-50%); bottom: 0">
+            {{self.getConfigXLabel()}} </p>
+        <p
+            style="position: absolute; top: 23px; right: 45%;text-transform: uppercase; font-weight: bold; transform: translateY(-50%);">
+            {{self.getConfigTitle()}}</p>
+        <p style="position: absolute;top: 23px;left: 15px; transform: translateY(-50%);">Frequency</p>
+        <p style="position: absolute;top: 23px; right: 15px;transform: translateY(-50%);">Percentage (%)</p>
+    </div>
+    <div class="statistic-table" resizable r-directions="['top']" r-flex="true">
+        <div style="overflow: auto; position: absolute;overflow: auto; position: absolute; top: 0; right: 0; left: 0; bottom: 0;" >
+            <wi-table-view ng-if="self.histogramList.length" row-count="self.getZoneNames().length"
+                col-count="self.getHeaders().length" col-headers="self.getHeaders()"
+                get-row-icons="self.getStatsRowIcons" get-row-icon-style="self.getStatsIconStyle"
+                row-headers="self.getZoneNames()" accessor="self.statsValue">
+            </wi-table-view>
+        </div>
+    </div>
+</div>

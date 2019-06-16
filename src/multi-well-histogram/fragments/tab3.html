@@ -1,0 +1,192 @@
+<div class="label-option-sidebar" style="margin-top: 10px;">
+    <span>OPTIONS</span>
+</div>
+<div style="overflow: auto;">
+    <div class="label-option-sidebar">
+        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                item-label="'Left'" item-value="self.getConfigLeft"
+                set-value="self.setConfigLeft" enabled="true" label-style="{}"
+                content-style="{flex:1,float:'none','text-align':'right'}">
+            </editable>
+        </div>
+        <div style="margin-bottom: 15px; "></div>
+        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                item-label="'Right'" item-value="self.getConfigRight"
+                set-value="self.setConfigRight" enabled="true" label-style="{}"
+                content-style="{flex:1,float:'none','text-align':'right'}">
+            </editable>
+        </div>
+        <div style="margin-bottom: 15px; "></div>
+
+        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                item-label="'Divisions'" item-value="self.getConfigDivisions"
+                set-value="self.setConfigDivisions" enabled="true" label-style="{}"
+                content-style="{flex:1,float:'none','text-align':'right'}">
+            </editable>
+        </div>
+        <div style="margin-bottom: 15px; "></div>
+
+        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                item-label="'Title'" item-value="self.getConfigTitle"
+                set-value="self.setConfigTitle" enabled="true" label-style="{}"
+                content-style="{flex:1,float:'none','text-align':'right'}">
+            </editable>
+
+        </div>
+        <div style="margin-bottom: 15px; "></div>
+
+        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                item-label="'X Label'" item-value="self.getConfigXLabel"
+                set-value="self.setConfigXLabel" enabled="true" label-style="{}"
+                content-style="{flex:1,float:'none','text-align':'right'}">
+            </editable>
+        </div>
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between;   flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Scale and Grid
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <span ng-class="{'active' : self.config.loga}"
+                ng-click="self.config.loga = !self.config.loga" class="button-with-label"
+                style="margin-right: 8px;">Log Scale</span>
+            <span ng-class="{'active' : self.config.grid}"
+                ng-click="self.config.grid = !self.config.grid" class="button-with-label"
+                style="margin-right: 8px;">Show Grid</span>
+            <span ng-class="{'active' : self.config.flipHorizontal}"
+                ng-click="self.config.flipHorizontal = !self.config.flipHorizontal"
+                class="button-with-label">Flip-H</span>
+        </div>
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Display Mode
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+
+        <div>
+            <span ng-class="{'active' : self.config.displayMode === 'bar'}"
+                ng-click="self.config.displayMode='bar'" class="button-with-label"
+                style="margin-right: 8px;"> Bar Mode</span>
+            <span ng-class="{'active' : self.config.displayMode === 'line'}"
+                ng-click="self.config.displayMode='line'" class="button-with-label">Line
+                Mode</span>
+        </div>
+
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Assistive Lines
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <span ng-class="{'active' : self.config.showCumulative}"
+                ng-click="self.config.showCumulative = !self.config.showCumulative"
+                class="button-with-label" style="margin-right: 8px;"> Show Cumulative</span>
+            <span ng-class="{'active' : self.config.showGaussian}"
+                ng-click="self.config.showGaussian = !self.config.showGaussian"
+                class="button-with-label" style="margin-right: 8px;"> Show Gaussian</span>
+        </div>
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Color Mode
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <span ng-class="{'active' : self.config.colorMode === 'zone'}"
+                ng-click="self.config.colorMode='zone'" class="button-with-label"
+                style="margin-right: 8px;"> Zone Color</span>
+            <span ng-class="{'active' : self.config.colorMode === 'well'}"
+                style="margin-right: 8px;" ng-click="self.config.colorMode='well'"
+                class="button-with-label">Well Color</span>
+            <span ng-class="{'active' : self.config.colorMode === 'user'}"
+                ng-click="self.config.colorMode='user'" class="button-with-label">User
+                Defined</span>
+        </div>
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Stack Mode
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <span ng-class="{'active' : self.config.stackMode === 'none'}"
+                ng-click="self.config.stackMode='none'" class="button-with-label"
+                style="margin-right: 8px;">No Stack</span>
+            <span ng-class="{'active' : self.config.stackMode === 'well'}"
+                style="margin-right: 8px;" ng-click="self.config.stackMode='well'"
+                class="button-with-label">Well</span>
+            <span ng-class="{'active' : self.config.stackMode === 'all'}"
+                ng-click="self.config.stackMode='all'" class="button-with-label">All</span>
+        </div>
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Histogram Mode
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <span ng-class="{'active' : self.selectConfig === 'option1'}"
+                ng-click="self.selectConfig='option1'" class="button-with-label"
+                style="margin-right: 8px;"> Frequency count</span>
+            <span ng-class="{'active' : self.selectConfig === 'option2'}"
+                ng-click="self.selectConfig='option2'"
+                class="button-with-label">Percentile</span>
+        </div>
+
+    </div>
+    <div class="label-option-sidebar"
+        style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
+        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Depth Limitation Mode
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+            </div>
+        </div>
+        <div>
+            <div ng-show="self.config.limitType === 'interval'">
+                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                        item-label="'Top'" item-value="self.getConfigLimitTop"
+                        set-value="self.setConfigLimitTop" enabled="true" label-style="{}"
+                        content-style="{flex:1,float:'none','text-align':'right'}">
+                    </editable>
+                </div>
+                <div style="margin-bottom: 15px; "></div>
+                <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
+                    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                        item-label="'Bottom'" item-value="self.getConfigLimitBottom"
+                        set-value="self.setConfigLimitBottom" enabled="true" label-style="{}"
+                        content-style="{flex:1,float:'none','text-align':'right'}">
+                    </editable>
+                </div>
+                <div style="margin-bottom: 15px; "></div>
+            </div>
+            <span ng-class="{'active' : self.config.limitType === 'interval'}"
+                ng-click="self. config.limitType = 'interval'" class="button-with-label"
+                style="margin-right: 8px;"> Interval Depth</span>
+            <span ng-class="{'active' : self.config.limitType === 'zonal'}"
+                ng-click="self.config.limitType = 'zonal'" class="button-with-label">Zonal
+                Depth</span>
+            <div style="margin-bottom: 15px; "></div>
+        </div>
+    </div>
+</div>
