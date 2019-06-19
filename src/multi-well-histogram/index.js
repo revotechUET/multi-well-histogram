@@ -316,7 +316,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return node.zone_template.name;
     }
    
-    this.getZoneIcon = (node) => ( (node && !node._notUsed) ? 'zone-16x16': 'fa fa-eye-slash' )
+    this.getZoneIcon = (node) => ( (node && !node._notUsed) ? 'zone-16x16': 'fa fa-ban' )
     const EMPTY_ARRAY = []
     this.noChildren = function (node) {
         return EMPTY_ARRAY;
