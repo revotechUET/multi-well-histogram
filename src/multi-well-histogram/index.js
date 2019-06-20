@@ -58,7 +58,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.hasDiscriminator = function(well) {
         let wSpec = getWellSpec(well);
-        return wSpec.discriminator && Object.keys(wSpec.discriminator).length > 0;
+        return wSpec.discriminator && Object.keys(wSpec.discriminator).length > 0 && wSpec.discriminator.active;
     }
     //--------------
     this.getDataset = function(well) {
