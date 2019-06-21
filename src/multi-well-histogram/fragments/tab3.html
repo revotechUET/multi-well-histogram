@@ -1,5 +1,12 @@
-<div class="label-option-sidebar" style="margin-top: 10px;">
-    <span>OPTIONS</span>
+<div class="selection-sidebar" style="padding: 9px 10px 5px 10px; margin: 16px;">
+    <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+        item-label="'Title'" item-value="self.getConfigTitle"
+        set-value="self.setConfigTitle" enabled="true" label-style="{}"
+        content-style="{flex:1,float:'none','text-align':'right'}">
+    </editable>
+</div>
+<div class="label-option-sidebar" style="margin-top: -5px;">
+    <span>X-Axis Scale</span>
 </div>
 <div style="overflow: auto;">
     <div class="label-option-sidebar">
@@ -31,16 +38,6 @@
 
         <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
             <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
-                item-label="'Title'" item-value="self.getConfigTitle"
-                set-value="self.setConfigTitle" enabled="true" label-style="{}"
-                content-style="{flex:1,float:'none','text-align':'right'}">
-            </editable>
-
-        </div>
-        <div style="margin-bottom: 15px; "></div>
-
-        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
                 item-label="'X Label'" item-value="self.getConfigXLabel"
                 set-value="self.setConfigXLabel" enabled="true" label-style="{}"
                 content-style="{flex:1,float:'none','text-align':'right'}">
@@ -63,7 +60,7 @@
                 style="margin-right: 8px;">Show Grid</span>
             <span ng-class="{'active' : self.config.flipHorizontal}"
                 ng-click="self.config.flipHorizontal = !self.config.flipHorizontal"
-                class="button-with-label">Flip-H</span>
+                class="button-with-label">Flip horizontally</span>
         </div>
     </div>
     <div class="label-option-sidebar"
@@ -114,9 +111,8 @@
             <span ng-class="{'active' : self.config.colorMode === 'well'}"
                 style="margin-right: 8px;" ng-click="self.config.colorMode='well'"
                 class="button-with-label">Well Color</span>
-            <span ng-class="{'active' : self.config.colorMode === 'user'}"
-                ng-click="self.config.colorMode='user'" class="button-with-label">User
-                Defined</span>
+            <!-- <span ng-class="{'active' : self.config.colorMode === 'user'}"
+                ng-click="self.config.colorMode='user'" class="button-with-label">User Defined</span> -->
         </div>
     </div>
     <div class="label-option-sidebar"
@@ -154,7 +150,7 @@
         </div>
 
     </div>
-    <div class="label-option-sidebar"
+    <!-- <div class="label-option-sidebar"
         style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
         <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Depth Limitation Mode
             <div
@@ -188,5 +184,5 @@
                 Depth</span>
             <div style="margin-bottom: 15px; "></div>
         </div>
-    </div>
+    </div> -->
 </div>

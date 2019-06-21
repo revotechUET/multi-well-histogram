@@ -33,7 +33,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
-    self.statisticHeaders = ['top','bottom','#pts','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
+    self.statisticHeaders = ['top','bottom','points','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
     self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
     $scope.tab = 1;
@@ -729,6 +729,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 selectionValue: self.selectionValue,
                 config: {...self.config, title: name} 
             }
+            console.log(content);
             wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
                 // self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
