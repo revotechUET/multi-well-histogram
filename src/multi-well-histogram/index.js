@@ -23,6 +23,7 @@ app.component(componentName, {
 		idHistogram: "<",
 		config: '<',
         onSave: '<',
+        onSaveAs: '<',
 		title: '<'
     },
     transclude: true
@@ -688,7 +689,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 				}
 				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
 					self.idHistogram = res.idParameterSet;
-                    self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet, name);
+                    self.onSave && self.onSave(res);
 				})
 					.catch(e => {
 						console.error(e);
@@ -734,7 +735,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 // self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
                 console.log(res);
-                self.onSave && self.onSave('multi-well-histogram' + res.idParameterSet, name);
+                self.onSaveAs && self.onSaveAs(res);
             })
                 .catch(e => {
                     console.error(e);
