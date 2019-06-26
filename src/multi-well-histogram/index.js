@@ -196,23 +196,28 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wellSpec.curveName = node.Name;
     }
     this.refresh = function(){
-        self.histogramList.length = 0;
-        self.treeConfig.length = 0;
-        getTree();
+        // self.histogramList.length = 0;
+        // self.treeConfig.length = 0;
+        getTree(()=> {
+            self.genHistogramList();
+            console.log("........................")
+        });
+        
     };
     async function getTree(callback) {
         wiLoading.show($element.find('.main')[0]);
         self.treeConfig = [];
-        let promises = [];
 		for (let w of self.wellSpec) {
 			try {
 				let well = await wiApi.getCachedWellPromise(w.idWell || w);
-				$timeout(() => self.treeConfig.push(well));
+				self.treeConfig.push(well);
 			}
 			catch(e) {
 				console.error(e);
 			}
-		}
+        }
+        if (!$scope.$root.$$phase) $scope.$digest();
+
 		callback && callback();
 		wiLoading.hide();
         // for (let w of self.wellSpec) {
@@ -718,7 +723,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.saveAs = function() {
         console.log("saveAs");
         wiDialog.promptDialog({
-            title: 'New Histogram',
+            title: 'Save As Histogram',
             inputName: 'Histogram Name',
             input: '',
         }, function(name) {
