@@ -1,0 +1,75 @@
+multi-histogram {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    multi-well-histogram {
+        height: 100%;
+    }
+    input, select {
+        box-shadow: none;
+    }
+    ::-webkit-scrollbar-button:horizontal:increment { /* Right */
+        background-image: none;
+    }
+    
+    ::-webkit-scrollbar-button:horizontal:decrement { /* Left */
+        background-image: none;
+    }
+    
+    ::-webkit-scrollbar-button:vertical:increment { /* Down */
+        background-image: none;
+    }
+    
+    ::-webkit-scrollbar-button:vertical:decrement { /* Up */
+        background-image: none;
+    }
+
+    .ui-select-match-text {
+        text-align: right;
+    }
+
+    button.disable {
+        color       : #aaa;
+        border-color: #aaa;
+    }
+
+    .main {
+        display       : flex;
+        height        : 100%;
+        flex-direction: column;
+    }
+
+    ::-webkit-scrollbar {
+        background: #f4f4f4;
+        width     : 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #dcdcdc;
+    }
+
+    .tab{
+        display: flex;
+        border-bottom: 1px solid #004f7e;
+        z-index: 1;
+        color: #fff;
+        background: #1962a7;
+        .tab-name{
+            padding: 11px 20px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition   : all 0.2s ease-in;
+            &:hover {
+                background: #1a78d0;
+                transition   : all 0.2s ease-in;
+            }
+        }
+        .active {
+            background: #277ccc;
+        }
+    }
+    
+
+}

@@ -1,3 +1,4 @@
 module.exports = {
-    multiWellHistogram: require('./multi-well-histogram')
+    multiWellHistogram: require('./multi-well-histogram'),
+    multiHistogram: require('./multi-histogram')
 }

@@ -24,7 +24,8 @@ app.component(componentName, {
 		config: '<',
         onSave: '<',
         onSaveAs: '<',
-		title: '<'
+        title: '<',
+        silent: "<"
     },
     transclude: true
 });
@@ -47,6 +48,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     $scope.isSet = function(tabNum){
       return $scope.tab === tabNum;
     };
+    this.getFamilyTable = () => wiApi.getFamilyTable()
     this.discriminatorDialog = function(well) {
         let wSpec = getWellSpec(well);
         let datasetId = wSpec.idDataset;
@@ -200,12 +202,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         // self.treeConfig.length = 0;
         getTree(()=> {
             self.genHistogramList();
-            console.log("........................")
         });
         
     };
     async function getTree(callback) {
-        wiLoading.show($element.find('.main')[0]);
+        wiLoading.show($element.find('.main')[0], self.silent);
         self.treeConfig = [];
 		for (let w of self.wellSpec) {
 			try {
@@ -428,7 +429,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 		listWellStats.length = 0;
 		listAllStats.length = 0;
         _histogramGen = null;
-        wiLoading.show($element.find('.main')[0]);
+        wiLoading.show($element.find('.main')[0], self.silent);
 
 		let allZones = [];
 		let allDataArray = [];

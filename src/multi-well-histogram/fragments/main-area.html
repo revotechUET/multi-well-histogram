@@ -1,9 +1,11 @@
 <div class="label-list-view ng-scope"
-    style="display :flex; background: #f4f4f4; padding: 12px 15px; justify-content: flex-start;">
-    <span ng-click="self.refresh()" class="reload-16x16"
-        style="cursor: pointer; margin-right: 10px;"></span>
-    <span ng-click="self.save()" class="save-16x16" style="cursor: pointer; margin-right: 10px;"></span>
-    <span ng-click="self.saveAs()" class="save-as-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+    style="display :flex; background: #f4f4f4; padding: 11px 15px; justify-content: flex-start;">
+    <!-- <span  class="reload-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+    <span  class="save-16x16" style="cursor: pointer; margin-right: 10px;"></span>
+    <span  class="save-as-16x16" style="cursor: pointer; margin-right: 10px;"></span> -->
+    <span class="fn-button" ng-click="self.refresh()">RELOAD</span>
+    <span class="fn-button" ng-click="self.save()">SAVE</span>
+    <span class="fn-button" ng-click="self.saveAs()">SAVE AS</span>
 </div>
 <div style="flex: 1; display: flex; flex-direction: column;">
     <div class="main-body-center border-style" style="position: relative;">
