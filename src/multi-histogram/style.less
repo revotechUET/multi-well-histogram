@@ -51,23 +51,27 @@ multi-histogram {
 
     .tab{
         display: flex;
-        border-bottom: 1px solid #004f7e;
         z-index: 1;
-        color: #fff;
-        background: #1962a7;
+        color: #000;
+        background: #fff;
+        
         .tab-name{
+            display: flex;
+            align-items: center;
             padding: 11px 20px;
-            text-transform: uppercase;
             cursor: pointer;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             transition   : all 0.2s ease-in;
+            border-right: 1px solid #d9d9d9;
             &:hover {
-                background: #1a78d0;
+                background: #f4f4f4;
                 transition   : all 0.2s ease-in;
             }
         }
         .active {
-            background: #277ccc;
+            color: #0077be;
+            background: #f4f4f4;
+            border-right: 1px solid #d9d9d9;
         }
     }
     
