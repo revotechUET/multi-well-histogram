@@ -35,6 +35,17 @@
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
                 bins="self.histogramList" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
+            <!--<line-gaussian-layer ng-repeat="(gIdx, gaussian) in self.histogramList" ng-show="!gaussian._notUsed"-->
+                <!--min-val='self.getLeft()' max-val='self.getRight()' min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' -->
+                <!--mean='gaussian.stats.avg' sigma='gaussian.stats.stddev' resolution='5000' line-color-second='gaussian.color' line-width-second='1'-->
+                <!--line-color='gaussian.color'>-->
+            <!--</line-gaussian-layer>-->
+            <line-point-layer min-val="self.getLeft()"
+                max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()"
+                min-draw="self.getLeft()" max-draw="self.getRight()" min-draw-y="self.minY || 0" max-draw-y="self.maxY || 100"
+                autofit='false' get-x='self.getCumulativeX' get-y='self.getCumulativeY' line-data="self.cmltLineData"
+                line-color="'black'" line-width='2' line-dash="'2 0'">
+            </line-point-layer>
             <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
                 ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'

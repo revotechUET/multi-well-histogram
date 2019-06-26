@@ -20,8 +20,8 @@ app.component(componentName, {
         zonesetName: "<",
         selectionType: "<",
         selectionValue: "<",
-		idHistogram: "<",
-		config: '<',
+        idHistogram: "<",
+        config: '<',
         onSave: '<',
         onSaveAs: '<',
         title: '<',
@@ -42,11 +42,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.selectionTab = self.selectionTab || 'Wells';
 
     $scope.setTab = function(newTab){
-      $scope.tab = newTab;
+        $scope.tab = newTab;
     };
 
     $scope.isSet = function(tabNum){
-      return $scope.tab === tabNum;
+        return $scope.tab === tabNum;
     };
     this.getFamilyTable = () => wiApi.getFamilyTable()
     this.discriminatorDialog = function(well) {
@@ -69,7 +69,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.datasets[well] = well.datasets;
         }).catch(e => console.error(e));
     }
-    
+
     function getCurvesInWell(well) {
         let curves = [];
         well.datasets.forEach(dataset => {
@@ -154,7 +154,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             properties:{name:item} 
         }));
     }
-    
+
     this.runMatch = function (node, criteria) {
         let family;
         if (!criteria) return true;
@@ -163,12 +163,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 family = wiApi.getFamily(node.idFamily);
                 if (!family) return null;
                 return family.familyGroup.trim().toLowerCase() === criteria.trim().toLowerCase();
-            
+
             case 'family': 
                 family = wiApi.getFamily(node.idFamily);
                 if (!family) return null;
                 return family.name.trim().toLowerCase() === criteria.trim().toLowerCase();
-            
+
             case 'curve':
                 return node.name.trim().toLowerCase() === criteria.trim().toLowerCase();
         }
@@ -203,24 +203,24 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         getTree(()=> {
             self.genHistogramList();
         });
-        
+
     };
     async function getTree(callback) {
         wiLoading.show($element.find('.main')[0], self.silent);
         self.treeConfig = [];
-		for (let w of self.wellSpec) {
-			try {
-				let well = await wiApi.getCachedWellPromise(w.idWell || w);
-				self.treeConfig.push(well);
-			}
-			catch(e) {
-				console.error(e);
-			}
+        for (let w of self.wellSpec) {
+            try {
+                let well = await wiApi.getCachedWellPromise(w.idWell || w);
+                self.treeConfig.push(well);
+            }
+            catch(e) {
+                console.error(e);
+            }
         }
         if (!$scope.$root.$$phase) $scope.$digest();
 
-		callback && callback();
-		wiLoading.hide();
+        callback && callback();
+        wiLoading.hide();
         // for (let w of self.wellSpec) {
         //     promises.push(
         //         wiApi.getWellPromise(w.idWell || w)
@@ -231,7 +231,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             .then(() => callback && callback())
             .catch(e => console.error(e))
             .finally(() => wiLoading.hide());
-		*/
+            */
     }
     function getZonesetsFromWells(wells) {
         let zsList;
@@ -322,7 +322,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return node.zone_template.name;
     }
-   
+
     this.getZoneIcon = (node) => ( (node && !node._notUsed) ? 'zone-16x16': 'fa fa-ban' )
     const EMPTY_ARRAY = []
     this.noChildren = function (node) {
@@ -334,9 +334,17 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.click2ToggleLayer = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
-        self.selectedLayers = Object.values(selectedObjs).map(o => o.data);
+        //self.selectedLayers = Object.values(selectedObjs).map(o => o.data);
     }
-    
+    this.click2ToggleCumulative = function ($event, node, selectedObjs) {
+        node._useCmlt = !node._useCmlt;
+        self.setCumulativeData(self.histogramList);
+         
+    }
+    this.click2ToggleGaussian = function ($event, node, selectedObjs) {
+        node._notUsedGssn = !node._notUsedGssn;
+    }
+
     this.runLayerMatch = function (node, criteria) {
         let keySearch = criteria.toLowerCase();
         let searchArray = node.name.toLowerCase();
@@ -420,21 +428,21 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
 
     this.histogramList = [];
-	var flattenHistogramList = [];
-	var listWellStats = [];
-	var listAllStats = [];
+    var flattenHistogramList = [];
+    var listWellStats = [];
+    var listAllStats = [];
     this.genHistogramList = async function() {
         this.histogramList.length = 0;
         let allHistogramList = []
-		listWellStats.length = 0;
-		listAllStats.length = 0;
+        listWellStats.length = 0;
+        listAllStats.length = 0;
         _histogramGen = null;
         wiLoading.show($element.find('.main')[0], self.silent);
 
-		let allZones = [];
-		let allDataArray = [];
+        let allZones = [];
+        let allDataArray = [];
         try {
-            
+
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
                 if (well._notUsed) {
@@ -469,37 +477,37 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     });
                     return !z._notUsed;
                 });
-				if (self.getStackMode() === 'all') {
-					allZones = [...allZones, ...zones];
-				}
+                if (self.getStackMode() === 'all') {
+                    allZones = [...allZones, ...zones];
+                }
                 let wellHistogramList = [];
-				let wellDataArray = [];
+                let wellDataArray = [];
                 for (let j = 0; j < zones.length; j++) {
                     let zone = zones[j];
                     let dataArray = filterData(curveData, zone);
-					dataArray.top = zone.startDepth;
-					dataArray.bottom = zone.endDepth;
-					if (self.getStackMode() === 'well') {
-						wellDataArray = [...wellDataArray, ...dataArray];
-					} else if (self.getStackMode() === 'all') {
-						allDataArray = [...allDataArray, ...dataArray];
-					}
+                    dataArray.top = zone.startDepth;
+                    dataArray.bottom = zone.endDepth;
+                    if (self.getStackMode() === 'well') {
+                        wellDataArray = [...wellDataArray, ...dataArray];
+                    } else if (self.getStackMode() === 'all') {
+                        allDataArray = [...allDataArray, ...dataArray];
+                    }
                     let bins = genBins(dataArray);
                     bins.color = self.getColor(zone, well);
                     bins.name = `${well.name}.${zone.zone_template.name}`;
 
-					bins.stats = {};
-					bins.stats.top = zone.startDepth;
-					bins.stats.bottom = zone.endDepth;
-					let stats = setStats(dataArray.map(d => d.x));
-					bins.stats = Object.assign(bins.stats, stats);
-					wellHistogramList.push(bins);
+                    bins.stats = {};
+                    bins.stats.top = zone.startDepth;
+                    bins.stats.bottom = zone.endDepth;
+                    let stats = setStats(dataArray.map(d => d.x));
+                    Object.assign(bins.stats, stats);
+                    wellHistogramList.push(bins);
                 }
                 if (self.getStackMode() === 'well') {
-					let stats = setStats(wellDataArray.map(d => d.x));
-					stats.top = d3.min(zones, z => z.startDepth);
-					stats.bottom = d3.max(zones, z => z.endDepth);
-					listWellStats.push(stats);
+                    let stats = setStats(wellDataArray.map(d => d.x));
+                    stats.top = d3.min(zones, z => z.startDepth);
+                    stats.bottom = d3.max(zones, z => z.endDepth);
+                    listWellStats.push(stats);
                     wellHistogramList.name = well.name;
                     wellHistogramList.color = well.color;
                     allHistogramList.push(wellHistogramList);
@@ -508,44 +516,45 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             }
             allHistogramList.name = 'All';
             let max = 0;
-			let flatten = [];
+            let flatten = [];
             switch(self.getStackMode()) {
                 case 'none':
                     for (let bins of allHistogramList) {
                         let maybeMax = d3.max(bins.map(b => b.length));
                         max = (max > maybeMax) ? max : maybeMax;
                     }
-					flatten = allHistogramList;
+                    flatten = allHistogramList;
                     break;
                 case 'well':
-                {
-                    for (let groupOfBins of allHistogramList) {
-                        let aggregate = aggregateHistogramList(groupOfBins);
-                        let maybeMax = d3.max(aggregate);
-                        max = (max > maybeMax) ? max : maybeMax;
-						flatten = flatten.concat(groupOfBins);
+                    {
+                        for (let groupOfBins of allHistogramList) {
+                            let aggregate = aggregateHistogramList(groupOfBins);
+                            let maybeMax = d3.max(aggregate);
+                            max = (max > maybeMax) ? max : maybeMax;
+                            flatten = flatten.concat(groupOfBins);
+                        }
                     }
-                }
-                break;
+                    break;
                 case 'all': 
-                {
-                    let aggregate = aggregateHistogramList(allHistogramList);
-                    max = d3.max(aggregate);
-					flatten = allHistogramList;
+                    {
+                        let aggregate = aggregateHistogramList(allHistogramList);
+                        max = d3.max(aggregate);
+                        flatten = allHistogramList;
 
-					let stats = setStats(allDataArray.map(d => d.x));
-					stats.top = d3.min(allZones, z => z.startDepth);
-					stats.bottom = d3.max(allZones, z => z.endDepth);
-					listAllStats.push(stats);
-                }
-                break;
-                    
+                        let stats = setStats(allDataArray.map(d => d.x));
+                        stats.top = d3.min(allZones, z => z.startDepth);
+                        stats.bottom = d3.max(allZones, z => z.endDepth);
+                        listAllStats.push(stats);
+                    }
+                    break;
+
             }
             $timeout(() => {
                 self.minY = 0;
                 self.maxY = max;
                 self.histogramList = allHistogramList;
-				flattenHistogramList = flatten;
+                flattenHistogramList = flatten;
+                self.setCumulativeData(self.histogramList);
             });
         }
         catch(e) {
@@ -554,38 +563,38 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         wiLoading.hide();
         console.log('end');
     }
-	function setStats(dataArray) {
-		let stats = {};
-		try {
-			stats.numPoints = dataArray.length;
-			stats.avg = d3.mean(dataArray);
-			stats.min = d3.min(dataArray);
-			stats.max = d3.max(dataArray);
-			stats.stddev = d3.deviation(dataArray);
-			stats.avgdev = calAverageDeviation(dataArray);
-			stats.var = d3.variance(dataArray);
-			stats.median = d3.median(dataArray);
-			stats.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray) : undefined;
-			stats.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray) : undefined;
-			stats.p10 = calPercentile(dataArray, 0.1);
-			stats.p50 = calPercentile(dataArray, 0.5);
-			stats.p90 = calPercentile(dataArray, 0.9);
-		}
-		catch(e) {
-			console.error(e);
-		}
-		return stats;
-	}
-	function calAverageDeviation(data) {
-		if (data.length < 1) return;
+    function setStats(dataArray) {
+        let stats = {};
+        try {
+            stats.numPoints = dataArray.length;
+            stats.avg = d3.mean(dataArray);
+            stats.min = d3.min(dataArray);
+            stats.max = d3.max(dataArray);
+            stats.stddev = d3.deviation(dataArray);
+            stats.avgdev = calAverageDeviation(dataArray);
+            stats.var = d3.variance(dataArray);
+            stats.median = d3.median(dataArray);
+            stats.skew = dataArray.length >= 3 ? ss.sampleSkewness(dataArray) : undefined;
+            stats.kurtosis = dataArray.length >= 4 ? ss.sampleKurtosis(dataArray) : undefined;
+            stats.p10 = calPercentile(dataArray, 0.1);
+            stats.p50 = calPercentile(dataArray, 0.5);
+            stats.p90 = calPercentile(dataArray, 0.9);
+        }
+        catch(e) {
+            console.error(e);
+        }
+        return stats;
+    }
+    function calAverageDeviation(data) {
+        if (data.length < 1) return;
         let mean = d3.mean(data);
 
         return d3.mean(data, function (d) {
             return Math.abs(d - mean)
         }).toFixed(_DECIMAL_LEN);
     }
-	function calPercentile(data, p) {
-		if (data.length < 1) return;
+    function calPercentile(data, p) {
+        if (data.length < 1) return;
         return d3.quantile(data.sort(function (a, b) {
             return a - b;
         }), p).toFixed(_DECIMAL_LEN);
@@ -648,7 +657,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.getLeft = () => {
         if(self.config.flipHorizontal) {
-           return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 1) ;
+            return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 1) ;
         }
         return getCorrectValue(getCorrectValue(self.config.left, self.defaultConfig.left), 0) ;
     }
@@ -657,7 +666,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             return getCorrectValue(getCorrectValue(self.config.left, self.defaultConfig.left), 1) ;
         }
         return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
-     } 
+    } 
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 10)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
@@ -676,51 +685,51 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return bins.color;
     }
 
-	this.save = function() {
-		console.log('save');
-		if (!self.idHistogram) {
-			wiDialog.promptDialog({
-				title: 'New Histogram',
-				inputName: 'Histogram Name',
-				input: self.getConfigTitle(),
-			}, function(name) {
-				let type = 'HISTOGRAM';
-				self.setConfigTitle(null, name);
-				let content = {
-					wellSpec: self.wellSpec,
-					zonesetName: self.zonesetName,
-					selectionType: self.selectionType,
-					selectionValue: self.selectionValue,
-					config: self.config	
-				}
-				wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
-					self.idHistogram = res.idParameterSet;
+    this.save = function() {
+        console.log('save');
+        if (!self.idHistogram) {
+            wiDialog.promptDialog({
+                title: 'New Histogram',
+                inputName: 'Histogram Name',
+                input: self.getConfigTitle(),
+            }, function(name) {
+                let type = 'HISTOGRAM';
+                self.setConfigTitle(null, name);
+                let content = {
+                    wellSpec: self.wellSpec,
+                    zonesetName: self.zonesetName,
+                    selectionType: self.selectionType,
+                    selectionValue: self.selectionValue,
+                    config: self.config	
+                }
+                wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
+                    self.idHistogram = res.idParameterSet;
                     self.onSave && self.onSave(res);
-				})
-					.catch(e => {
-						console.error(e);
-						self.save();
-					})
-			});
-		}
-		else {
-			let type = 'HISTOGRAM';
-			let content = {
-				idParameterSet: self.idHistogram,
-				wellSpec: self.wellSpec,
-				zonesetName: self.zonesetName,
-				selectionType: self.selectionType,
-				selectionValue: self.selectionValue,
-				config: self.config	
-			}
-			wiApi.editAssetPromise(self.idHistogram, content).then(res => {
-				console.log(res);
-			})
-				.catch(e => {
-					console.error(e);
-				});
-		}
-	}
+                })
+                    .catch(e => {
+                        console.error(e);
+                        self.save();
+                    })
+            });
+        }
+        else {
+            let type = 'HISTOGRAM';
+            let content = {
+                idParameterSet: self.idHistogram,
+                wellSpec: self.wellSpec,
+                zonesetName: self.zonesetName,
+                selectionType: self.selectionType,
+                selectionValue: self.selectionValue,
+                config: self.config	
+            }
+            wiApi.editAssetPromise(self.idHistogram, content).then(res => {
+                console.log(res);
+            })
+                .catch(e => {
+                    console.error(e);
+                });
+        }
+    }
     this.saveAs = function() {
         console.log("saveAs");
         wiDialog.promptDialog({
@@ -765,60 +774,60 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
     }
     self.statsValue = function ([row, col]) {
-		let statsArray = [];
-		switch(self.getStackMode()) {
-			case 'none':
-				statsArray = flattenHistogramList.map(e => e.stats);
-				break;
-			case 'well':
-				statsArray = [...listWellStats];
-				break;
-			case 'all':
-				// statsArray = [...listAllStats];
-				statsArray = flattenHistogramList.map(e => e.stats);
-				break;
-			default:
-				statsArray = [];
-		}
+        let statsArray = [];
+        switch(self.getStackMode()) {
+            case 'none':
+                statsArray = flattenHistogramList.map(e => e.stats);
+                break;
+            case 'well':
+                statsArray = [...listWellStats];
+                break;
+            case 'all':
+                // statsArray = [...listAllStats];
+                statsArray = flattenHistogramList.map(e => e.stats);
+                break;
+            default:
+                statsArray = [];
+        }
 
-		try {
-			switch(_headers[col]){
-				case 'top': 
-					return wiApi.bestNumberFormat(statsArray[row].top, 4) || 'N/A';
-				case 'bottom': 
-					return wiApi.bestNumberFormat(statsArray[row].bottom, 4) || 'N/A';
-				case '#pts':
-					return statsArray[row].numPoints || 'N/A';
-				case 'avg':
-					return wiApi.bestNumberFormat(statsArray[row].avg) || 'N/A'
-				case 'min':
-					return wiApi.bestNumberFormat(statsArray[row].min) || 'N/A'
-				case 'max':
-					return wiApi.bestNumberFormat(statsArray[row].max )|| 'N/A'
-				case 'avgdev': 
-					return wiApi.bestNumberFormat(statsArray[row].avgdev) || 'N/A';
-				case 'stddev': 
-					return wiApi.bestNumberFormat(statsArray[row].stddev) || 'N/A';
-				case 'var':
-					return wiApi.bestNumberFormat(statsArray[row].var) || 'N/A';
-				case 'skew':
-					return wiApi.bestNumberFormat(statsArray[row].skew) || 'N/A';
-				case 'kurtosis':
-					return wiApi.bestNumberFormat(statsArray[row].kurtosis) || 'N/A';
-				case 'median':
-					return wiApi.bestNumberFormat(statsArray[row].median) || 'N/A';
-				case 'p10': 
-					return wiApi.bestNumberFormat(statsArray[row].p10) || 'N/A';
-				case 'p50': 
-					return wiApi.bestNumberFormat(statsArray[row].p50) || 'N/A';
-				case 'p90': 
-					return wiApi.bestNumberFormat(statsArray[row].p90) || 'N/A';
-				default: 
-					return "this default";
-			}
-		} catch {
-			return 'N/A';
-		}
+        try {
+            switch(_headers[col]){
+                case 'top': 
+                    return wiApi.bestNumberFormat(statsArray[row].top, 4) || 'N/A';
+                case 'bottom': 
+                    return wiApi.bestNumberFormat(statsArray[row].bottom, 4) || 'N/A';
+                case 'points':
+                    return statsArray[row].numPoints || 'N/A';
+                case 'avg':
+                    return wiApi.bestNumberFormat(statsArray[row].avg) || 'N/A'
+                case 'min':
+                    return wiApi.bestNumberFormat(statsArray[row].min) || 'N/A'
+                case 'max':
+                    return wiApi.bestNumberFormat(statsArray[row].max )|| 'N/A'
+                case 'avgdev': 
+                    return wiApi.bestNumberFormat(statsArray[row].avgdev) || 'N/A';
+                case 'stddev': 
+                    return wiApi.bestNumberFormat(statsArray[row].stddev) || 'N/A';
+                case 'var':
+                    return wiApi.bestNumberFormat(statsArray[row].var) || 'N/A';
+                case 'skew':
+                    return wiApi.bestNumberFormat(statsArray[row].skew) || 'N/A';
+                case 'kurtosis':
+                    return wiApi.bestNumberFormat(statsArray[row].kurtosis) || 'N/A';
+                case 'median':
+                    return wiApi.bestNumberFormat(statsArray[row].median) || 'N/A';
+                case 'p10': 
+                    return wiApi.bestNumberFormat(statsArray[row].p10) || 'N/A';
+                case 'p50': 
+                    return wiApi.bestNumberFormat(statsArray[row].p50) || 'N/A';
+                case 'p90': 
+                    return wiApi.bestNumberFormat(statsArray[row].p90) || 'N/A';
+                default: 
+                    return "this default";
+            }
+        } catch {
+            return 'N/A';
+        }
     }
     let _headers = [];
     self.getHeaders = function (){
@@ -884,5 +893,37 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.wellSpec.splice(index, 1);
         }
     }
-    
+
+    this.setCumulativeData = function(layers) {
+        self.cmltLineData = [];
+        layers = layers.filter(l => {
+            return l._useCmlt;
+        });
+        if (!layers.length) return;
+        let newData = [];
+        for (let i = 0; i < self.getDivisions(); i++) {
+            let elem = [];
+            for (let j = 0; j < layers.length; j++) {
+                elem = [...elem, ...layers[j][i]];
+                elem.x0 = layers[j][i].x0;
+                elem.x1 = layers[j][i].x1;
+            }
+            newData.push(elem);
+        }
+        newData.totalPoint = _.sum(newData.map(d => d.length));
+        let cumulativeVal = 0;
+        newData.forEach(l => {
+            cumulativeVal += l.length;
+            self.cmltLineData.push({
+                x: (l.x0 + l.x1) / 2,
+                y: (cumulativeVal / newData.totalPoint) * self.maxY
+            });
+        })
+    }
+    this.getCumulativeX = cmlt => {
+        return cmlt.x;
+    };
+    this.getCumulativeY = cmlt => {
+        return cmlt.y;
+    }
 }
