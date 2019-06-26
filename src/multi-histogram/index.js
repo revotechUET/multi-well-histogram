@@ -29,6 +29,7 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
     let self = this;
     self.silent = true;
     $scope.tabIndex = 0;
+
     this.$onInit = async function () {
         if (self.token)
             wiToken.setToken(self.token);
@@ -37,9 +38,6 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
         $timeout(()=>{
             $scope.tabIndex = $index;
         })
+
     }
-    // $timeout(()=>{
-    //     wiLoading.hide();
-    //     console.log("...............")
-    // },10000)
 }

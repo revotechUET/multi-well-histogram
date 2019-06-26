@@ -668,7 +668,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
     } 
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
-    this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 10)
+    this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 35)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
     this.getColor = (zone, well) => {
         let cMode = self.getColorMode();

@@ -5,7 +5,11 @@
         ng-repeat="wellSpec in self.wellSpecs" 
         ng-class="{active: tabIndex === $index}" 
         ng-click="self.activateTab($index)">
-        tab {{$index}}
+        <!-- {{self.wellSpecs[$index][0].idWell}} -->
+        <div ng-if="self.selectionTypes[$index] === 'curve'" class="curve-16x16" style="margin-right: 10px;"></div>
+        <div ng-if="self.selectionTypes[$index] === 'family'" class="family-16x16" style="margin-right: 10px;"></div>
+        <div ng-if="self.selectionTypes[$index] === 'family-group'" class="family-group-16x16" style="margin-right: 10px;"></div>
+        {{self.selectionTypes[$index]}} - {{self.selectionValues[$index]}}
     </div>
 </div>
 <div ng-show="tabIndex === $index" 
