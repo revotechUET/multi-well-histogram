@@ -452,6 +452,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         let allZones = [];
         let allDataArray = [];
+        let zoneBinsObj = {};
+        let zoneBinsList = [];
         try {
 
             for (let i = 0; i < self.treeConfig.length; i++) {
@@ -512,6 +514,19 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     bins.stats.bottom = zone.endDepth;
                     let stats = setStats(dataArray.map(d => d.x));
                     Object.assign(bins.stats, stats);
+                    if (self.getStackMode() === 'zone') {
+                        let zbl = zoneBinsObj[zone.zone_template.name] ? zoneBinsObj[zone.zone_template.name] : [];
+                        zoneBinsObj[zone.zone_template.name] = bins.map((b, bIdx) => {
+                            let zoneBin = b.concat(zbl[bIdx] || []);
+                            zoneBin.x0 = b.x0;
+                            zoneBin.x1 = b.x1;
+                            return zoneBin;
+                        });
+                        zoneBinsObj[zone.zone_template.name].color = self.getColor(zone, well);
+                        zoneBinsObj[zone.zone_template.name].name = `${zone.zone_template.name}`;
+                        zoneBinsObj[zone.zone_template.name].top = zone.startDepth;
+                        zoneBinsObj[zone.zone_template.name].bottom = zone.endDepth;
+                    }
                     wellHistogramList.push(bins);
                 }
                 if (self.getStackMode() === 'well') {
@@ -522,8 +537,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     wellHistogramList.name = well.name;
                     wellHistogramList.color = well.color;
                     allHistogramList.push(wellHistogramList);
-                }
-                else allHistogramList.push(...wellHistogramList);
+                } else allHistogramList.push(...wellHistogramList);
             }
             allHistogramList.name = 'All';
             let max = 0;
@@ -544,6 +558,19 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                             max = (max > maybeMax) ? max : maybeMax;
                             flatten = flatten.concat(groupOfBins);
                         }
+                    }
+                    break;
+                case 'zone':
+                    {
+                        for (let key in zoneBinsObj) {
+                            let maybeMax = d3.max(zoneBinsObj[key].map(b => b.length));
+                            max = (max > maybeMax) ? max : maybeMax;
+                            let fullData =  zoneBinsObj[key].flat();
+                            zoneBinsObj[key].stats = setStats(fullData);
+                            zoneBinsList.push(zoneBinsObj[key]);
+                        }
+                        allHistogramList = zoneBinsList;
+                        flatten = zoneBinsList;
                     }
                     break;
                 case 'all': 
@@ -794,6 +821,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             case 'well':
                 statsArray = [...listWellStats];
                 break;
+            case 'zone':
+                statsArray = flattenHistogramList.map(e => e.stats);
+                break;
             case 'all':
                 // statsArray = [...listAllStats];
                 statsArray = flattenHistogramList.map(e => e.stats);
@@ -912,6 +942,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             return l._useCmlt;
         });
         if (!layers.length) return;
+        if (self.getStackMode() === 'well') layers = layers.flat();
         let newData = [];
         for (let i = 0; i < self.getDivisions(); i++) {
             let elem = [];
@@ -936,6 +967,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.gaussianLine = undefined;
         layers = layers.filter(l => l._useGssn);
         if (!layers.length) return;
+        if (self.getStackMode() === 'well') layers = layers.flat();
         let fullData = [];
         for (let lIdx = 0; lIdx < layers.length; lIdx++) {
             for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
