@@ -455,7 +455,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let zoneBinsObj = {};
         let zoneBinsList = [];
         try {
-
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
                 if (well._notUsed) {
@@ -784,7 +783,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 selectionValue: self.selectionValue,
                 config: {...self.config, title: name} 
             }
-            console.log(content);
             wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
                 // self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
@@ -936,8 +934,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
     }
 
+    self.cmltLineData = [];
     this.setCumulativeData = function(layers) {
-        self.cmltLineData = [];
+        self.cmltLineData.length = 0;
         layers = layers.filter(l => {
             return l._useCmlt;
         });
@@ -961,6 +960,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 x: (l.x0 + l.x1) / 2,
                 y: (cumulativeVal / newData.totalPoint) * self.maxY
             });
+            self.cmltLineData.color = self.cmltLineData.color || 'black';
+            self.cmltLineData.width = self.cmltLineData.width || 2;
         })
     }
     this.setGaussianData = function(layers) {
@@ -975,13 +976,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             }
         }
         let mean = _.mean(fullData);
-        console.log(mean);
         let sigma = d3.deviation(fullData);
         self.gaussianLine = {
             mean, sigma,
-            color: colorGenerator(),
             width: 2
         }
+        self.gaussianLine.color = self.gaussianLine.color || 'black';
     }
     this.getCumulativeX = cmlt => {
         return cmlt.x;
