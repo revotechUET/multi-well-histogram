@@ -30,11 +30,27 @@
                 max-y='self.maxY || 100' loga="self.getLoga()" autofit='false' bins="groupOfBins"
                 bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
+            <canvas-barchart-layer ng-show="!bins._notUsed"
+                ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'zone'"
+                ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
+                min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
+                bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
+            </canvas-barchart-layer>
             <canvas-barchart-layer ng-show="!self.histogramList._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
                 self.getStackMode() == 'all'" min-val="self.getLeft()" max-val="self.getRight()"
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
                 bins="self.histogramList" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
+            <line-gaussian-layer ng-if="self.gaussianLine" min-val='self.getLeft()' max-val='self.getRight()' min-y='self.minY || 0'
+                max-y='self.maxY || 100' autofit='true' mean='self.gaussianLine.mean' sigma='self.gaussianLine.sigma'
+                resolution='5000' line-color='self.gaussianLine.color' line-width='self.gaussianLine.width'>
+            </line-gaussian-layer>
+            <line-point-layer min-val="self.getLeft()"
+                max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()"
+                min-draw="self.getLeft()" max-draw="self.getRight()" min-draw-y="self.minY || 0" max-draw-y="self.maxY || 100"
+                autofit='false' get-x='self.getCumulativeX' get-y='self.getCumulativeY' line-data="self.cmltLineData"
+                line-color="self.cmltLineData.color" line-width='self.cmltLineData.width' line-dash="'2 0'">
+            </line-point-layer>
             <line-point-layer ng-if="self.getDisplayMode() === 'line' && !bins._notUsed"
                 ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'

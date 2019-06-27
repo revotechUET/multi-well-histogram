@@ -82,22 +82,6 @@
 
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
-        <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Assistive Lines
-            <div
-                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-            </div>
-        </div>
-        <div>
-            <span ng-class="{'active' : self.config.showCumulative}"
-                ng-click="self.config.showCumulative = !self.config.showCumulative"
-                class="button-with-label" style="margin-right: 8px;"> Show Cumulative</span>
-            <span ng-class="{'active' : self.config.showGaussian}"
-                ng-click="self.config.showGaussian = !self.config.showGaussian"
-                class="button-with-label" style="margin-right: 8px;"> Show Gaussian</span>
-        </div>
-    </div>
-    <div class="label-option-sidebar"
         style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
         <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Color Mode
             <div
@@ -129,6 +113,9 @@
             <span ng-class="{'active' : self.config.stackMode === 'well'}"
                 style="margin-right: 8px;" ng-click="self.config.stackMode='well'"
                 class="button-with-label">Well</span>
+            <span ng-class="{'active' : self.config.stackMode === 'zone'}"
+                style="margin-right: 8px;" ng-click="self.config.stackMode='zone'"
+                class="button-with-label">Zone</span>
             <span ng-class="{'active' : self.config.stackMode === 'all'}"
                 ng-click="self.config.stackMode='all'" class="button-with-label">All</span>
         </div>
