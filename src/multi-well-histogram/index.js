@@ -514,17 +514,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let stats = setStats(dataArray.map(d => d.x));
                     Object.assign(bins.stats, stats);
                     if (self.getStackMode() === 'zone') {
-                        //let zbl = zoneBinsObj[zone.zone_template.name] ? zoneBinsObj[zone.zone_template.name] : [];
-                        //zoneBinsObj[zone.zone_template.name] = bins.map((b, bIdx) => {
-                            //let zoneBin = b.concat(zbl[bIdx] || []);
-                            //zoneBin.x0 = b.x0;
-                            //zoneBin.x1 = b.x1;
-                            //return zoneBin;
-                        //});
-                        //zoneBinsObj[zone.zone_template.name].color = self.getColor(zone, well);
-                        //zoneBinsObj[zone.zone_template.name].name = `${zone.zone_template.name}`;
-                        //zoneBinsObj[zone.zone_template.name].top = zone.startDepth;
-                        //zoneBinsObj[zone.zone_template.name].bottom = zone.endDepth;
                         let zoneExisted = zoneBinsList.find(zbl => zbl.name == zone.zone_template.name);
                         let zoneBinsElem;
                         if (!zoneExisted) {
@@ -537,10 +526,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                 zoneExisted.color = well.color;
                             }
                         }
-                        //if (!zoneBinsList[j]) zoneBinsList[j] = [];
-                        //zoneBinsList[j].name = zone.zone_template.name;
-                        //if (!zoneBinsList[j][i]) zoneBinsList[j][i] = [];
-                        //zoneBinsList[j][i] = bins;
                         if (!zoneExisted[i]) zoneExisted[i] = [];
                         zoneExisted[i] = bins;
                     }
@@ -581,27 +566,18 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     {
                         for (let groupOfBins of zoneBinsList) {
                             let fullData = [];
-                            console.log(typeof groupOfBins);
                             for (let i = 0; i < groupOfBins.flat().length; i++) {
                                 fullData = fullData.concat(groupOfBins.flat()[i]);
                             }
                             groupOfBins.stats = setStats(fullData);
+                            groupOfBins.stats.top = _.min(groupOfBins.map(gob => gob.stats.top));
+                            groupOfBins.stats.bottom = _.max(groupOfBins.map(gob => gob.stats.bottom));
                             let aggregate = aggregateHistogramList(groupOfBins);
                             let maybeMax = d3.max(aggregate);
                             max = (max > maybeMax) ? max : maybeMax;
-                            flatten = flatten.concat(groupOfBins);
                         }
                         allHistogramList = zoneBinsList;
-                        console.log('AHG', allHistogramList);
-                        //for (let key in zoneBinsObj) {
-                            //let maybeMax = d3.max(zoneBinsObj[key].map(b => b.length));
-                            //max = (max > maybeMax) ? max : maybeMax;
-                            //let fullData =  zoneBinsObj[key].flat();
-                            //zoneBinsObj[key].stats = setStats(fullData);
-                            //zoneBinsList.push(zoneBinsObj[key]);
-                        //}
-                        //allHistogramList = zoneBinsList;
-                        //flatten = zoneBinsList;
+                        flatten = zoneBinsList;
                     }
                     break;
                 case 'all': 
@@ -751,15 +727,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getBinY = (bin) => (bin.length)
 
     this.colorFn = function(bin, bins) {
-        //if (self.getStackMode() === 'zone') {
-            //console.log('bins: ', bin);
-            //console.log('BINS: ', bins);
-            //if (self.getColorMode() === 'zone') {
-                //return bins.color;
-            //} else {
-                //return bin.color;
-            //}
-        //}
         if (self.getStackMode() === 'none');
         return bins.color;
     }
@@ -825,7 +792,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 config: {...self.config, title: name} 
             }
             wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
-                // self.setConfigTitle(null, name);
                 self.idHistogram = res.idParameterSet;
                 console.log(res);
                 self.onSaveAs && self.onSaveAs(res);
