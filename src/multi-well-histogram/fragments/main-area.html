@@ -30,11 +30,11 @@
                 max-y='self.maxY || 100' loga="self.getLoga()" autofit='false' bins="groupOfBins"
                 bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
-            <canvas-barchart-layer ng-show="!bins._notUsed"
-                ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'zone'"
-                ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
-                min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
-                bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn">
+            <canvas-barchart-layer ng-show="!groupOfBins._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
+                self.getStackMode() == 'zone'" ng-repeat="groupOfBins in self.histogramList"
+                min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
+                max-y='self.maxY || 100' loga="self.getLoga()" autofit='false' bins="groupOfBins"
+                bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
             <canvas-barchart-layer ng-show="!self.histogramList._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
                 self.getStackMode() == 'all'" min-val="self.getLeft()" max-val="self.getRight()"
