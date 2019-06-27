@@ -12,7 +12,7 @@ app.component(componentName, {
     bindings: {
         token: "<",
         idProject: "<",
-        wellSpecs: "<",
+        wellSpecs: "=",
         zonesetNames: "<",
         selectionTypes: "<",
         selectionValues: "<",
@@ -39,5 +39,30 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
             $scope.tabIndex = $index;
         })
 
+    }
+    this.onDrop = function (event, helper, myData) {
+        let idCurves = helper.data("idCurves");
+        let curveName;
+        let idWell;
+        if(idCurves){
+            self.warning = false;
+            wiApi.getCurveInfoPromise(idCurves[0]).then(curveInfo => {
+                console.log(curveInfo);
+                curveName = curveInfo.name;
+                return wiApi.getDatasetInfoPromise(curveInfo.idDataset);
+            }).then(datasetInfo => {
+                idWell = datasetInfo.idWell;
+                $timeout(()=>{
+                    self.wellSpecs.push([{idWell}]);
+                    self.selectionTypes.push('curve');
+                    self.selectionValues.push(curveName);
+                });
+            });
+        } else {
+            $timeout(()=>{
+                self.warning = true;
+            })
+        }
+        
     }
 }

@@ -18,8 +18,8 @@ app.component(componentName, {
         idProject: "<",
         wellSpec: "<",
         zonesetName: "<",
-        selectionType: "<",
-        selectionValue: "<",
+        selectionType: "=",
+        selectionValue: "=",
 		idHistogram: "<",
 		config: '<',
         onSave: '<',
@@ -32,6 +32,7 @@ app.component(componentName, {
 
 function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoading) {
     let self = this;
+    self.silent = true;
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
