@@ -25,8 +25,8 @@
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin: 1px 15px 5px 0px; overflow: hidden;">
                         <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getLayerIcon" get-icons="self.getLayerIcons"
-                            get-children="self.noChildren" icon-style="self.getLayerIconStyle" keep-children='true'
+                            filter="self.layerFilter" get-icon="self.getCumulativeIcon" get-icons="self.getCumulativeIcons"
+                            get-children="self.noChildren" icon-style="self.getCumulativeIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.click2ToggleCumulative'>
                         </wi-tree-view>
@@ -38,8 +38,8 @@
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin: 1px 15px 5px 0px; overflow: hidden;">
                         <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getLayerIcon" get-icons="self.getLayerIcons"
-                            get-children="self.noChildren" icon-style="self.getLayerIconStyle" keep-children='true'
+                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
+                            get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.click2ToggleGaussian'>
                         </wi-tree-view>

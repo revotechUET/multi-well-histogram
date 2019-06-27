@@ -115,6 +115,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || ''};
+        self.gaussianLine = self.gaussianLine || undefined;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -339,10 +340,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.click2ToggleCumulative = function ($event, node, selectedObjs) {
         node._useCmlt = !node._useCmlt;
         self.setCumulativeData(self.histogramList);
-         
     }
     this.click2ToggleGaussian = function ($event, node, selectedObjs) {
-        node._notUsedGssn = !node._notUsedGssn;
+        node._useGssn = !node._useGssn;
+        self.setGaussianData(self.histogramList);
     }
 
     this.runLayerMatch = function (node, criteria) {
@@ -362,6 +363,16 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getLayerIcon = (node) => ( (node && !node._notUsed) ? 'layer-16x16': 'fa fa-eye-slash' )
     this.getLayerIcons = (node) => ( ["rectangle"] )
     this.getLayerIconStyle = (node) => ( {
+        'background-color': node.color
+    })
+    this.getCumulativeIcon = (node) => ( (node && node._useCmlt) ? 'layer-16x16': 'fa fa-eye-slash' )
+    this.getCumulativeIcons = (node) => ( ["rectangle"] )
+    this.getCumulativeIconStyle = (node) => ( {
+        'background-color': node.color
+    })
+    this.getGaussianIcon = (node) => ( (node && node._useGssn) ? 'layer-16x16': 'fa fa-eye-slash' )
+    this.getGaussianIcons = (node) => ( ["rectangle"] )
+    this.getGaussianIconStyle = (node) => ( {
         'background-color': node.color
     } )
     this.getConfigLeft = function() {
@@ -555,6 +566,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.histogramList = allHistogramList;
                 flattenHistogramList = flatten;
                 self.setCumulativeData(self.histogramList);
+                self.setGaussianData(self.histogramList);
             });
         }
         catch(e) {
@@ -920,10 +932,36 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             });
         })
     }
+    this.setGaussianData = function(layers) {
+        self.gaussianLine = undefined;
+        layers = layers.filter(l => l._useGssn);
+        if (!layers.length) return;
+        let fullData = [];
+        for (let lIdx = 0; lIdx < layers.length; lIdx++) {
+            for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
+                fullData = fullData.concat(layers[lIdx][bIdx]);
+            }
+        }
+        let mean = _.mean(fullData);
+        console.log(mean);
+        let sigma = d3.deviation(fullData);
+        self.gaussianLine = {
+            mean, sigma,
+            color: colorGenerator(),
+            width: 2
+        }
+    }
     this.getCumulativeX = cmlt => {
         return cmlt.x;
     };
     this.getCumulativeY = cmlt => {
         return cmlt.y;
+    }
+
+    function colorGenerator() {
+        let rand = function () {
+            return Math.floor(Math.random() * 255);
+        }
+        return "rgb(" + rand() + "," + rand() + "," + rand() + ")";
     }
 }
