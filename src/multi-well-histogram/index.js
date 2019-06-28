@@ -20,8 +20,8 @@ app.component(componentName, {
         zonesetName: "<",
         selectionType: "=",
         selectionValue: "=",
-		idHistogram: "<",
-		config: '<',
+        idHistogram: "<",
+        config: '<',
         onSave: '<',
         onSaveAs: '<',
         title: '<',
@@ -117,6 +117,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || ''};
         self.gaussianLine = self.gaussianLine || undefined;
+        self.getToggleGaussianFn = self.getNotUsedGaussian() ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -345,6 +346,18 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.click2ToggleGaussian = function ($event, node, selectedObjs) {
         node._useGssn = !node._useGssn;
         self.setGaussianData(self.histogramList);
+    }
+    this.click2ToggleLogNormalD = function ($event, node, selectedObjs) {
+        node._useLogNormalD = !node._useLogNormalD;
+        self.setLogNormalDFn(self.histogramList);
+    }
+    this.toggleGaussianLine = function(notUsedGaussian) {
+        self.config.notUsedGaussian = notUsedGaussian;
+        if (notUsedGaussian) {
+            self.getToggleGaussianFn = self.click2ToggleLogNormalD;
+        } else {
+            self.getToggleGaussianFn = self.click2ToggleGaussian;
+        }
     }
 
     this.runLayerMatch = function (node, criteria) {
@@ -714,6 +727,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
     } 
     this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
+    this.getNotUsedGaussian = () => {self.config.notUsedGaussian || false};
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 35)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
     this.getColor = (zone, well) => {
@@ -951,7 +965,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         if (!layers.length) return;
         if (self.getStackMode() === 'well' ||
-        self.getStackMode() === 'zone') layers = layers.flat();
+            self.getStackMode() === 'zone') layers = layers.flat();
         let newData = [];
         for (let i = 0; i < self.getDivisions(); i++) {
             let elem = [];
@@ -976,6 +990,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.setGaussianData = function(layers) {
         self.gaussianLine = undefined;
+        //self.logNormalDLine = undefined;
         if (self.getStackMode() != 'all') {
             layers = layers.filter(l => l._useGssn);
         } else if (!layers._useGssn) {
@@ -983,20 +998,62 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         if (!layers.length) return;
         if (self.getStackMode() === 'well' ||
-        self.getStackMode() === 'zone') layers = layers.flat();
+            self.getStackMode() === 'zone') layers = layers.flat();
         let fullData = [];
         for (let lIdx = 0; lIdx < layers.length; lIdx++) {
             for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
                 fullData = fullData.concat(layers[lIdx][bIdx]);
             }
         }
-        let mean = _.mean(fullData);
+        let mean = d3.mean(fullData);
         let sigma = d3.deviation(fullData);
         self.gaussianLine = {
             mean, sigma,
             width: 2
         }
+        self.gaussianLine.fn = (function(x) {
+            let mean = this.mean;
+            let sigma = this.sigma;
+            let gaussianConstant = 1 / Math.sqrt(2 * Math.PI);
+            x = (x - mean) / sigma;
+            return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
+        }).bind(self.gaussianLine);
         self.gaussianLine.color = self.gaussianLine.color || 'black';
+    }
+    this.setLogNormalDFn = function(layers) {
+        self.logNormalDLine = undefined;
+        //self.gaussianLine = undefined;
+        if (self.getStackMode() != 'all') {
+            layers = layers.filter(l => l._useLogNormalD);
+        } else if (!layers._useLogNormalD) {
+            return;
+        }
+        if (!layers.length) return;
+        if (self.getStackMode() === 'well' ||
+            self.getStackMode() === 'zone') layers = layers.flat();
+        let fullData = [];
+        for (let lIdx = 0; lIdx < layers.length; lIdx++) {
+            for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
+                fullData = fullData.concat(layers[lIdx][bIdx]);
+            }
+        }
+        let mean = d3.mean(fullData);
+        let sigma = d3.deviation(fullData);
+        console.log(mean, sigma);
+        self.logNormalDLine = {
+            mean, sigma,
+            width: 2
+        }
+        self.logNormalDLine.fn = (function(x) {
+            if (x <= 0) return 0;
+            let mean = this.mean,
+                sigma = this.sigma,
+                s2 = Math.pow(sigma, 2),
+                A = 1 / (Math.sqrt(2 * Math.PI)),
+                B = -1 / (2 * s2);
+            return (1 / (x * sigma)) * A * Math.exp(B * Math.pow(Math.log(x) - mean, 2));
+        }).bind(self.logNormalDLine);
+        self.logNormalDLine.color = self.logNormalDLine.color || 'black';
     }
     this.getCumulativeX = cmlt => {
         return cmlt.x;
