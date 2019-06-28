@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>image Set Manager</title>
+    <title>Hung handsome</title>
 
     <link rel="stylesheet" href="./bower_components/jquery-ui/themes/base/jquery-ui.min.css">
     <link rel="stylesheet" href="./bower_components/font-awesome/css/font-awesome.min.css">
@@ -39,11 +39,15 @@
 </head>
 
 <body ng-app="myApp" style="font-size: 12px;">
-    <div style="width: 1300px; height:900px; border: 1px solid #ddd; margin: 10px; border-radius: 4px;">
+    <div style="width: 1300px; height:600px; border: 1px solid #ddd; margin: 10px; border-radius: 4px;">
         <multi-histogram
-            token="'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh1bmduayIsIndob2FtaSI6Im1haW4tc2VydmljZSIsInJvbGUiOjIsImNvbXBhbnkiOiJFU1MiLCJpYXQiOjE1NjE1MTkzNDUsImV4cCI6MTU2MTY5MjE0NX0.0ydD-bW_xLB8ZAQCmp4q_xg39PNuuAi8Ze9fiaLY94I'"
+            token="'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imh1bmduayIsIndob2FtaSI6Im1haW4tc2VydmljZSIsInJvbGUiOjIsImNvbXBhbnkiOiJFU1MiLCJpYXQiOjE1NjE3MDYzMzEsImV4cCI6MTU2MjU3MDMzMX0.qGcE7FdZXZFyC84Nd6uvf0F_5grIVkqdsIuTBc-SABQ'"
             well-specs="[[{idWell:164}],[{idWell:158}]]" zoneset-names="['New','New']" 
-            selection-types="['family-group','curve']" selection-values='["Gamma Ray","GR"]'>
+            selection-types="['family-group','curve']" selection-values='["Gamma Ray","GR"]' 
+            ctrl-params-list="[
+                [{name: 'param1', value:10, color:'green'},{name: 'param2', value:40, color:'red'}],
+                [{name: 'param3', value:15, color:'green'},{name: 'param4', value:45, color:'red'}]
+            ]">
         </multi-histogram>
     </div>
     <script>

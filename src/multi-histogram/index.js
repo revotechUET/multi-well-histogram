@@ -17,7 +17,8 @@ app.component(componentName, {
         selectionTypes: "<",
         selectionValues: "<",
 		idHistograms: "<",
-		configs: '<',
+        configs: '<',
+        ctrlParamsList: '<',
         onSave: '<',
         onSaveAs: '<',
 		titles: '<'
@@ -46,6 +47,7 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
         let idWell;
         if(idCurves){
             self.warning = false;
+            wiLoading.show(document.getElementsByTagName("body")[0], false);
             wiApi.getCurveInfoPromise(idCurves[0]).then(curveInfo => {
                 console.log(curveInfo);
                 curveName = curveInfo.name;
@@ -57,6 +59,7 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
                     self.selectionTypes.push('curve');
                     self.selectionValues.push(curveName);
                 });
+                wiLoading.hide();
             });
         } else {
             $timeout(()=>{

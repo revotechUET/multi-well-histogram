@@ -25,7 +25,8 @@ app.component(componentName, {
         onSave: '<',
         onSaveAs: '<',
         title: '<',
-        silent: "<"
+        silent: "<", 
+        ctrlParams: "<"
     },
     transclude: true
 });
@@ -1068,4 +1069,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return "rgb(" + rand() + "," + rand() + "," + rand() + ")";
     }
+
+    this.getMarkerVal = (marker, idx) => (marker.value)
+    this.setMarkerVal = (marker, idx, newVal) => {marker.value = newVal;}
+    this.markerStyle = (marker, idx) => ({stroke:marker.color,'stroke-width':'2', fill:'none'})
+    this.markerName = (marker, idx) => (marker.name)
 }

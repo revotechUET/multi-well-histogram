@@ -23,6 +23,7 @@
 <div ng-show="tabIndex === $index" class="main" ng-repeat="wellSpec in self.wellSpecs">
     <multi-well-histogram well-spec="wellSpec" zoneset-name="self.zoneNames[$index]"
         selection-type="self.selectionTypes[$index]" selection-value="self.selectionValues[$index]"
+        ctrl-params="self.ctrlParamsList[$index]"
         config="self.configs[$index]" silent="self.silent">
     </multi-well-histogram>
 </div>
