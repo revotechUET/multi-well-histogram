@@ -10,6 +10,27 @@
             <div style="overflow: auto;">
                 <div class="label-option-sidebar"
                     style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+                    <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Gaussian / Log-normal Distribution
+                        <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                        </div>
+                    </div>
+                    <div>
+                        <span ng-class="{'active' : !self.config.notUsedGaussian}"
+                            ng-click="self.toggleGaussianLine(false)" class="button-with-label"
+                            style="margin-right: 8px;">Gaussian</span>
+                        <span ng-class="{'active' : self.config.notUsedGaussian}"
+                            ng-click="self.toggleGaussianLine(true)" class="button-with-label">Log-normal Distribution</span>
+                    </div>
+                    <div style="margin-bottom: 15px; "></div>
+                    <div ng-show="self.histogramList"
+                        style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
+                        <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
+                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
+                            get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
+                            run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
+                            click-fn='self.getToggleGaussianFn'>
+                        </wi-tree-view>
+                    </div>
                     <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Cumulative
                         <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                         </div>
@@ -17,23 +38,10 @@
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
                         <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getCumulativeIcon"
-                            get-icons="self.getCumulativeIcons" get-children="self.noChildren"
-                            icon-style="self.getCumulativeIconStyle" keep-children='true' run-match="self.runLayerMatch"
-                            hide-unmatched="true" hide-search='false' click-fn='self.click2ToggleCumulative'>
-                        </wi-tree-view>
-                    </div>
-                    <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Gaussian
-                        <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-                        </div>
-                    </div>
-                    <div ng-show="self.histogramList"
-                        style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
-                        <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
-                            get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
+                            filter="self.layerFilter" get-icon="self.getCumulativeIcon" get-icons="self.getCumulativeIcons"
+                            get-children="self.noChildren" icon-style="self.getCumulativeIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
-                            click-fn='self.click2ToggleGaussian'>
+                            click-fn='self.click2ToggleCumulative'>
                         </wi-tree-view>
                     </div>
                 </div>
