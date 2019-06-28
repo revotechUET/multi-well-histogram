@@ -17,7 +17,8 @@ app.component(componentName, {
         selectionTypes: "<",
         selectionValues: "<",
 		idHistograms: "<",
-		configs: '<',
+        configs: '<',
+        ctrlParamsList: '<',
         onSave: '<',
         onSaveAs: '<',
 		titles: '<'
