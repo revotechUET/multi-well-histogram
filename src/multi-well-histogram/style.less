@@ -113,7 +113,7 @@ multi-well-histogram {
         display        : flex;
         overflow-y     : auto;
         /* padding-left: 15px; */
-        flex-direction : column;
+        flex-direction : row;
        
     }
 
@@ -382,24 +382,25 @@ multi-well-histogram {
             }
         }
 
-        .tab-with-label {
-            cursor       : pointer;
-            background   : #f4f4f4;
-            font-size    : 12px;
-            padding      : 12px 10px 8px 10px;
-            border-bottom: 2px solid #f4f4f4;
-            transition   : all 0.2s ease-in;
-            flex         : 1;
-            font-weight: bold;
-            text-align   : center;
-
-            &.active {
-                // background   : #fff;
-                color           : #0077be;
-                border-bottom   : 2px solid #0077be;
-                transition      : all 0.2s ease-in;
-            }
-        }
+        .tab-with-lable {
+			cursor       : pointer;
+			opacity: 0.3;
+			transition   : all 0.2s ease-in;
+			transform: rotate(90deg);
+			margin: 25px 0px;
+			width: 40px;
+			white-space: nowrap;
+			font-weight: bold;
+			&:hover {
+				color: #0077be;
+				opacity: 1;
+			}
+			&.active {
+				opacity: 1;
+				color: #0077be;
+				transition      : all 0.2s ease-in;
+			}
+		}
         .select-table-header {
             border: 1px solid #eee;
             background: #f4f4f4;
