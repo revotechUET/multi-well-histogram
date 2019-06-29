@@ -985,19 +985,22 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 x: (l.x0 + l.x1) / 2,
                 y: (cumulativeVal / newData.totalPoint) * self.maxY
             });
-            self.cmltLineData.color = self.cmltLineData.color || 'black';
+            self.cmltLineData.color = self.cmltLineData.color || colorGenerator();
             self.cmltLineData.width = self.cmltLineData.width || 2;
         })
     }
     this.setGaussianData = function(layers) {
-        self.gaussianLine = undefined;
-        //self.logNormalDLine = undefined;
+        self.gaussianLine = self.gaussianLine || {};
         if (self.getStackMode() != 'all') {
             layers = layers.filter(l => l._useGssn);
         } else if (!layers._useGssn) {
             return;
         }
-        if (!layers.length) return;
+        if (!layers.length) {
+            self.gaussianLine._notUsed = true;
+            return;
+        }
+        self.gaussianLine._notUsed = false;
         if (self.getStackMode() === 'well' ||
             self.getStackMode() === 'zone') layers = layers.flat();
         let fullData = [];
@@ -1009,8 +1012,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let mean = d3.mean(fullData);
         let sigma = d3.deviation(fullData);
         self.gaussianLine = {
+            ...self.gaussianLine,
             mean, sigma,
-            width: 2
+            width: 2,
         }
         self.gaussianLine.fn = (function(x) {
             let mean = this.mean;
@@ -1019,17 +1023,24 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             x = (x - mean) / sigma;
             return gaussianConstant * Math.exp(-.5 * x * x) / sigma;
         }).bind(self.gaussianLine);
-        self.gaussianLine.color = self.gaussianLine.color || 'black';
+        self.gaussianLine.color = self.gaussianLine.color || colorGenerator();
+        self.gaussianLine.sigmaLines = [
+            {color: self.gaussianLine.color, value: mean - sigma},
+            {color: self.gaussianLine.color, value: mean + sigma}
+        ]
     }
     this.setLogNormalDFn = function(layers) {
-        self.logNormalDLine = undefined;
-        //self.gaussianLine = undefined;
+        self.logNormalDLine = self.logNormalDLine || {};
         if (self.getStackMode() != 'all') {
             layers = layers.filter(l => l._useLogNormalD);
         } else if (!layers._useLogNormalD) {
             return;
         }
-        if (!layers.length) return;
+        if (!layers.length) {
+            self.logNormalDLine._notUsed = true;
+            return;
+        }
+        self.logNormalDLine._notUsed = false;
         if (self.getStackMode() === 'well' ||
             self.getStackMode() === 'zone') layers = layers.flat();
         let fullData = [];
@@ -1040,8 +1051,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         let mean = d3.mean(fullData);
         let sigma = d3.deviation(fullData);
-        console.log(mean, sigma);
         self.logNormalDLine = {
+            ...self.logNormalDLine,
             mean, sigma,
             width: 2
         }
@@ -1054,7 +1065,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 B = -1 / (2 * s2);
             return (1 / (x * sigma)) * A * Math.exp(B * Math.pow(Math.log(x) - mean, 2));
         }).bind(self.logNormalDLine);
-        self.logNormalDLine.color = self.logNormalDLine.color || 'black';
+        self.logNormalDLine.color = self.logNormalDLine.color || colorGenerator();
     }
     this.getCumulativeX = cmlt => {
         return cmlt.x;

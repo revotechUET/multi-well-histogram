@@ -41,11 +41,22 @@
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
                 bins="self.histogramList" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
-            <line-formula-layer ng-if="self.gaussianLine && !self.config.notUsedGaussian" min-val='self.getLeft()' max-val='self.getRight()'
+            <line-formula-layer ng-if="self.gaussianLine && !self.config.notUsedGaussian && !self.gaussianLine._notUsed" min-val='self.getLeft()' max-val='self.getRight()'
                 min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000'
                 formula="self.gaussianLine" line-color="self.gaussianLine.color" line-width="self.gaussianLine.width">
             </line-formula-layer>
-            <line-formula-layer ng-if="self.logNormalDLine && self.config.notUsedGaussian" min-val='self.getLeft()' max-val='self.getRight()'
+            <control-marker-layer ng-if="!self.config.notUsedGaussian && self.gaussianLine.sigmaLines.length && !self.gaussianLine._notUsed" 
+                min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
+                max-y='self.maxY || 100' 
+                markers="self.gaussianLine.sigmaLines" draggable="false" 
+                axis-direction="'right'"
+                get-marker-value="self.getMarkerVal"
+                set-marker-value="self.setMarkerVal"
+                get-marker-style-fn="self.markerStyle" 
+                get-marker-name="self.markerName"
+                marker-width="19">
+            </control-marker-layer>
+            <line-formula-layer ng-if="self.logNormalDLine && self.config.notUsedGaussian && !self.logNormalDLine._notUsed" min-val='self.getLeft()' max-val='self.getRight()'
                 min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000'
                 formula="self.logNormalDLine" line-color="self.logNormalDLine.color" line-width="self.logNormalDLine.width">
             </line-formula-layer>
