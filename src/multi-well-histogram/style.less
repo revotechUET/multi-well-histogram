@@ -40,6 +40,10 @@ multi-well-histogram {
             }
         }
     }
+    wi-tree-node .node-content.selected {
+        background: linear-gradient(to left, #e4e4e4, #fff);
+        font-weight: bold;
+    }
     wi-table-view {
         & div.cell {
             display: table-cell;
@@ -114,6 +118,9 @@ multi-well-histogram {
         overflow-y     : auto;
         /* padding-left: 15px; */
         flex-direction : row;
+        wi-tree-node .node-content.search-mode {
+            color: #000;
+        }
        
     }
 
@@ -408,6 +415,10 @@ multi-well-histogram {
             margin: 0 15px 15px 0;
             cursor: pointer;
             border-radius: 2px;
+            min-width: 86px;
+            display: flex;
+            justify-content: center;
+            transition: all 0.2s ease-in;
 
             &.active {
                 // background   : #fff;

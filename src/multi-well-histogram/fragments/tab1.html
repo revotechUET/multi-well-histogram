@@ -28,12 +28,13 @@
                 <i class="header-icon"
                     ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}"
                     ng-click="well._hidden = !well._hidden"></i>
-                <div ng-bind="well.name"></div>
+                <div style="border-radius: 2px; padding: 1px 10px;max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    ng-bind="well.name"></div>
             </div>
             <div style="display: flex; align-items: center;position:absolute; right: 10px;">
-                <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
+                <div style="border-radius: 2px; padding: 1px;max-width: 55px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     ng-bind="self.getWellSpec(well).datasetName"></div>
-                <div style="border-radius: 2px;padding:1px 10px;margin-right: 10px;"
+                <div style="border-radius: 2px; padding: 1px 10px;max-width: 55px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 10px;"
                     ng-bind="self.getCurve(well).name"></div>
                 <span
                     ng-class="{'red-color fa fa-eye-slash': well._notUsed, 'blue-color fa fa-eye': !well._notUsed }"
