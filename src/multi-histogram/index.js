@@ -41,7 +41,6 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
     this.$onInit = async function () {
         if (self.token)
             wiToken.setToken(self.token);
-        console.log(self.zonesetNames);
     }
     self.activateTab = function ($index){
         $timeout(()=>{
