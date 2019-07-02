@@ -264,6 +264,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             */
     }
     function getZonesetsFromWells(wells) {
+        if (!wells.length) return;
         let zsList;
         for (let well of wells) {
             let zonesets = well.zone_sets;
