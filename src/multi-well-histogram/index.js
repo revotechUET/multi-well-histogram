@@ -26,7 +26,14 @@ app.component(componentName, {
         onSaveAs: '<',
         title: '<',
         silent: "<", 
-        ctrlParams: "<"
+        ctrlParams: "<",
+        cpGetMarkerVal: "<",
+        cpSetMarkerVal: "<",
+        cpMarkerStyle: "<",
+        cpMarkerName: "<",
+        prefix: '<',
+        cpIcons: "<",
+        cpIconStyle: "<"
     },
     transclude: true
 });
@@ -104,12 +111,31 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 getZonesetsFromWells(self.treeConfig);
                 updateDefaultConfig();
             }, true);
-            // $scope.$watch(() => (
-            //     `${self.getLeft()}-${self.getRight()}-${self.getLoga()}-${self.getDivisions()}-${self.selectionValue}`
-            // ), () => {
-            //     _histogramGen = null;
-            // });
         }, 500);
+
+        self.cpGetMarkerVal = self.cpGetMarkerVal || function (marker, idx) { return  marker.value }
+        self.cpSetMarkerVal = self.cpSetMarkerVal || function (marker, idx, newVal) {marker.value = newVal;}
+        self.cpMarkerStyle = self.cpMarkerStyle || function (marker, idx) { return  {stroke:marker.color,'stroke-width':'2', fill:'none'} }
+        self.cpMarkerName = self.cpMarkerName || function(marker, idx) { return  marker.name; }
+        self.ctrlParams = self.ctrlParams || [];
+        self.ctrlParamsMask = self.ctrlParams.map(c => true);
+        self.cpIcon = self.cpIcon || function(node) {
+            let idx = self.ctrlParams.indexOf(node);
+            if (idx >= 0) {
+                let use = self.ctrlParamsMask[idx];
+                return use ? 'layer-16x16': 'fa fa-eye-slash';
+            }
+        }
+        self.cpIcons = self.cpIcons || function (node){ return ["rectangle"] }
+        self.cpIconStyle = self.cpIconStyle || function(node) { 
+            return  {
+                'background-color': node.$res.color
+            }
+        }
+        self.cpBackground = self.cpBackground || {
+            'background-color': 'rgba(255, 249, 160, 0.6)'
+        };
+
 
         self.defaultConfig = self.defaultConfig || {};
         self.wellSpec = self.wellSpec || [];
@@ -258,6 +284,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             properties: zs
         }));
         self.zonesetList.splice(0, 0, {data: {label: 'ZonationAll'}, properties: genZonationAllZS(0, 1)});
+        let selectedZonesetProps = (self.zonesetList.find(zs => zs.properties.name === self.zonesetName) || {}).properties;
+        if (!selectedZonesetProps) return;
+        self.onZonesetSelectionChanged(selectedZonesetProps);
+        if (!$scope.$root.$$phase) $scope.$digest();
     }
     function intersectAndMerge(dstZoneList, srcZoneList) {
         return dstZoneList.filter(zs => {
@@ -282,7 +312,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let wellSpec = getWellSpec(well);
         if (!Object.keys(wellSpec).length) return {};
         let curves = getCurvesInWell(well).filter(c => self.runMatch(c, self.selectionValue));
-        let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) : curves[0];
+        let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) || curves[0] : curves[0];
         if (!curve) {
             delete wellSpec.curveName;
             delete wellSpec.idCurve;
@@ -310,6 +340,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if (zonesetName === "" || zonesetName === "ZonationAll") 
             return null;
         return zonesets.find(zs => zs.name === zonesetName);
+    }
+    this.onZonesetDropdownInit = function(wiDropdownListCtrl) {
+        self.zonesetDropdownCtrl = wiDropdownListCtrl;
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
         self.zoneTree = (selectedItemProps || {}).zones;
@@ -348,6 +381,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         node._useGssn = !node._useGssn;
         self.setGaussianData(self.histogramList);
     }
+    this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
+        let idx = self.ctrlParams.indexOf(node);
+        if (idx >= 0) {
+            self.ctrlParamsMask[idx] = !self.ctrlParamsMask[idx];
+        }
+        self.selectedCtrlParams = Object.values(selectedObjs).map(o => o.data);
+    }
     this.click2ToggleLogNormalD = function ($event, node, selectedObjs) {
         node._useLogNormalD = !node._useLogNormalD;
         self.setLogNormalDFn(self.histogramList);
@@ -385,6 +425,20 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getCumulativeIconStyle = (node) => ( {
         'background-color': node.color
     })
+    /*
+    this.getCtrlParamsIcon = function(node) {
+        let idx = self.ctrlParams.indexOf(node);
+        if (idx >= 0) {
+            let use = self.ctrlParamsMask[idx];
+            return use ? 'layer-16x16': 'fa fa-eye-slash';
+        }
+    }
+    this.getCtrlParamsIcons = function (node){ return ["rectangle"] }
+    this.getCtrlParamsIconStyle = function(node) { 
+        return  {
+            'background-color': self.cpMarkerStyle(node).color
+        }
+    }*/
     this.getGaussianIcon = (node) => ( (node && node._useGssn) ? 'layer-16x16': 'fa fa-eye-slash' )
     this.getGaussianIcons = (node) => ( ["rectangle"] )
     this.getGaussianIconStyle = (node) => ( {
@@ -448,9 +502,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if (!curve) return;
         let family = wiApi.getFamily(curve.idFamily);
         if (!family) return;
-        self.defaultConfig.left = family.family_spec[0].minScale;
-        self.defaultConfig.right = family.family_spec[0].maxScale;
-        self.defaultConfig.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
+        $timeout(() => {
+            self.defaultConfig.left = family.family_spec[0].minScale;
+            self.defaultConfig.right = family.family_spec[0].maxScale;
+            self.defaultConfig.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
+        })
     }
 
     this.histogramList = [];
@@ -914,6 +970,36 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.histogramList.forEach(bins => bins._notUsed = false);
         $timeout(() => {});
     }
+    this.hideAllCtrlParams = function() {
+        $timeout(() => {
+            self.ctrlParamsMask = self.ctrlParamsMask.map(m => false);
+        });
+    }
+    this.showAllCtrlParams = function() {
+        //self.ctrlParamsMask.forEach(m => m = true);
+        $timeout(() => {
+            self.ctrlParamsMask = self.ctrlParamsMask.map(m => true);
+        });
+    }
+    this.hideSelectedCtrlParams = function() {
+        if(!self.selectedCtrlParams) return;
+        self.selectedCtrlParams.forEach(cp => {
+            let idx = self.ctrlParams.indexOf(cp);
+            if (idx >= 0) {
+                self.ctrlParamsMask[idx] = false;
+            }
+        });
+    }
+    this.showSelectedCtrlParams = function() {
+        if(!self.selectedCtrlParams) return;
+        self.selectedCtrlParams.forEach(cp => {
+            let idx = self.ctrlParams.indexOf(cp);
+            if (idx >= 0) {
+                self.ctrlParamsMask[idx] = true;
+            }
+        });
+        $timeout(() => {});
+    }
 
     //--------------
 
@@ -1080,9 +1166,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return "rgb(" + rand() + "," + rand() + "," + rand() + ")";
     }
-
+/*
     this.getMarkerVal = (marker, idx) => (marker.value)
     this.setMarkerVal = (marker, idx, newVal) => {marker.value = newVal;}
     this.markerStyle = (marker, idx) => ({stroke:marker.color,'stroke-width':'2', fill:'none'})
     this.markerName = (marker, idx) => (marker.name)
+    */
 }

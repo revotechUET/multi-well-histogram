@@ -21,7 +21,14 @@ app.component(componentName, {
         ctrlParamsList: '<',
         onSave: '<',
         onSaveAs: '<',
-		titles: '<'
+		titles: '<',
+        prefixs: '<',
+        cpGetMarkerVal: '<',
+        cpSetMarkerVal: '<',
+        cpMarkerStyle: '<',
+        cpMarkerName: '<',
+        cpIcons: '<',
+        cpIconStyle: '<'
     },
     transclude: true
 });
@@ -34,6 +41,7 @@ function multiHistogramController($scope, $timeout, $element, wiToken, wiApi, wi
     this.$onInit = async function () {
         if (self.token)
             wiToken.setToken(self.token);
+        console.log(self.zonesetNames);
     }
     self.activateTab = function ($index){
         $timeout(()=>{

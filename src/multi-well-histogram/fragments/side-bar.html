@@ -6,6 +6,37 @@
         <div ng-show="isSet(2)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
             ${require('./tab2.html')}
         </div>
+        <div ng-show="isSet(7) && self.ctrlParams.length" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
+            <div style="overflow: auto;">
+                <div class="label-option-sidebar"
+                    style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+                    <div>
+                        <span ng-class="{'active' : !self.notCPBackground}"
+                            ng-click="self.notCPBackground = !self.notCPBackground" class="button-with-label"
+                            style="margin-right: 8px;">Use Background</span>
+                    </div>
+                    <div style="display: flex; padding: 16px 16px 0px 16px;">
+                        <span ng-click="self.hideSelectedCtrlParams()" class="button-with-label-layer"
+                            style="margin-left: 0px;">Hide</span>
+                        <span ng-click="self.showSelectedCtrlParams()" class="button-with-label-layer"
+                            style="margin-left: 15px;">Show</span>
+                        <span ng-click="self.hideAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Hide
+                            All</span>
+                        <span ng-click="self.showAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Show
+                            All</span>
+                    </div>
+                    <div ng-show="self.histogramList"
+                        style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
+                        <wi-tree-view tree-root="self.ctrlParams" get-label="self.cpMarkerName"
+                            filter="" get-icon="self.cpIcon" get-icons="self.cpIcons"
+                            get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
+                            run-match="" hide-unmatched="true" hide-search='false'
+                            click-fn='self.click2ToggleCtrlParams'>
+                        </wi-tree-view>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div ng-show="isSet(6)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
             <div style="overflow: auto;">
                 <div class="label-option-sidebar"
@@ -113,6 +144,11 @@
         <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-lable">
             <div style="margin: 0px;">
                 Configuration
+            </div>
+        </span>
+        <span ng-show='self.ctrlParams.length' ng-class="{'active' : isSet(7)}" ng-click="setTab(7)" class="tab-with-lable">
+            <div style="margin: 22px;">
+                Control Params
             </div>
         </span>
         <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-lable">

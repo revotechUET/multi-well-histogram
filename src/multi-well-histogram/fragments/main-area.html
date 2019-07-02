@@ -76,11 +76,14 @@
                 min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
                 max-y='self.maxY || 100' 
                 markers="self.ctrlParams" draggable="true" 
+                markers-mask = "self.ctrlParamsMask"
+                order-free='true'
+                not-use-background='self.notCPBackground'
                 axis-direction="'right'"
-                get-marker-value="self.getMarkerVal"
-                set-marker-value="self.setMarkerVal"
-                get-marker-style-fn="self.markerStyle" 
-                get-marker-name="self.markerName"
+                get-marker-value="self.cpGetMarkerVal"
+                set-marker-value="self.cpSetMarkerVal"
+                get-marker-style-fn="self.cpMarkerStyle" 
+                get-marker-name="self.cpMarkerName"
                 marker-width="19">
             </control-marker-layer>
         </layer-collection>

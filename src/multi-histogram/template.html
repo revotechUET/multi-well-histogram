@@ -1,9 +1,8 @@
 <wi-droppable style="display: flex;width: 100%;background: #ffffff;z-index: 1;box-shadow: 0 4px 9px #00000014;flex-basis: 40px;border-radius: 2px;" on-drop="self.onDrop"
     container-style="{display:'flex',flex: 1, position: 'relative'}">
     <div class="tab">
-        <div class="tab-name" ng-repeat="wellSpec in self.wellSpecs" ng-class="{active: tabIndex === $index}"
+        <div class="tab-name" ng-repeat="sV in self.selectionValues track by $index" ng-class="{active: tabIndex === $index}"
             ng-click="self.activateTab($index)">
-            <!-- {{self.wellSpecs[$index][0].idWell}} -->
             <div ng-if="self.selectionTypes[$index] === 'curve'" class="curve-16x16" style="margin-right: 10px;"></div>
             <div ng-if="self.selectionTypes[$index] === 'family'" class="family-16x16" style="margin-right: 10px;">
             </div>
@@ -20,10 +19,13 @@
         DROP CURVE, TRY AGIAN!
     </div>
 </wi-droppable>
-<div ng-show="tabIndex === $index" class="main" ng-repeat="wellSpec in self.wellSpecs">
-    <multi-well-histogram well-spec="wellSpec" zoneset-name="self.zoneNames[$index]"
+<div ng-show="tabIndex === $index" class="main" ng-repeat="sV in self.selectionValues track by $index">
+    <multi-well-histogram well-spec="self.wellSpecs" zoneset-name="self.zonesetNames[$index]"
         selection-type="self.selectionTypes[$index]" selection-value="self.selectionValues[$index]"
-        ctrl-params="self.ctrlParamsList[$index]"
-        config="self.configs[$index]" silent="self.silent">
+        ctrl-params="self.ctrlParamsList[$index]" zone-set-ctrl-lines="self.zoneSetCtrlLines"
+        config="self.configs[$index]" silent="self.silent" prefix='self.prefixs[$index]'
+        cp-get-marker-val='self.cpGetMarkerVal' cp-set-marker-val='self.cpSetMarkerVal'
+        cp-marker-style='self.cpMarkerStyle' cp-marker-name='self.cpMarkerName'
+        cp-icons='self.cpIcons' cp-icon-style='self.cpIconStyle'>
     </multi-well-histogram>
 </div>

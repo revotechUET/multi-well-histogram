@@ -1,7 +1,7 @@
 <div class="label-option-sidebar" style="padding: 16px 16px;">
     <div class="selection-sidebar">
         <span>Zoneset</span>
-        <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.zonesetList'
+        <wi-dropdown-list style="flex:1; margin-left: 10px;" items='self.zonesetList' on-wi-dropdown-init="self.zonesetDropdownInit"
             current-select="self.zonesetName" on-item-changed="self.onZonesetSelectionChanged">
         </wi-dropdown-list>
     </div>
