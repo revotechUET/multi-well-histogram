@@ -8,14 +8,21 @@
         </div>
         <div ng-show="isSet(7) && self.ctrlParams.length" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
             <div style="overflow: auto;">
-                <div class="label-option-sidebar"
-                    style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+                <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column;">
                     <div>
-                        <span ng-class="{'active' : !self.notCPBackground}"
-                            ng-click="self.notCPBackground = !self.notCPBackground" class="button-with-label"
-                            style="margin-right: 8px;">Use Background</span>
+                        <div class="switch-label">
+                            Use Background
+                            <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round" ng-click="self.notCPBackground = !self.notCPBackground"></span>
+                            </label>
+                        </div>
+                        <div
+                            style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-bottom: 6px; margin-top: 18px;">
+                        </div>
                     </div>
-                    <div style="display: flex; padding: 16px 16px 0px 16px;">
+                    
+                    <div style="display: flex; padding: 16px 0;">
                         <span ng-click="self.hideSelectedCtrlParams()" class="button-with-label-layer"
                             style="margin-left: 0px;">Hide</span>
                         <span ng-click="self.showSelectedCtrlParams()" class="button-with-label-layer"
@@ -25,7 +32,7 @@
                         <span ng-click="self.showAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Show
                             All</span>
                     </div>
-                    <div ng-show="self.histogramList"
+                    <div ng-show="self.histogramList" class="disable-node-caret"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
                         <wi-tree-view tree-root="self.ctrlParams" get-label="self.cpMarkerName"
                             filter="" get-icon="self.cpIcon" get-icons="self.cpIcons"
@@ -40,12 +47,12 @@
         <div ng-show="isSet(6)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
             <div style="overflow: auto;">
                 <div class="label-option-sidebar"
-                    style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+                    style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column;">
                     <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Gaussian / Log-normal Distribution
                         <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                         </div>
                     </div>
-                    <div>
+                    <div style="    margin-bottom: 5px;">
                         <span ng-class="{'active' : !self.config.notUsedGaussian}"
                             ng-click="self.toggleGaussianLine(false)" class="button-with-label"
                             style="margin-right: 8px;">Gaussian</span>
@@ -53,7 +60,7 @@
                             ng-click="self.toggleGaussianLine(true)" class="button-with-label">Log-normal Distribution</span>
                     </div>
                     <div style="margin-bottom: 15px; "></div>
-                    <div ng-show="self.histogramList"
+                    <div ng-show="self.histogramList" class="disable-node-caret"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
                         <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                             filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
@@ -91,7 +98,7 @@
                 <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                 </div>
             </div>
-            <div style="display: flex; flex-wrap: wrap;">
+            <div style="display: flex; flex-wrap: wrap;    position: absolute;">
                 <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
                     ng-class="{'active' : self.statisticHeaderMasks[$index]}"
                     ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
@@ -109,7 +116,7 @@
                 <span ng-click="self.showAllLayer()" class="button-with-label-layer" style="margin-left: 15px;">Show
                     All</span>
             </div>
-            <div ng-show="self.histogramList"
+            <div ng-show="self.histogramList" class="disable-node-caret"
                 style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
                 <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel" filter="self.layerFilter"
                     get-icon="self.getLayerIcon" get-icons="self.getLayerIcons" get-children="self.noChildren"
