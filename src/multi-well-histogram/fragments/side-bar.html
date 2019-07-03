@@ -7,6 +7,9 @@
             ${require('./tab2.html')}
         </div>
         <div ng-show="isSet(7) && self.ctrlParams.length" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
+            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+                <div>Control Params</div>
+            </div>
             <div style="overflow: auto;">
                 <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column;">
                     <div>
@@ -45,10 +48,13 @@
             </div>
         </div>
         <div ng-show="isSet(6)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
+            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+                <div>Assistive Lines</div>
+            </div>
             <div style="overflow: auto;">
                 <div class="label-option-sidebar"
                     style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column;">
-                    <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Gaussian / Log-normal Distribution
+                    <div style="display: flex;margin-bottom: 16px;">Gaussian / Log-normal Distribution
                         <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                         </div>
                     </div>
@@ -69,7 +75,7 @@
                             click-fn='self.getToggleGaussianFn'>
                         </wi-tree-view>
                     </div>
-                    <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Cumulative
+                    <div style="display: flex;margin-bottom: 16px;">Cumulative
                         <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
                         </div>
                     </div>
@@ -85,27 +91,31 @@
                 </div>
             </div>
         </div>
-        <div ng-show="isSet(3)" style="
-    overflow: hidden;
-    flex: 1;
-    display: flex;
-    flex-direction: column;">
+        <div ng-show="isSet(3)" style="overflow: hidden;flex: 1;display: flex;flex-direction: column;">
             ${require('./tab3.html')}
         </div>
-        <div ng-show="isSet(4)" onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'"
-            style="flex:1; padding: 15px;">
-            <div style="font-size: 10px;display: flex;margin-bottom: 16px;">Table Header
-                <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+        <div ng-show="isSet(4)" style="overflow: hidden;flex: 1;display: flex;flex-direction: column;">
+            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+                <div>Statistic</div>
+            </div>
+            <div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'"style="flex:1; padding: 15px;">
+                <div style="display: flex;margin-bottom: 16px;">Table Header
+                    <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+                    </div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap;    position: absolute;">
+                    <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
+                        ng-class="{'active' : self.statisticHeaderMasks[$index]}"
+                        ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
+                        {{header}}</span>
                 </div>
             </div>
-            <div style="display: flex; flex-wrap: wrap;    position: absolute;">
-                <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
-                    ng-class="{'active' : self.statisticHeaderMasks[$index]}"
-                    ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
-                    {{header}}</span>
-            </div>
+            
         </div>
         <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
+            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+                <div>Layer</div>
+            </div>
             <div style="display: flex; padding: 16px 16px 0px 16px;">
                 <span ng-click="self.hideSelectedLayer()" class="button-with-label-layer"
                     style="margin-left: 0px;">Hide</span>
@@ -131,49 +141,39 @@
             </span>
         </div>
     </div>
-    <div class="label-list-view" style="    
-    display: flex;
-    border-left: 1px solid #e4e4e4;
-    flex-direction: column;
-    justify-content: start;
-    padding: 0px;
-    right: 0;
-    background: #fff;
-    overflow-y: overlay;
-    overflow-x: hidden;
-    position: sticky;
-    box-shadow: 0 10px 10px #00000017;">
-        <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-lable">
+    <div class="label-list-view" style=" display: flex; border-left: 1px solid #e4e4e4;flex-direction: column;justify-content: start;
+        padding: 0px;right: 0;background: #fff;overflow-y: overlay;overflow-x: hidden; position: sticky;box-shadow: 0 10px 10px #00000017;">
+        <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label">
             <div style="margin: 10px;">
                 Wells
             </div>
         </span>
-        <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-lable">
+        <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label">
             <div style="margin: 0px;">
                 Configuration
             </div>
         </span>
-        <span ng-show='self.ctrlParams.length' ng-class="{'active' : isSet(7)}" ng-click="setTab(7)" class="tab-with-lable">
+        <span ng-show='self.ctrlParams.length' ng-class="{'active' : isSet(7)}" ng-click="setTab(7)" class="tab-with-label">
             <div style="margin: 22px;">
                 Control Params
             </div>
         </span>
-        <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-lable">
+        <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-label">
             <div style="margin: 22px;">
                 Assistive Lines
             </div>
         </span>
-        <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-lable">
+        <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">
             <div style="margin: 26px;">
                 Zone
             </div>
         </span>
-        <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-lable">
+        <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">
             <div style="margin: 0px;">
                 Statistic
             </div>
         </span>
-        <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-lable">
+        <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-label">
             <div style="margin: 10px;">
                 Layers
             </div>
