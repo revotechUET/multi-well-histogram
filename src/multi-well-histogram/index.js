@@ -129,7 +129,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.cpIcons = self.cpIcons || function (node){ return ["rectangle"] }
         self.cpIconStyle = self.cpIconStyle || function(node) { 
             return  {
-                'background-color': node.$res.color
+                'background-color': node.color || 'red'
             }
         }
         self.cpBackground = self.cpBackground || {
