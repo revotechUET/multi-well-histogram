@@ -37,12 +37,12 @@
                     </div>
                     <div ng-show="self.histogramList" class="disable-node-caret"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
-                        <wi-tree-view tree-root="self.ctrlParams" get-label="self.cpMarkerName"
+                        <wi-tree-view-virtual tree-root="self.ctrlParams" get-label="self.cpMarkerName"
                             filter="" get-icon="self.cpIcon" get-icons="self.cpIcons"
                             get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
                             run-match="" hide-unmatched="true" hide-search='false'
                             click-fn='self.click2ToggleCtrlParams'>
-                        </wi-tree-view>
+                        </wi-tree-view-virtual>
                     </div>
                 </div>
             </div>
@@ -68,12 +68,12 @@
                     <div style="margin-bottom: 15px; "></div>
                     <div ng-show="self.histogramList" class="disable-node-caret"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
-                        <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
+                        <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                             filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
                             get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.getToggleGaussianFn'>
-                        </wi-tree-view>
+                        </wi-tree-view-virtual>
                     </div>
                     <div style="display: flex;margin-bottom: 16px;">Cumulative
                         <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
@@ -81,12 +81,12 @@
                     </div>
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin-bottom: 15px; overflow: hidden;">
-                        <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
+                        <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                             filter="self.layerFilter" get-icon="self.getCumulativeIcon" get-icons="self.getCumulativeIcons"
                             get-children="self.noChildren" icon-style="self.getCumulativeIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.click2ToggleCumulative'>
-                        </wi-tree-view>
+                        </wi-tree-view-virtual>
                     </div>
                 </div>
             </div>
@@ -128,11 +128,11 @@
             </div>
             <div ng-show="self.histogramList" class="disable-node-caret"
                 style="border: 1px solid #eee; margin: 15px 15px 5px 15px; overflow: hidden;">
-                <wi-tree-view tree-root="self.getLayerTree()" get-label="self.getLayerLabel" filter="self.layerFilter"
+                <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel" filter="self.layerFilter"
                     get-icon="self.getLayerIcon" get-icons="self.getLayerIcons" get-children="self.noChildren"
                     icon-style="self.getLayerIconStyle" keep-children='true' run-match="self.runLayerMatch"
                     hide-unmatched="true" hide-search='false' click-fn='self.click2ToggleLayer'>
-                </wi-tree-view>
+                </wi-tree-view-virtual>
             </div>
         </div>
         <div style="display: flex;">

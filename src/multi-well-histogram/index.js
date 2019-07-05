@@ -5,7 +5,7 @@ require('./style.less');
 const _DECIMAL_LEN = 4;
 
 var app = angular.module(componentName, [
-    'sideBar', 'wiTreeView', 'wiTableView',
+    'sideBar', 'wiTreeViewVirtual', 'wiTableView',
     'wiApi', 'editable', 'wiDialog',
     'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading','angularResizable','wiDiscriminator'
 ]);
@@ -57,7 +57,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     $scope.isSet = function(tabNum){
         return $scope.tab === tabNum;
     };
-    this.getFamilyTable = () => wiApi.getFamilyTable()
+    this.getFamilyTable = function() {
+				return wiApi.getFamilyTable();
+		}
     this.discriminatorDialog = function(well) {
         let wSpec = getWellSpec(well);
         let datasetId = wSpec.idDataset;
@@ -371,6 +373,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         node._notUsed = !node._notUsed;
         self.selectedZones = Object.values(selectedObjs).map(o => o.data);
     }
+    this.getZoneTreeMaxHeight = function() {
+        return $element.height();
+    }
+
     this.click2ToggleLayer = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
         //self.selectedLayers = Object.values(selectedObjs).map(o => o.data);
