@@ -1,7 +1,7 @@
 <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
     <div>Configuration</div>
 </div>
-<div class="selection-sidebar" style="padding: 9px 10px 5px 10px; margin: 16px;">
+<div class="selection-sidebar" style="padding: 9px 10px 5px 10px; margin: 16px 16px 5px 16px;">
     <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
         item-label="'Title'" item-value="self.getConfigTitle"
         set-value="self.setConfigTitle" enabled="true" label-style="{}"
@@ -17,22 +17,35 @@
     <span>X-Axis Scale</span>
 </div> -->
 <div style="overflow: auto;">
-    <div class="label-option-sidebar">
+    <div class="label-option-sidebar" style="padding: 5px 16px;">
+
         <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
             <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
-                item-label="'Left'" item-value="self.getConfigLeft"
-                set-value="self.setConfigLeft" enabled="true" label-style="{}"
+                item-label="'X Label'" item-value="self.getConfigXLabel"
+                set-value="self.setConfigXLabel" enabled="true" label-style="{}"
                 content-style="{flex:1,float:'none','text-align':'right'}">
             </editable>
         </div>
         <div style="margin-bottom: 15px; "></div>
-        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
-                item-label="'Right'" item-value="self.getConfigRight"
-                set-value="self.setConfigRight" enabled="true" label-style="{}"
-                content-style="{flex:1,float:'none','text-align':'right'}">
-            </editable>
+
+        <div style="display: flex;">
+            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px; flex: 1;">
+                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                    item-label="'Left'" item-value="self.getConfigLeft"
+                    set-value="self.setConfigLeft" enabled="true" label-style="{}"
+                    content-style="{flex:1,float:'none','text-align':'right'}">
+                </editable>
+            </div>
+            <div style="margin-right: 15px; "></div>
+            <div class="selection-sidebar" style="padding: 9px 10px 5px 10px; flex: 1;">
+                <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
+                    item-label="'Right'" item-value="self.getConfigRight"
+                    set-value="self.setConfigRight" enabled="true" label-style="{}"
+                    content-style="{flex:1,float:'none','text-align':'right'}">
+                </editable>
+            </div>
         </div>
+        
         <div style="margin-bottom: 15px; "></div>
 
         <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
@@ -42,18 +55,10 @@
                 content-style="{flex:1,float:'none','text-align':'right'}">
             </editable>
         </div>
-        <div style="margin-bottom: 15px; "></div>
-
-        <div class="selection-sidebar" style="padding: 9px 10px 5px 10px;">
-            <editable style="flex:1;display:flex;flex-direction:row;overflow:hidden;"
-                item-label="'X Label'" item-value="self.getConfigXLabel"
-                set-value="self.setConfigXLabel" enabled="true" label-style="{}"
-                content-style="{flex:1,float:'none','text-align':'right'}">
-            </editable>
-        </div>
+        
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between;   flex-direction: column;">
+        style="padding: 10px 20px; display: flex; justify-content: space-between;   flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Scale and Grid
             <div
                 style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
@@ -72,7 +77,7 @@
         </div>
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+        style="padding: 10px 20px; display: flex; justify-content: space-between; flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Display Mode
             <div
                 style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
@@ -90,7 +95,7 @@
 
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
+        style="padding: 10px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Color Mode
             <div
                 style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
@@ -108,7 +113,7 @@
         </div>
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between; flex-direction: column;">
+        style="padding: 10px 20px; display: flex; justify-content: space-between; flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Stack Mode
             <div
                 style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
@@ -129,7 +134,7 @@
         </div>
     </div>
     <div class="label-option-sidebar"
-        style="padding: 20px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
+        style="padding: 10px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Histogram Mode
             <div
                 style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
