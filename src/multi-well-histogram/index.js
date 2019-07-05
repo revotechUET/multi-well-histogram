@@ -118,6 +118,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.cpMarkerStyle = self.cpMarkerStyle || function (marker, idx) { return  {stroke:marker.color,'stroke-width':'2', fill:'none'} }
         self.cpMarkerName = self.cpMarkerName || function(marker, idx) { return  marker.name; }
         self.ctrlParams = self.ctrlParams || [];
+        self.notCPBackground = self.ctrlParams.length ? false : true;
         self.ctrlParamsMask = self.ctrlParams.map(c => true);
         self.cpIcon = self.cpIcon || function(node) {
             let idx = self.ctrlParams.indexOf(node);
@@ -1171,6 +1172,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return "rgb(" + rand() + "," + rand() + "," + rand() + ")";
     }
+
+    this.getMarkerGaussianVal = (marker, idx) => (marker.value)
+    this.setMarkerGaussianVal = (marker, idx, newVal) => {marker.value = newVal;}
+    this.markerGaussianStyle = (marker, idx) => ({stroke:marker.color,'stroke-width':'2', fill:'none'})
 /*
     this.getMarkerVal = (marker, idx) => (marker.value)
     this.setMarkerVal = (marker, idx, newVal) => {marker.value = newVal;}
