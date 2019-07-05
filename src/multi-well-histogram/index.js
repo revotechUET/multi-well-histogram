@@ -44,7 +44,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
-    self.statisticHeaders = ['top','bottom','points','avg','min', 'max', 'avgdev', 'stddev', 'var', 'skew', 'kurtosis', 'median', 'p10', 'p50', 'p90'];
+    self.statisticHeaders = ['Top','Bottom','Points','Avg','Min', 'Max', 'Avgdev', 'Stddev', 'Var', 'Skew', 'Kurtosis', 'Median', 'P10', 'P50', 'P90'];
     self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
     $scope.tab = 1;
@@ -912,35 +912,35 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         try {
             switch(_headers[col]){
-                case 'top': 
+                case 'Top': 
                     return wiApi.bestNumberFormat(statsArray[row].top, 4) || 'N/A';
-                case 'bottom': 
+                case 'Bottom': 
                     return wiApi.bestNumberFormat(statsArray[row].bottom, 4) || 'N/A';
-                case 'points':
+                case 'Points':
                     return statsArray[row].numPoints || 'N/A';
-                case 'avg':
+                case 'Avg':
                     return wiApi.bestNumberFormat(statsArray[row].avg) || 'N/A'
-                case 'min':
+                case 'Min':
                     return wiApi.bestNumberFormat(statsArray[row].min) || 'N/A'
-                case 'max':
+                case 'Max':
                     return wiApi.bestNumberFormat(statsArray[row].max )|| 'N/A'
-                case 'avgdev': 
+                case 'Avgdev': 
                     return wiApi.bestNumberFormat(statsArray[row].avgdev) || 'N/A';
-                case 'stddev': 
+                case 'Stddev': 
                     return wiApi.bestNumberFormat(statsArray[row].stddev) || 'N/A';
-                case 'var':
+                case 'Var':
                     return wiApi.bestNumberFormat(statsArray[row].var) || 'N/A';
-                case 'skew':
+                case 'Skew':
                     return wiApi.bestNumberFormat(statsArray[row].skew) || 'N/A';
-                case 'kurtosis':
+                case 'Kurtosis':
                     return wiApi.bestNumberFormat(statsArray[row].kurtosis) || 'N/A';
-                case 'median':
+                case 'Median':
                     return wiApi.bestNumberFormat(statsArray[row].median) || 'N/A';
-                case 'p10': 
+                case 'P10': 
                     return wiApi.bestNumberFormat(statsArray[row].p10) || 'N/A';
-                case 'p50': 
+                case 'P50': 
                     return wiApi.bestNumberFormat(statsArray[row].p50) || 'N/A';
-                case 'p90': 
+                case 'P90': 
                     return wiApi.bestNumberFormat(statsArray[row].p90) || 'N/A';
                 default: 
                     return "this default";
