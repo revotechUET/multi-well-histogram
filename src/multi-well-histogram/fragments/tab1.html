@@ -1,18 +1,16 @@
-<div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+<div class="label-option-sidebar"
+    style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
     <div>Wells</div>
 </div>
-<div class="label-option-sidebar"
-    style="margin-top: 10px; display: flex; justify-content: space-between;">
-    <span>INPUT</span>
+<div class="label-option-sidebar" style="margin-top: 10px; display: flex; justify-content: space-between;">
+    <span>Input</span>
     <div>
-        <span ng-class="{'active' : self.selectionType === 'family-group'}"
-            ng-click="self.selectionType='family-group'" class="button-with-label"
-            style="margin-right: 8px;">family-group</span>
-        <span ng-class="{'active' : self.selectionType === 'family'}"
-            ng-click="self.selectionType='family'" class="button-with-label"
-            style="margin-right: 8px;">family</span>
-        <span ng-class="{'active' : self.selectionType === 'curve'}"
-            ng-click="self.selectionType='curve'" class="button-with-label">curve</span>
+        <span ng-class="{'active' : self.selectionType === 'family-group'}" ng-click="self.selectionType='family-group'"
+            class="button-with-label" style="margin-right: 8px;">family-group</span>
+        <span ng-class="{'active' : self.selectionType === 'family'}" ng-click="self.selectionType='family'"
+            class="button-with-label" style="margin-right: 8px;">family</span>
+        <span ng-class="{'active' : self.selectionType === 'curve'}" ng-click="self.selectionType='curve'"
+            class="button-with-label">curve</span>
     </div>
 </div>
 <div class="label-option-sidebar" style="display: flex;">
@@ -24,41 +22,46 @@
     </div>
 </div>
 <div style="overflow: auto; display:flex; flex-direction: column;">
-    <div style="border: 1px solid #e4e4e4;margin: 5px 16px;border-radius: 2px;"
-        ng-repeat='well in self.treeConfig'>
-        <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row; position: relative; padding: 9px 10px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
+    <div style="border: 1px solid #e4e4e4;margin: 5px 16px;border-radius: 2px;" ng-repeat='well in self.treeConfig'>
+        <div style="display: flex; flex-direction: row; position: relative; padding: 9px 10px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
             <div style="display: flex; align-items: center;">
-                <i class="header-icon"
-                    ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}"
+                <i class="header-icon" ng-class="{'fa fa-caret-down': !well._hidden, 'fa fa-caret-right': well._hidden}"
                     ng-click="well._hidden = !well._hidden"></i>
                 <div style="border-radius: 2px; padding: 1px 10px;max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     ng-bind="well.name"></div>
             </div>
             <div style="display: flex; align-items: center;position:absolute; right: 10px;">
+
+                <span ng-class="{'red-color fa fa-eye-slash': well._notUsed, 'blue-color fa fa-eye': !well._notUsed }"
+                    ng-click="self.toggleWell(well)" style="cursor: pointer; margin-right: 17px;">
+                </span>
+                <span class="fa fa-filter" ng-class="{'blue-color': self.hasDiscriminator(well)}"
+                    ng-click="self.discriminatorDialog(well)" style="cursor: pointer; margin-right: 17px;">
+                </span>
+                <span class="fa fa-times-circle" ng-click="self.removeWell(well)"
+                    style="color: rgb(163, 163, 163);cursor: pointer;margin-right: 5px;">
+                </span>
+            </div>
+        </div>
+        <div style="display: flex;position: relative;flex-direction: row ; flex-wrap: wrap; max-width: 420px;border-top: 1px solid #dbdbdb; background: #f4f4f4; align-items: center;justify-content: flex-start;text-align: center;">
+            <div class="axis-bar">
+                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 2;">Dataset: {{self.getWellSpec(well).datasetName}}</div>
+                <div style="border-right: 1px solid #ddd;height: 17px;margin: 0 10px;"></div>
+                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 1;">Curver: {{self.getCurve(well).name}}</div>
+            </div>
+        </div>
+        <!-- <div style="border-bottom: 1px solid #e4e4e4;display: flex; flex-direction: row; position: relative; padding: 9px 10px;background: #f4f4f4; align-items: center;justify-content: space-between;text-align: center;">
+            <div style="display: flex; flex-direction: row ; flex-wrap: wrap; max-width: 420px;border-top: 1px solid #dbdbdb; background: #f4f4f4; align-items: center;justify-content: flex-start;text-align: center;">
                 <div style="border-radius: 2px; padding: 1px;max-width: 55px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                     ng-bind="self.getWellSpec(well).datasetName"></div>
                 <div style="border-radius: 2px; padding: 1px 10px;max-width: 55px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 10px;"
                     ng-bind="self.getCurve(well).name"></div>
-                <span
-                    ng-class="{'red-color fa fa-eye-slash': well._notUsed, 'blue-color fa fa-eye': !well._notUsed }"
-                    ng-click="self.toggleWell(well)"
-                    style="cursor: pointer; margin-right: 17px;">
-                </span>
-                <span class="fa fa-filter"
-                    ng-class="{'blue-color': self.hasDiscriminator(well)}"
-                    ng-click="self.discriminatorDialog(well)"
-                    style="cursor: pointer; margin-right: 17px;">
-                </span>
-                <span class="fa fa-times-circle" ng-click="self.removeWell(well)"
-                    style="color: rgb(163, 163, 163);cursor: pointer;">
-                </span>
             </div>
-        </div>
-        <wi-tree-view-virtual ng-hide="well._hidden" tree-root="well" get-label="self.getLabel"
-            filter="self.selectionValue" get-icon="self.getIcon" get-children="self.getChildren"
-            keep-children='true' uncollapsible='false' run-match="self.runMatch"
-            hide-unmatched="true" hide-search='true' click-fn='self.clickFunction'>
+        </div> -->
+
+        <wi-tree-view-virtual ng-hide="well._hidden" tree-root="well" get-label="self.getLabel" filter="self.selectionValue"
+            get-icon="self.getIcon" get-children="self.getChildren" keep-children='true' uncollapsible='false'
+            run-match="self.runMatch" hide-unmatched="true" hide-search='true' click-fn='self.clickFunction'>
         </wi-tree-view-virtual>
     </div>
 </div>
-
