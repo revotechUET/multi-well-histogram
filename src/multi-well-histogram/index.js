@@ -1168,6 +1168,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return "rgb(" + rand() + "," + rand() + "," + rand() + ")";
     }
+
+    this.getMarkerGaussianVal = (marker, idx) => (marker.value)
+    this.setMarkerGaussianVal = (marker, idx, newVal) => {marker.value = newVal;}
+    this.markerGaussianStyle = (marker, idx) => ({stroke:marker.color,'stroke-width':'2', fill:'none'})
 /*
     this.getMarkerVal = (marker, idx) => (marker.value)
     this.setMarkerVal = (marker, idx, newVal) => {marker.value = newVal;}
