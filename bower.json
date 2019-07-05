@@ -16,6 +16,7 @@
   "dependencies": {
     "misc-component": "https://github.com/tunghoang/misc-component.git",
     "plot-toolkit": "https://github.com/tunghoang/plot-toolkit.git",
-    "angular-resizable": "^1.2.0"
+    "angular-resizable": "^1.2.0",
+    "wi-vlist": "*"
   }
 }
