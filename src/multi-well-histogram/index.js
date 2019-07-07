@@ -791,7 +791,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
         return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
     } 
-    this.getLoga = () => (self.config.loga || self.defaultConfig.loga || 0)
+    this.getLoga = () => (self.config.loga === undefined? self.defaultConfig.loga : self.config.loga)
     this.getNotUsedGaussian = () => {self.config.notUsedGaussian || false};
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 35)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
@@ -800,7 +800,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return cMode === 'zone' ? zone.zone_template.background:(cMode === 'well'?well.color:'blue');
     }
     this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
-    this.getStackMode = () => (self.config.stackMode || self.defaultConfig.stackMode || 'none')
+    this.getStackMode = () => (
+        self.getDisplayMode() === 'bar'?(self.config.stackMode||self.defaultConfig.stackMode||'none'):'none'
+    )
     this.getBinGap = () => (self.config.binGap || self.defaultConfig.binGap)
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)
