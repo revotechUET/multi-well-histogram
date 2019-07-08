@@ -69,7 +69,7 @@
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
+                            filter="self.layerFilter" get-icon="self.getGaussianIconFn" get-icons="self.getGaussianIcons"
                             get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.getToggleGaussianFn'>

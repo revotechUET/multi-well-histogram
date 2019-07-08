@@ -148,7 +148,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetName = self.zonesetName || "ZonationAll";
         self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || ''};
         self.gaussianLine = self.gaussianLine || undefined;
-        self.getToggleGaussianFn = self.getNotUsedGaussian() ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
+        self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
+        self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
@@ -405,8 +406,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.config.notUsedGaussian = notUsedGaussian;
         if (notUsedGaussian) {
             self.getToggleGaussianFn = self.click2ToggleLogNormalD;
+            self.getGaussianIconFn = self.getLogNormalDIcon;
         } else {
             self.getToggleGaussianFn = self.click2ToggleGaussian;
+            self.getGaussianIconFn = self.getGaussianIcon;
         }
     }
 
@@ -448,7 +451,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             'background-color': self.cpMarkerStyle(node).color
         }
     }*/
-    this.getGaussianIcon = (node) => ( (node && node._useGssn) ? 'layer-16x16': 'fa fa-eye-slash' )
+    this.getGaussianIcon = function(node) {
+        return (node && node._useGssn) ? 'layer-16x16': 'fa fa-eye-slash';
+    }
+    this.getLogNormalDIcon = function(node) {
+        return (node && node._useLogNormalD) ? 'layer-16x16': 'fa fa-eye-slash';
+    }
     this.getGaussianIcons = (node) => ( ["rectangle"] )
     this.getGaussianIconStyle = (node) => ( {
         'background-color': node.color
