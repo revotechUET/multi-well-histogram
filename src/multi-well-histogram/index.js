@@ -1162,7 +1162,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 s2 = Math.pow(sigma, 2),
                 A = 1 / (Math.sqrt(2 * Math.PI)),
                 B = -1 / (2 * s2);
-                console.log(mean, sigma);
             return (1 / (x * sigma)) * A * Math.exp(B * Math.pow(Math.log(x) - mean, 2));
         }).bind(self.logNormalDLine);
         self.logNormalDLine.color = self.logNormalDLine.color || colorGenerator();
