@@ -10,8 +10,8 @@
             <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
                 <div>Control Params</div>
             </div>
-            <div style="overflow: auto;">
-                <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column;">
+            <div style="overflow: hidden; display: flex; flex-direction: column; flex: 1;">
+                <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column; flex: 1; overflow: hidden;">
                     <div>
                         <div class="switch-label">
                             Use Background
@@ -35,8 +35,8 @@
                         <span ng-click="self.showAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Show
                             All</span>
                     </div>
-                    <div ng-show="self.histogramList" class="disable-node-caret"
-                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1; overflow: hidden;">
+                    <div ng-show="self.histogramList"
+                        style="border: 1px solid #eee; flex:1; overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.ctrlParams" get-label="self.cpMarkerName"
                             filter="" get-icon="self.cpIcon" get-icons="self.cpIcons"
                             get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
@@ -66,8 +66,8 @@
                             ng-click="self.toggleGaussianLine(true)" class="button-with-label">Log-normal Distribution</span>
                     </div>
                     <div style="margin-bottom: 15px;"></div>
-                    <div ng-show="self.histogramList" class="disable-node-caret"
-                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;">
+                    <div ng-show="self.histogramList"
+                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                             filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
                             get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div ng-show="self.histogramList"
-                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;">
+                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
                             filter="self.layerFilter" get-icon="self.getCumulativeIcon" get-icons="self.getCumulativeIcons"
                             get-children="self.noChildren" icon-style="self.getCumulativeIconStyle" keep-children='true'

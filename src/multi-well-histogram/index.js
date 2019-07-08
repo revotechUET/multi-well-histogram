@@ -57,6 +57,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     $scope.isSet = function(tabNum){
         return $scope.tab === tabNum;
     };
+
     this.getFamilyTable = function() {
 				return wiApi.getFamilyTable();
 		}
