@@ -38,9 +38,9 @@
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; flex:1; overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.ctrlParams" get-label="self.cpMarkerName"
-                            filter="" get-icon="self.cpIcon" get-icons="self.cpIcons"
+                            filter="self.cpFilter" get-icon="self.cpIcon" get-icons="self.cpIcons"
                             get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
-                            run-match="" hide-unmatched="true" hide-search='false'
+                            run-match="self.runCPMatch" hide-unmatched="true" hide-search='false'
                             click-fn='self.click2ToggleCtrlParams'>
                         </wi-tree-view-virtual>
                     </div>
