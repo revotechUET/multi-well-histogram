@@ -392,11 +392,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.setGaussianData(self.histogramList);
     }
     this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
-        let idx = self.ctrlParams.indexOf(node);
-        if (idx >= 0) {
-            self.ctrlParamsMask[idx] = !self.ctrlParamsMask[idx];
+        let ctrlParam = self.ctrlParams.find(cp => node.$ref === cp.$ref);
+        if (ctrlParam) {
+            let idx = self.ctrlParams.indexOf(ctrlParam);
+            if (idx >= 0) {
+                self.ctrlParamsMask[idx] = !self.ctrlParamsMask[idx];
+            }
+            self.selectedCtrlParams = selectedObjs;
         }
-        self.selectedCtrlParams = Object.values(selectedObjs).map(o => o.data);
     }
     this.click2ToggleLogNormalD = function ($event, node, selectedObjs) {
         node._useLogNormalD = !node._useLogNormalD;
@@ -1010,18 +1013,24 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.hideSelectedCtrlParams = function() {
         if(!self.selectedCtrlParams) return;
         self.selectedCtrlParams.forEach(cp => {
-            let idx = self.ctrlParams.indexOf(cp);
-            if (idx >= 0) {
-                self.ctrlParamsMask[idx] = false;
+            let ctrlParam = self.ctrlParams.find(cpI => cpI.$ref === cp.$ref);
+            if (ctrlParam) {
+                let idx = self.ctrlParams.indexOf(ctrlParam);
+                if (idx >= 0) {
+                    self.ctrlParamsMask[idx] = false;
+                }
             }
         });
     }
     this.showSelectedCtrlParams = function() {
         if(!self.selectedCtrlParams) return;
         self.selectedCtrlParams.forEach(cp => {
-            let idx = self.ctrlParams.indexOf(cp);
-            if (idx >= 0) {
-                self.ctrlParamsMask[idx] = true;
+            let ctrlParam = self.ctrlParams.find(cpI => cpI.$ref === cp.$ref);
+            if (ctrlParam) {
+                let idx = self.ctrlParams.indexOf(ctrlParam);
+                if (idx >= 0) {
+                    self.ctrlParamsMask[idx] = true;
+                }
             }
         });
         $timeout(() => {});
