@@ -513,7 +513,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         $timeout(() => {
             self.defaultConfig.left = family.family_spec[0].minScale;
             self.defaultConfig.right = family.family_spec[0].maxScale;
-            self.defaultConfig.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
+            self.config.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
         })
     }
 
@@ -522,6 +522,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     var listWellStats = [];
     var listAllStats = [];
     this.genHistogramList = async function() {
+        let preLayers = self.histogramList.map(layer => layer.name);
+        //console.log(layer.name)
         this.histogramList.length = 0;
         let allHistogramList = []
         listWellStats.length = 0;
@@ -1159,6 +1161,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 s2 = Math.pow(sigma, 2),
                 A = 1 / (Math.sqrt(2 * Math.PI)),
                 B = -1 / (2 * s2);
+                console.log(mean, sigma);
             return (1 / (x * sigma)) * A * Math.exp(B * Math.pow(Math.log(x) - mean, 2));
         }).bind(self.logNormalDLine);
         self.logNormalDLine.color = self.logNormalDLine.color || colorGenerator();

@@ -58,8 +58,8 @@
                 marker-width="19">
             </control-marker-layer>
             <line-formula-layer ng-if="self.logNormalDLine && self.config.notUsedGaussian && !self.logNormalDLine._notUsed" min-val='self.getLeft()' max-val='self.getRight()'
-                min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000'
-                formula="self.logNormalDLine" line-color="self.logNormalDLine.color" line-width="self.logNormalDLine.width">
+                min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000' eqn-offsets="['65px', '0%']"
+                formula="self.logNormalDLine" line-color="self.logNormalDLine.color" line-width="self.logNormalDLine.width" show-equation='true'>
             </line-formula-layer>
             <line-point-layer min-val="self.getLeft()"
                 max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()"
