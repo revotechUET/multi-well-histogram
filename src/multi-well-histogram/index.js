@@ -867,9 +867,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     wiDialog.errorMessageDialog(e, self.save())
                 })
                     .catch(e => {
-                        console.error(e);
-                        toastr.error(`Asset ${name} has been existed.`);
-                        self.save();
+                        wiDialog.errorMessageDialog(e, self.save())
                     })
             });
         }
@@ -886,8 +884,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             wiApi.editAssetPromise(self.idHistogram, content).then(res => {
                 console.log(res);
             }).catch(e => {
-                    console.error(e);
-                    toastr.error(`Asset ${name} has been existed.`);
+                    wiDialog.errorMessageDialog(e, self.save())
                 });
         }
     }
@@ -912,9 +909,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.onSaveAs && self.onSaveAs(res);
             })
                 .catch(e => {
-                    console.error(e);
-                    toastr.error(`Asset ${name} has been existed.`);
-                    self.saveAs();
+                    wiDialog.errorMessageDialog(e, self.saveAs())
                 })
         });
     }
