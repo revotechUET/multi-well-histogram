@@ -864,10 +864,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     self.idHistogram = res.idParameterSet;
                     self.onSave && self.onSave(res);
                 }).catch(e => {
-                    wiDialog.errorMessageDialog(e, self.save())
+                    wiDialog.errorMessageDialog(`Histogram ${name} has been existed`, self.save())
                 })
                     .catch(e => {
-                        wiDialog.errorMessageDialog(e, self.save())
+                        wiDialog.errorMessageDialog(`Histogram ${name} has been existed`, self.save())
                     })
             });
         }
@@ -884,7 +884,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             wiApi.editAssetPromise(self.idHistogram, content).then(res => {
                 console.log(res);
             }).catch(e => {
-                    wiDialog.errorMessageDialog(e, self.save())
+                    wiDialog.errorMessageDialog(`Histogram ${name} has been existed`, self.save())
                 });
         }
     }
@@ -909,7 +909,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 self.onSaveAs && self.onSaveAs(res);
             })
                 .catch(e => {
-                    wiDialog.errorMessageDialog(e, self.saveAs())
+                    wiDialog.errorMessageDialog(`Histogram ${name} has been existed`, self.saveAs())
                 })
         });
     }
