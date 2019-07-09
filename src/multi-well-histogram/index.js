@@ -538,8 +538,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         $timeout(() => {
             self.defaultConfig.left = family.family_spec[0].minScale;
             self.defaultConfig.right = family.family_spec[0].maxScale;
-            self.config.left = family.family_spec[0].minScale;
-            self.config.right = family.family_spec[0].maxScale;
+            self.config.left = family.family_spec[0].minScale || 0;
+            self.config.right = family.family_spec[0].maxScale || 100;
             self.config.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
         })
     }
@@ -966,29 +966,29 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 case 'Points':
                     return isNaN(statsArray[row].numPoints) ? 'N/A' : statsArray[row].numPoints;
                 case 'Avg':
-                    return isNaN(statsArray[row].avg) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avg);
+                    return isNaN(statsArray[row].avg) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avg, 4);
                 case 'Min':
-                    return isNaN(statsArray[row].min) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].min);
+                    return isNaN(statsArray[row].min) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].min, 4);
                 case 'Max':
-                    return isNaN(statsArray[row].max) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].max);
+                    return isNaN(statsArray[row].max) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].max, 4);
                 case 'Avgdev': 
-                    return isNaN(statsArray[row].avgdev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avgdev);
+                    return isNaN(statsArray[row].avgdev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avgdev, 4);
                 case 'Stddev': 
-                    return isNaN(statsArray[row].stddev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].stddev);
+                    return isNaN(statsArray[row].stddev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].stddev, 4);
                 case 'Var':
-                    return isNaN(statsArray[row].var) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].var);
+                    return isNaN(statsArray[row].var) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].var, 4);
                 case 'Skew':
-                    return isNaN(statsArray[row].skew) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].skew);
+                    return isNaN(statsArray[row].skew) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].skew, 4);
                 case 'Kurtosis':
-                    return isNaN(statsArray[row].kurtosis) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].kurtosis);
+                    return isNaN(statsArray[row].kurtosis) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].kurtosis, 4);
                 case 'Median':
-                    return isNaN(statsArray[row].median) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].median);
+                    return isNaN(statsArray[row].median) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].median, 4);
                 case 'P10': 
-                    return isNaN(statsArray[row].p10) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p10);
+                    return isNaN(statsArray[row].p10) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p10, 4);
                 case 'P50': 
-                    return isNaN(statsArray[row].p50) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p50);
+                    return isNaN(statsArray[row].p50) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p50, 4);
                 case 'P90': 
-                    return isNaN(statsArray[row].p90) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p90);
+                    return isNaN(statsArray[row].p90) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p90, 4);
                 default: 
                     return "this default";
             }
