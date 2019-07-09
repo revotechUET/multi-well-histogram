@@ -428,10 +428,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     let _layerTree = [];
     this.getLayerTree = function() {
-        if(self.getStackMode() === 'all') {
-            _layerTree[0] = self.histogramList;
-            return _layerTree;
-        }
+        //if(self.getStackMode() === 'all') {
+            //_layerTree[0] = self.histogramList;
+            //return _layerTree;
+        //}
         return self.histogramList;
     }
     this.getLayerLabel = (node) => node.name
@@ -690,23 +690,21 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         let aggregate = aggregateHistogramList(allHistogramList);
                         max = d3.max(aggregate);
                         flatten = allHistogramList;
-
                         let stats = setStats(allDataArray.map(d => d.x));
                         stats.top = d3.min(allZones, z => z.startDepth);
                         stats.bottom = d3.max(allZones, z => z.endDepth);
                         listAllStats.push(stats);
                     }
                     break;
-
             }
             $timeout(() => {
                 self.minY = 0;
                 self.maxY = max;
                 if (self.getStackMode() == 'all') {
-                    self.histogramList.color = allHistogramList[0].color;
-                    self.histogramList.stats = allHistogramList[0].stats;
+                    self.histogramList = [allHistogramList];
+                } else {
+                    self.histogramList = allHistogramList;
                 }
-                self.histogramList = allHistogramList;
                 flattenHistogramList = flatten;
                 self.setCumulativeData(self.histogramList);
                 self.setGaussianData(self.histogramList);
@@ -716,7 +714,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             console.error(e);
         }
         wiLoading.hide();
-        console.log('end');
     }
     function setStats(dataArray) {
         let stats = {};
@@ -1226,4 +1223,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.markerStyle = (marker, idx) => ({stroke:marker.color,'stroke-width':'2', fill:'none'})
     this.markerName = (marker, idx) => (marker.name)
     */
+    this.resetHistogramList = resetHistograms;
+    function resetHistograms() {
+        self.histogramList = [];
+    }
 }

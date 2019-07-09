@@ -121,24 +121,22 @@
         </div>
         <div>
             <span ng-class="{'active' : self.config.stackMode === 'none'}"
-                ng-click="self.config.stackMode='none'" class="button-with-label"
+                ng-click="self.config.stackMode='none';self.resetHistogramList();" class="button-with-label"
                 style="margin-right: 8px;">No Stack</span>
             <span ng-class="{'active' : self.config.stackMode === 'well'}"
-                style="margin-right: 8px;" ng-click="self.config.stackMode='well'"
+                style="margin-right: 8px;" ng-click="self.config.stackMode='well';self.resetHistogramList();"
                 class="button-with-label">Well</span>
             <span ng-class="{'active' : self.config.stackMode === 'zone'}"
-                style="margin-right: 8px;" ng-click="self.config.stackMode='zone'"
+                style="margin-right: 8px;" ng-click="self.config.stackMode='zone';self.resetHistogramList();"
                 class="button-with-label">Zone</span>
             <span ng-class="{'active' : self.config.stackMode === 'all'}"
-                ng-click="self.config.stackMode='all'" class="button-with-label">All</span>
+                ng-click="self.config.stackMode='all';self.resetHistogramList();" class="button-with-label">All</span>
         </div>
     </div>
     <div class="label-option-sidebar"
         style="padding: 10px 20px; display: flex; justify-content: space-between;  flex-direction: column;">
         <div style="display: flex;margin-bottom: 16px;">Histogram Mode
-            <div
-                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-            </div>
+            <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;"></div>
         </div>
         <div>
             <span ng-class="{'active' : self.selectConfig === 'option1'}"

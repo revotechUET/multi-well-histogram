@@ -36,10 +36,11 @@
                 max-y='self.maxY || 100' loga="self.getLoga()" autofit='false' bins="groupOfBins"
                 bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
             </canvas-barchart-layer>
-            <canvas-barchart-layer ng-show="!self.histogramList._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
+            <canvas-barchart-layer ng-show="!bins._notUsed" ng-if="self.getDisplayMode() == 'bar' && 
                 self.getStackMode() == 'all'" min-val="self.getLeft()" max-val="self.getRight()"
                 min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()" autofit='false'
-                bins="self.histogramList" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'>
+                bins="bins" bin-gap="self.getBinGap()" color-func="self.colorFn" multiple='true'
+                ng-repeat="bins in self.histogramList">
             </canvas-barchart-layer>
             <line-formula-layer ng-if="self.gaussianLine && !self.config.notUsedGaussian && !self.gaussianLine._notUsed" min-val='self.getLeft()' max-val='self.getRight()'
                 min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000'
