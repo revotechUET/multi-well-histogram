@@ -701,6 +701,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             $timeout(() => {
                 self.minY = 0;
                 self.maxY = max;
+                if (self.getStackMode() == 'all') {
+                    self.histogramList.color = allHistogramList[0].color;
+                    self.histogramList.stats = allHistogramList[0].stats;
+                }
                 self.histogramList = allHistogramList;
                 flattenHistogramList = flatten;
                 self.setCumulativeData(self.histogramList);
