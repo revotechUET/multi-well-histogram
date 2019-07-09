@@ -65,14 +65,23 @@
                         <span ng-class="{'active' : self.config.notUsedGaussian}"
                             ng-click="self.toggleGaussianLine(true)" class="button-with-label">Log-normal Distribution</span>
                     </div>
-                    <div style="margin-bottom: 15px;"></div>
+                    <div style="display: flex; padding: 16px 0;">
+                        <span ng-click="self.hideSelectedGaussian()" class="button-with-label-layer"
+                            style="margin-left: 0;">Deactive</span>
+                        <span ng-click="self.showSelectedGaussian()" class="button-with-label-layer"
+                            style="margin-left: 15px;">Activate</span>
+                        <span ng-click="self.hideAllGaussian()" class="button-with-label-layer"
+                            style="margin-left: 15px;">Deactivate All</span>
+                        <span ng-click="self.showAllGaussian()" class="button-with-label-layer"
+                            style="margin-left: 15px;">Activate All</span>
+                    </div>
                     <div ng-show="self.histogramList"
                         style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">
                         <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getGaussianIconFn" get-icons="self.getGaussianIcons"
+                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
                             get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
                             run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
-                            click-fn='self.getToggleGaussianFn'>
+                            click-fn='self.click2ToggleGaussian'>
                         </wi-tree-view-virtual>
                     </div>
                     <div style="display: flex;margin-bottom: 16px;">Cumulative

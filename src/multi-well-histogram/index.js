@@ -373,7 +373,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.click2ToggleZone = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
-        self.selectedZones = Object.values(selectedObjs).map(o => o.data);
+        self.selectedZones = selectedObjs;
     }
     this.getZoneTreeMaxHeight = function() {
         return $element.height();
@@ -381,7 +381,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.click2ToggleLayer = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
-        //self.selectedLayers = Object.values(selectedObjs).map(o => o.data);
+        self.selectedLayers = selectedObjs;
     }
     this.click2ToggleCumulative = function ($event, node, selectedObjs) {
         node._useCmlt = !node._useCmlt;
@@ -389,7 +389,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.click2ToggleGaussian = function ($event, node, selectedObjs) {
         node._useGssn = !node._useGssn;
-        self.setGaussianData(self.histogramList);
+        if (self.config.notUsedGaussian) {
+            self.setLogNormalDFn(self.histogramList);
+        } else {
+            self.setGaussianData(self.histogramList);
+        }
+        self.selectedGaussian = selectedObjs;
     }
     this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
         let ctrlParam = self.ctrlParams.find(cp => node.$ref === cp.$ref);
@@ -400,6 +405,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             }
             self.selectedCtrlParams = selectedObjs;
         }
+        self.selectedCtrlParams = selectedObjs;
     }
     this.click2ToggleLogNormalD = function ($event, node, selectedObjs) {
         node._useLogNormalD = !node._useLogNormalD;
@@ -410,9 +416,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if (notUsedGaussian) {
             self.getToggleGaussianFn = self.click2ToggleLogNormalD;
             self.getGaussianIconFn = self.getLogNormalDIcon;
+            self.setLogNormalDFn(self.histogramList);
         } else {
             self.getToggleGaussianFn = self.click2ToggleGaussian;
             self.getGaussianIconFn = self.getGaussianIcon;
+            self.setGaussianData(self.histogramList);
         }
     }
 
@@ -994,6 +1002,40 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         Object.assign(_headers, self.statisticHeaders.filter((item, idx) => self.statisticHeaderMasks[idx]));
         return _headers;
     }
+    this.hideSelectedGaussian = function() {
+        if (!self.selectedGaussian) return;
+        self.selectedGaussian.forEach(gaussian => gaussian._useGssn = false);
+        if (self.config.notUsedGaussian) {
+            self.setLogNormalDFn(self.histogramList);
+        } else {
+            self.setGaussianData(self.histogramList);
+        }
+    }
+    this.showSelectedGaussian = function() {
+        if (!self.selectedGaussian) return;
+        self.selectedGaussian.forEach(gaussian => gaussian._useGssn = true);
+        if (self.config.notUsedGaussian) {
+            self.setLogNormalDFn(self.histogramList);
+        } else {
+            self.setGaussianData(self.histogramList);
+        }
+    }
+    this.hideAllGaussian = function() {
+        self.histogramList.forEach(gaussian => gaussian._useGssn = false);
+        if (self.config.notUsedGaussian) {
+            self.setLogNormalDFn(self.histogramList);
+        } else {
+            self.setGaussianData(self.histogramList);
+        }
+    }
+    this.showAllGaussian = function() {
+        self.histogramList.forEach(gaussian => gaussian._useGssn = true);
+        if (self.config.notUsedGaussian) {
+            self.setLogNormalDFn(self.histogramList);
+        } else {
+            self.setGaussianData(self.histogramList);
+        }
+    }
     this.hideSelectedLayer = function() {
         if(!self.selectedLayers) return;
         self.selectedLayers.forEach(layer => layer._notUsed = true);
@@ -1165,8 +1207,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.setLogNormalDFn = function(layers) {
         self.logNormalDLine = self.logNormalDLine || {};
         if (self.getStackMode() != 'all') {
-            layers = layers.filter(l => l._useLogNormalD);
-        } else if (!layers._useLogNormalD) {
+            layers = layers.filter(l => l._useGssn);
+        } else if (!layers._useGssn) {
             return;
         }
         if (!layers.length) {
