@@ -44,8 +44,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.treeConfig = [];
     self.selectedNode = null;
     self.datasets = {};
-    self.statisticHeaders = ['Top','Bottom','Points','Avg','Min', 'Max', 'Avgdev', 'Stddev', 'Var', 'Skew', 'Kurtosis', 'Median', 'P10', 'P50', 'P90'];
-    self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
+    self.statisticHeaders = ['X-Axis','Filter','Top','Bottom','Points','Avg','Min', 'Max', 'Avgdev', 'Stddev', 'Var', 'Skew', 'Kurtosis', 'Median', 'P10', 'P50', 'P90'];
+    self.statisticHeaderMasks = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
     //--------------
     $scope.tab = 1;
     self.selectionTab = self.selectionTab || 'Wells';
@@ -530,6 +530,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         $timeout(() => {
             self.defaultConfig.left = family.family_spec[0].minScale;
             self.defaultConfig.right = family.family_spec[0].maxScale;
+            self.config.left = family.family_spec[0].minScale;
+            self.config.right = family.family_spec[0].maxScale;
             self.config.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
         })
     }
@@ -554,6 +556,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         try {
             for (let i = 0; i < self.treeConfig.length; i++) {
                 let well = self.treeConfig[i];
+                let wellSpec = getWellSpec(well);
                 if (well._notUsed) {
                     continue;
                 }
@@ -606,6 +609,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     bins.name = `${well.name}.${zone.zone_template.name}`;
 
                     bins.stats = {};
+                    bins.stats.curveInfo = `${dataset.name}.${curve.name}`;
+                    bins.stats.conditionExpr = wellSpec.discriminator ? wellSpec.discriminator.conditionExpr : undefined;
                     bins.stats.top = zone.startDepth;
                     bins.stats.bottom = zone.endDepth;
                     let stats = setStats(dataArray.map(d => d.x));
@@ -632,6 +637,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let stats = setStats(wellDataArray.map(d => d.x));
                     stats.top = d3.min(zones, z => z.startDepth);
                     stats.bottom = d3.max(zones, z => z.endDepth);
+                    stats.curveInfo = `${dataset.name}.${curve.name}`;
+                    stats.conditionExpr = wellSpec.discriminator ? wellSpec.discriminator.conditionExpr : undefined;
                     listWellStats.push(stats);
                     wellHistogramList.name = well.name;
                     wellHistogramList.color = well.color;
@@ -854,6 +861,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 })
                     .catch(e => {
                         console.error(e);
+                        toastr.error(`Asset ${name} has been existed.`);
                         self.save();
                     })
             });
@@ -873,6 +881,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             })
                 .catch(e => {
                     console.error(e);
+                    toastr.error(`Asset ${name} has been existed.`);
                 });
         }
     }
@@ -898,6 +907,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             })
                 .catch(e => {
                     console.error(e);
+                    toastr.error(`Asset ${name} has been existed.`);
                     self.saveAs();
                 })
         });
@@ -939,36 +949,40 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         try {
             switch(_headers[col]){
+                case 'X-Axis':
+                    return statsArray[row].curveInfo || 'N/A';
+                case 'Filter':
+                    return statsArray[row].conditionExpr || 'N/A';
                 case 'Top': 
-                    return wiApi.bestNumberFormat(statsArray[row].top, 4) || 'N/A';
+                    return isNaN(statsArray[row].top) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].top, 4);
                 case 'Bottom': 
-                    return wiApi.bestNumberFormat(statsArray[row].bottom, 4) || 'N/A';
+                    return isNaN(statsArray[row].bottom) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].bottom, 4);
                 case 'Points':
-                    return statsArray[row].numPoints || 'N/A';
+                    return isNaN(statsArray[row].numPoints) ? 'N/A' : statsArray[row].numPoints;
                 case 'Avg':
-                    return wiApi.bestNumberFormat(statsArray[row].avg) || 'N/A'
+                    return isNaN(statsArray[row].avg) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avg);
                 case 'Min':
-                    return wiApi.bestNumberFormat(statsArray[row].min) || 'N/A'
+                    return isNaN(statsArray[row].min) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].min);
                 case 'Max':
-                    return wiApi.bestNumberFormat(statsArray[row].max )|| 'N/A'
+                    return isNaN(statsArray[row].max) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].max);
                 case 'Avgdev': 
-                    return wiApi.bestNumberFormat(statsArray[row].avgdev) || 'N/A';
+                    return isNaN(statsArray[row].avgdev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].avgdev);
                 case 'Stddev': 
-                    return wiApi.bestNumberFormat(statsArray[row].stddev) || 'N/A';
+                    return isNaN(statsArray[row].stddev) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].stddev);
                 case 'Var':
-                    return wiApi.bestNumberFormat(statsArray[row].var) || 'N/A';
+                    return isNaN(statsArray[row].var) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].var);
                 case 'Skew':
-                    return wiApi.bestNumberFormat(statsArray[row].skew) || 'N/A';
+                    return isNaN(statsArray[row].skew) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].skew);
                 case 'Kurtosis':
-                    return wiApi.bestNumberFormat(statsArray[row].kurtosis) || 'N/A';
+                    return isNaN(statsArray[row].kurtosis) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].kurtosis);
                 case 'Median':
-                    return wiApi.bestNumberFormat(statsArray[row].median) || 'N/A';
+                    return isNaN(statsArray[row].median) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].median);
                 case 'P10': 
-                    return wiApi.bestNumberFormat(statsArray[row].p10) || 'N/A';
+                    return isNaN(statsArray[row].p10) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p10);
                 case 'P50': 
-                    return wiApi.bestNumberFormat(statsArray[row].p50) || 'N/A';
+                    return isNaN(statsArray[row].p50) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p50);
                 case 'P90': 
-                    return wiApi.bestNumberFormat(statsArray[row].p90) || 'N/A';
+                    return isNaN(statsArray[row].p90) ? 'N/A' : wiApi.bestNumberFormat(statsArray[row].p90);
                 default: 
                     return "this default";
             }
