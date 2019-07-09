@@ -628,8 +628,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                 zoneExisted.color = well.color;
                             }
                         }
-                        if (!zoneExisted[i]) zoneExisted[i] = [];
-                        zoneExisted[i] = bins;
+                        //if (!zoneExisted[i]) zoneExisted[i] = [];
+                        //zoneExisted[i] = bins;
+                        zoneExisted.push(bins);
                     }
                     wellHistogramList.push(bins);
                 }
