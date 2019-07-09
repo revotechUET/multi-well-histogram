@@ -858,6 +858,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
                     self.idHistogram = res.idParameterSet;
                     self.onSave && self.onSave(res);
+                }).catch(e => {
+                    wiDialog.errorMessageDialog(e, self.save())
                 })
                     .catch(e => {
                         console.error(e);
@@ -878,8 +880,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             }
             wiApi.editAssetPromise(self.idHistogram, content).then(res => {
                 console.log(res);
-            })
-                .catch(e => {
+            }).catch(e => {
                     console.error(e);
                     toastr.error(`Asset ${name} has been existed.`);
                 });
