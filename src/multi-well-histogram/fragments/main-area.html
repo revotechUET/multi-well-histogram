@@ -63,7 +63,7 @@
                 min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000' eqn-offsets="['65px', '0%']"
                 formula="self.logNormalDLine" line-color="self.logNormalDLine.color" line-width="self.logNormalDLine.width" show-equation='true'>
             </line-formula-layer>
-            <line-point-layer min-val="self.getLeft()"
+            <line-point-layer ng-if="!self.config.notShowCumulative" min-val="self.getLeft()"
                 max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()"
                 min-draw="self.getLeft()" max-draw="self.getRight()" min-draw-y="self.minY || 0" max-draw-y="self.maxY || 100"
                 autofit='false' get-x='self.getCumulativeX' get-y='self.getCumulativeY' line-data="self.cmltLineData"

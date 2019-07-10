@@ -146,7 +146,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || ''};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || '', notShowCumulative: false};
         self.gaussianLine = self.gaussianLine || undefined;
         self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
         self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
@@ -394,6 +394,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         } else {
             self.setGaussianData(self.histogramList);
         }
+        self.setCumulativeData(self.histogramList);
         self.selectedGaussian = selectedObjs;
     }
     this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
@@ -1017,6 +1018,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         } else {
             self.setGaussianData(self.histogramList);
         }
+        self.setCumulativeData(self.histogramList);
     }
     this.showSelectedGaussian = function() {
         if (!self.selectedGaussian) return;
@@ -1026,6 +1028,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         } else {
             self.setGaussianData(self.histogramList);
         }
+        self.setCumulativeData(self.histogramList);
     }
     this.hideAllGaussian = function() {
         self.histogramList.forEach(gaussian => gaussian._useGssn = false);
@@ -1034,6 +1037,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         } else {
             self.setGaussianData(self.histogramList);
         }
+        self.setCumulativeData(self.histogramList);
     }
     this.showAllGaussian = function() {
         self.histogramList.forEach(gaussian => gaussian._useGssn = true);
@@ -1042,6 +1046,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         } else {
             self.setGaussianData(self.histogramList);
         }
+        self.setCumulativeData(self.histogramList);
     }
     this.hideSelectedLayer = function() {
         if(!self.selectedLayers) return;
@@ -1141,9 +1146,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     self.cmltLineData = [];
     this.setCumulativeData = function(layers) {
         self.cmltLineData.length = 0;
+        //if (self.getStackMode() != 'all') {
+            //layers = layers.filter(l => l._useCmlt);
+        //} else if (!layers._useCmlt) {
+            //return;
+        //}
         if (self.getStackMode() != 'all') {
-            layers = layers.filter(l => l._useCmlt);
-        } else if (!layers._useCmlt) {
+            layers = layers.filter(l => l._useGssn);
+        } else if (!layers._useGssn) {
             return;
         }
         if (!layers.length) return;
