@@ -617,7 +617,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     bins.name = `${well.name}.${zone.zone_template.name}`;
 
                     bins.stats = {};
-                    bins.stats.curveInfo = `${dataset.name}.${curve.name}`;
+                    switch (self.getStackMode()) {
+                        case 'none':
+                            bins.stats.curveInfo = `${curve.name}`;
+                            break;
+                        case 'all':
+                            bins.stats.curveInfo = `${well.name}.${curve.name}`;
+                            break;
+                    }
                     bins.stats.conditionExpr = wellSpec.discriminator ? wellSpec.discriminator.conditionExpr : undefined;
                     bins.stats.top = zone.startDepth;
                     bins.stats.bottom = zone.endDepth;
@@ -646,7 +653,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     let stats = setStats(wellDataArray.map(d => d.x));
                     stats.top = d3.min(zones, z => z.startDepth);
                     stats.bottom = d3.max(zones, z => z.endDepth);
-                    stats.curveInfo = `${dataset.name}.${curve.name}`;
+                    stats.curveInfo = `${curve.name}`;
                     stats.conditionExpr = wellSpec.discriminator ? wellSpec.discriminator.conditionExpr : undefined;
                     listWellStats.push(stats);
                     wellHistogramList.name = well.name;
