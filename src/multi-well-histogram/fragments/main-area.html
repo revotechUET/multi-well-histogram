@@ -12,7 +12,8 @@
         <layer-collection v-padding="50" h-padding='60'>
             <axis-layer min-val="self.getLeft()" max-val="self.getRight()" loga="self.getLoga()"
                 n-ticks="self.config.majorTicks || 10" minor-ticks="self.config.minorTicks || 1" precision="4"
-                grid="!!self.config.grid" placement="1">
+                grid="!!self.config.grid" placement="1"
+                get-min-val="self.getLeft" get-max-val="self.getRight">
             </axis-layer>
             <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
                 precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
