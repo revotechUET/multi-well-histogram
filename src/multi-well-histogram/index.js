@@ -100,7 +100,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             wiToken.setToken(self.token);
         $timeout(() => {
             $scope.$watch(() => (self.wellSpec.map(wsp => wsp.idWell)), () => {
-                getTree();
+                //getTree();
             }, true);
             $scope.$watch(() => (self.selectionType), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
@@ -1124,11 +1124,30 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let idWells = helper.data('idWells');
         if (idWells && idWells.length) {
             $timeout(() => {
-                for (let idWell of idWells) {
-                    if (!self.wellSpec.find(wsp => wsp.idWell === idWell)) {
-                        self.wellSpec.push({idWell});
+                async.eachSeries(idWells, (idWell, next) => {
+                    wiApi.getCachedWellPromise(idWell)
+                        .then(well => {
+                            if (!self.wellSpec.find(wsp => wsp.idWell === idWell)) {
+                                self.wellSpec.push({idWell});
+                                let curve = getCurve(well);
+                                if (!curve) {
+                                    self.wellSpec.pop();
+                                    let msg = `Well ${well.name} does not meet requirement`;
+                                    if (__toastr) __toastr.error(msg);
+                                    console.error(new Error(msg));
+                                }
+                            }
+                            next();
+                        })
+                        .catch(e => {
+                            console.error(e);
+                            next();
+                        })
+                }, err => {
+                    if (!err) {
+                        getTree();
                     }
-                }
+                })
             })
         }
     }
@@ -1140,6 +1159,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if(index >= 0) {
             self.wellSpec.splice(index, 1);
         }
+        getTree();
     }
 
     self.cmltLineData = [];
