@@ -143,6 +143,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         self.defaultConfig = self.defaultConfig || {};
         self.wellSpec = self.wellSpec || [];
+        getTree();
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
