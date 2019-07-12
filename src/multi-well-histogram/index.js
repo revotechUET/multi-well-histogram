@@ -1132,10 +1132,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                 self.wellSpec.push({idWell});
                                 let curve = getCurve(well);
                                 if (!curve) {
-                                    self.wellSpec.pop();
+                                    //self.wellSpec.pop();
                                     let msg = `Well ${well.name} does not meet requirement`;
-                                    if (__toastr) __toastr.error(msg);
-                                    console.error(new Error(msg));
+                                    if (__toastr) __toastr.warning(msg);
+                                    console.warning(msg);
                                 }
                             }
                             next();
