@@ -1,0 +1,22 @@
+<div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+    <div>Layer</div>
+</div>
+<div style="display: flex; padding: 16px 16px 0px 16px;">
+    <span ng-click="self.hideSelectedLayer()" class="button-with-label-layer"
+        style="margin-left: 0px;">Hide</span>
+    <span ng-click="self.showSelectedLayer()" class="button-with-label-layer"
+        style="margin-left: 15px;">Show</span>
+    <span ng-click="self.hideAllLayer()" class="button-with-label-layer" style="margin-left: 15px;">Hide
+        All</span>
+    <span ng-click="self.showAllLayer()" class="button-with-label-layer" style="margin-left: 15px;">Show
+        All</span>
+</div>
+<div ng-show="self.histogramList" class="disable-node-caret"
+    style="border: 1px solid #eee; margin: 15px 15px 5px 15px;flex:1;overflow: hidden;">
+    <wi-tree-view-virtual tree-root="self.getLayerTree()" 
+        get-label="self.getLayerLabel" filter="self.layerFilter"
+        get-icon="self.getLayerIcon" get-icons="self.getLayerIcons" get-children="self.noChildren"
+        icon-style="self.getLayerIconStyle" keep-children='true' run-match="self.runLayerMatch"
+        hide-unmatched="true" hide-search='false' click-fn='self.click2ToggleLayer'>
+    </wi-tree-view-virtual>
+</div>

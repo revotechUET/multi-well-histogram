@@ -1,0 +1,39 @@
+<div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+    <div>Control Params</div>
+</div>
+<div style="overflow: hidden; display: flex; flex-direction: column; flex: 1;">
+    <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column; flex: 1; overflow: hidden;">
+        <div>
+            <div class="switch-label">
+                Use Background
+                <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider round" ng-click="self.notCPBackground = !self.notCPBackground"></span>
+                </label>
+            </div>
+            <div
+                style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-bottom: 6px; margin-top: 18px;">
+            </div>
+        </div>
+        
+        <div style="display: flex; padding: 16px 0;">
+            <span ng-click="self.hideSelectedCtrlParams()" class="button-with-label-layer"
+                style="margin-left: 0px;">Hide</span>
+            <span ng-click="self.showSelectedCtrlParams()" class="button-with-label-layer"
+                style="margin-left: 15px;">Show</span>
+            <span ng-click="self.hideAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Hide
+                All</span>
+            <span ng-click="self.showAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Show
+                All</span>
+        </div>
+        <div ng-show="self.histogramList"
+            style="border: 1px solid #eee; flex:1; overflow: hidden;" class="disable-node-caret">
+            <wi-tree-view-virtual tree-root="self.ctrlParams" get-label="self.cpMarkerName"
+                filter="self.cpFilter" get-icon="self.cpIcon" get-icons="self.cpIcons"
+                get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
+                run-match="self.runCPMatch" hide-unmatched="true" hide-search='false'
+                click-fn='self.click2ToggleCtrlParams'>
+            </wi-tree-view-virtual>
+        </div>
+    </div>
+</div>

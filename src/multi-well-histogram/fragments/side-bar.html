@@ -1,151 +1,32 @@
 <side-bar ng-if="self.getFamilyTable()" my-default-width="370" orientation="w" collapsed="false">
     <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+        <!--Wells-->
         <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
-            ${require('./tab1.html')}
+            ${require('./wells.html')}
         </div>
+        <!--Zone-->
         <div ng-show="isSet(2)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
-            ${require('./tab2.html')}
+            ${require('./zone.html')}
         </div>
+        <!--Control Params-->
         <div ng-show="isSet(7) && self.ctrlParams.length" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
-            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
-                <div>Control Params</div>
-            </div>
-            <div style="overflow: hidden; display: flex; flex-direction: column; flex: 1;">
-                <div class="label-option-sidebar" style="padding: 16px; display: flex; justify-content: space-between; flex-direction: column; flex: 1; overflow: hidden;">
-                    <div>
-                        <div class="switch-label">
-                            Use Background
-                            <label class="switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider round" ng-click="self.notCPBackground = !self.notCPBackground"></span>
-                            </label>
-                        </div>
-                        <div
-                            style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-bottom: 6px; margin-top: 18px;">
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; padding: 16px 0;">
-                        <span ng-click="self.hideSelectedCtrlParams()" class="button-with-label-layer"
-                            style="margin-left: 0px;">Hide</span>
-                        <span ng-click="self.showSelectedCtrlParams()" class="button-with-label-layer"
-                            style="margin-left: 15px;">Show</span>
-                        <span ng-click="self.hideAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Hide
-                            All</span>
-                        <span ng-click="self.showAllCtrlParams()" class="button-with-label-layer" style="margin-left: 15px;">Show
-                            All</span>
-                    </div>
-                    <div ng-show="self.histogramList"
-                        style="border: 1px solid #eee; flex:1; overflow: hidden;" class="disable-node-caret">
-                        <wi-tree-view-virtual tree-root="self.ctrlParams" get-label="self.cpMarkerName"
-                            filter="self.cpFilter" get-icon="self.cpIcon" get-icons="self.cpIcons"
-                            get-children="self.noChildren" icon-style="self.cpIconStyle" keep-children='true'
-                            run-match="self.runCPMatch" hide-unmatched="true" hide-search='false'
-                            click-fn='self.click2ToggleCtrlParams'>
-                        </wi-tree-view-virtual>
-                    </div>
-                </div>
-            </div>
+            ${require('./control-params.html')}
         </div>
+        <!--Assistive Lines-->
         <div ng-show="isSet(6)" style="overflow: hidden;flex: 1; display: flex; flex-direction: column;">
-            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
-                <div>Assistive Lines</div>
-            </div>
-            <div style="flex:1;overflow: auto;">
-                <div class="label-option-sidebar"
-                    style="height: 100%; padding: 16px; display: flex;justify-content: space-between;flex-direction: column;">
-                    <div style="display: flex;margin-bottom: 16px;">Gaussian / Log-normal Distribution
-                        <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <span ng-class="{'active' : !self.config.notUsedGaussian}"
-                            ng-click="self.toggleGaussianLine(false)" class="button-with-label"
-                            style="margin-right: 8px;">Gaussian</span>
-                        <span ng-class="{'active' : self.config.notUsedGaussian}"
-                            ng-click="self.toggleGaussianLine(true)" class="button-with-label">Log-normal Distribution</span>
-                        <span ng-class="{'active' : !self.config.notShowCumulative}"
-                            ng-click="self.config.notShowCumulative = !self.config.notShowCumulative" class="button-with-label">Cumulative</span>
-                    </div>
-                    <div style="display: flex; padding: 16px 0;">
-                        <span ng-click="self.hideSelectedGaussian()" class="button-with-label-layer"
-                            style="margin-left: 0;">Deactive</span>
-                        <span ng-click="self.showSelectedGaussian()" class="button-with-label-layer"
-                            style="margin-left: 15px;">Activate</span>
-                        <span ng-click="self.hideAllGaussian()" class="button-with-label-layer"
-                            style="margin-left: 15px;">Deactivate All</span>
-                        <span ng-click="self.showAllGaussian()" class="button-with-label-layer"
-                            style="margin-left: 15px;">Activate All</span>
-                    </div>
-                    <div ng-show="self.histogramList"
-                        style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">
-                        <wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"
-                            filter="self.layerFilter" get-icon="self.getGaussianIcon" get-icons="self.getGaussianIcons"
-                            get-children="self.noChildren" icon-style="self.getGaussianIconStyle" keep-children='true'
-                            run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'
-                            click-fn='self.click2ToggleGaussian'>
-                        </wi-tree-view-virtual>
-                    </div>
-                    <!--<div style="display: flex;margin-bottom: 16px;">Cumulative-->
-                        <!--<div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div ng-show="self.histogramList"-->
-                        <!--style="border: 1px solid #eee; margin-bottom: 15px;flex:1;overflow: hidden;" class="disable-node-caret">-->
-                        <!--<wi-tree-view-virtual tree-root="self.getLayerTree()" get-label="self.getLayerLabel"-->
-                            <!--filter="self.layerFilter" get-icon="self.getCumulativeIcon" get-icons="self.getCumulativeIcons"-->
-                            <!--get-children="self.noChildren" icon-style="self.getCumulativeIconStyle" keep-children='true'-->
-                            <!--run-match="self.runLayerMatch" hide-unmatched="true" hide-search='false'-->
-                            <!--click-fn='self.click2ToggleCumulative'>-->
-                        <!--</wi-tree-view-virtual>-->
-                    <!--</div>-->
-                </div>
-            </div>
+            ${require('./assistive-lines.html')}
         </div>
+        <!--Configuration-->
         <div ng-show="isSet(3)" style="overflow: hidden;flex: 1;display: flex;flex-direction: column;">
-            ${require('./tab3.html')}
+            ${require('./config.html')}
         </div>
+        <!--Statistic-->
         <div ng-show="isSet(4)" style="overflow: hidden;flex: 1;display: flex;flex-direction: column;">
-            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
-                <div>Statistic</div>
-            </div>
-            <div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'"style="flex:1; padding: 15px;">
-                <div style="display: flex;margin-bottom: 16px;">Table Information
-                    <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
-                    </div>
-                </div>
-                <div style="display: flex; flex-wrap: wrap;    position: absolute;">
-                    <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
-                        ng-class="{'active' : self.statisticHeaderMasks[$index]}"
-                        ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
-                        {{header}}</span>
-                </div>
-            </div>
-            
+            ${require('./statistic.html')}
         </div>
+        <!--Layers-->
         <div ng-show="isSet(5)" style="overflow: auto; flex: 1; display: flex; flex-direction: column;">
-            <div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
-                <div>Layer</div>
-            </div>
-            <div style="display: flex; padding: 16px 16px 0px 16px;">
-                <span ng-click="self.hideSelectedLayer()" class="button-with-label-layer"
-                    style="margin-left: 0px;">Hide</span>
-                <span ng-click="self.showSelectedLayer()" class="button-with-label-layer"
-                    style="margin-left: 15px;">Show</span>
-                <span ng-click="self.hideAllLayer()" class="button-with-label-layer" style="margin-left: 15px;">Hide
-                    All</span>
-                <span ng-click="self.showAllLayer()" class="button-with-label-layer" style="margin-left: 15px;">Show
-                    All</span>
-            </div>
-            <div ng-show="self.histogramList" class="disable-node-caret"
-                style="border: 1px solid #eee; margin: 15px 15px 5px 15px;flex:1;overflow: hidden;">
-                <wi-tree-view-virtual tree-root="self.getLayerTree()" 
-                    get-label="self.getLayerLabel" filter="self.layerFilter"
-                    get-icon="self.getLayerIcon" get-icons="self.getLayerIcons" get-children="self.noChildren"
-                    icon-style="self.getLayerIconStyle" keep-children='true' run-match="self.runLayerMatch"
-                    hide-unmatched="true" hide-search='false' click-fn='self.click2ToggleLayer'>
-                </wi-tree-view-virtual>
-            </div>
+            ${require('./layers.html')}
         </div>
         <div style="display: flex;">
             <span class="button-update" ng-click="self.genHistogramList()">
@@ -170,14 +51,14 @@
                 Control Params
             </div>
         </span>
-        <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-label">
-            <div style="margin: 22px;">
-                Assistive Lines
-            </div>
-        </span>
         <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">
             <div style="margin: 26px;">
                 Zone
+            </div>
+        </span>
+        <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-label">
+            <div style="margin: 22px;">
+                Assistive Lines
             </div>
         </span>
         <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">

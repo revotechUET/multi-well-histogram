@@ -1,0 +1,15 @@
+<div class="label-option-sidebar" style="padding: 12px 20px;display: flex;background: #f4f4f4;border-bottom: 1px solid #dcdcdc;justify-content: space-between;flex-direction: column;">
+    <div>Statistic</div>
+</div>
+<div onmouseover="this.style.overflow='overlay'" onmouseout="this.style.overflow='hidden'"style="flex:1; padding: 15px;">
+    <div style="display: flex;margin-bottom: 16px;">Table Information
+        <div style="border-bottom: 1px solid #e4e4e4;flex: 1;margin-left: 15px;margin-bottom: 6px;">
+        </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap;    position: absolute;">
+        <span ng-repeat="header in self.statisticHeaders track by $index" class="select-table-header"
+            ng-class="{'active' : self.statisticHeaderMasks[$index]}"
+            ng-click="self.statisticHeaderMasks[$index]= !self.statisticHeaderMasks[$index]">
+            {{header}}</span>
+    </div>
+</div>
