@@ -34,42 +34,52 @@
             </span>
         </div>
     </div>
-    <div class="label-list-view" style=" display: flex; border-left: 1px solid #e4e4e4;flex-direction: column;justify-content: start;
-        padding: 0px;right: 0;background: #fff;overflow-y: overlay;overflow-x: hidden; position: sticky;box-shadow: 0 10px 10px #00000017;">
-        <span ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label">
-            <div style="margin: 10px;">
-                Wells
+    <div class="label-list-view" style="   
+        border-left: 1px solid #e4e4e4;
+        position: relative;
+        overflow-y: overlay;
+        width: 44px;
+        right: 0;">
+        <div style="
+            transform-origin: left;
+            transform: translate(4.5%, -50%) rotate(90deg);
+            display: flex;
+            position: absolute;">
+            <div ng-class="{'active' : isSet(1)}" ng-click="setTab(1)" class="tab-with-label">
+                <div >
+                    Wells
+                </div>
             </div>
-        </span>
-        <span ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label">
-            <div style="margin: 0px;">
-                Configuration
+            <div ng-class="{'active' : isSet(3)}" ng-click="setTab(3)" class="tab-with-label">
+                <div >
+                    Configuration
+                </div>
             </div>
-        </span>
-        <span ng-show='self.ctrlParams.length' ng-class="{'active' : isSet(7)}" ng-click="setTab(7)" class="tab-with-label">
-            <div style="margin: 22px;">
-                Control Params
+            <div ng-show='self.ctrlParams.length' ng-class="{'active' : isSet(7)}" ng-click="setTab(7)" class="tab-with-label">
+                <div>
+                    Control Params
+                </div>
             </div>
-        </span>
-        <span ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">
-            <div style="margin: 26px;">
-                Zone
+            <div ng-class="{'active' : isSet(2)}" ng-click="setTab(2)" class="tab-with-label">
+                <div >
+                    Zone
+                </div>
             </div>
-        </span>
-        <span ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-label">
-            <div style="margin: 22px;">
-                Assistive Lines
+            <div ng-class="{'active' : isSet(6)}" ng-click="setTab(6)" class="tab-with-label">
+                <div >
+                    Assistive Lines
+                </div>
             </div>
-        </span>
-        <span ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">
-            <div style="margin: 0px;">
-                Statistic
+            <div ng-class="{'active' : isSet(4)}" ng-click="setTab(4)" class="tab-with-label">
+                <div >
+                    Statistic
+                </div>
             </div>
-        </span>
-        <span ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-label">
-            <div style="margin: 10px;">
-                Layers
+            <div ng-class="{'active' : isSet(5)}" ng-click="setTab(5)" class="tab-with-label">
+                <div >
+                    Layers
+                </div>
             </div>
-        </span>
+        </div>
     </div>
 </side-bar>
