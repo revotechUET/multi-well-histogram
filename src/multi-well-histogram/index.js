@@ -1128,17 +1128,24 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 async.eachSeries(idWells, (idWell, next) => {
                     wiApi.getCachedWellPromise(idWell)
                         .then(well => {
-                            if (!self.wellSpec.find(wsp => wsp.idWell === idWell)) {
-                                self.wellSpec.push({idWell});
-                                let curve = getCurve(well);
-                                if (!curve) {
-                                    //self.wellSpec.pop();
-                                    let msg = `Well ${well.name} does not meet requirement`;
+                            let zonesets = well.zone_sets;
+                            let hasZonesetName = self.zonesetName != 'ZonationAll' ? zonesets.some(zs => zs.name == self.zonesetName) : true;
+                            $timeout(() => {
+                                if (!self.wellSpec.find(wsp => wsp.idWell === idWell) && hasZonesetName) {
+                                    self.wellSpec.push({idWell});
+                                    let curve = getCurve(well);
+                                    if (!curve) {
+                                        let msg = `Well ${well.name} does not meet requirement`;
+                                        if (__toastr) __toastr.warning(msg);
+                                        console.warn(msg);
+                                    }
+                                } else if (!hasZonesetName) {
+                                    let msg = `User dataset do not have ${self.zonesetName}`;
                                     if (__toastr) __toastr.warning(msg);
-                                    console.warning(msg);
+                                    console.warn(msg);
                                 }
-                            }
-                            next();
+                                next();
+                            })
                         })
                         .catch(e => {
                             console.error(e);
