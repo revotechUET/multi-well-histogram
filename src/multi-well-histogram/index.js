@@ -399,12 +399,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.selectedGaussian = selectedObjs;
     }
     this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
-        let ctrlParam = self.ctrlParams.find(cp => node.$ref === cp.$ref);
-        if (ctrlParam) {
-            let idx = self.ctrlParams.indexOf(ctrlParam);
-            if (idx >= 0) {
-                self.ctrlParamsMask[idx] = !self.ctrlParamsMask[idx];
-            }
+        let ctrlParamIdx = self.ctrlParams.findIndex(cp => node.$res.name === cp.$res.name && node.zoneInfo.idZone == cp.zoneInfo.idZone);
+        if (ctrlParamIdx >= 0) {
+            self.ctrlParamsMask[ctrlParamIdx] = !self.ctrlParamsMask[ctrlParamIdx];
             self.selectedCtrlParams = selectedObjs;
         }
         self.selectedCtrlParams = selectedObjs;
@@ -1078,24 +1075,20 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.hideSelectedCtrlParams = function() {
         if(!self.selectedCtrlParams) return;
         self.selectedCtrlParams.forEach(cp => {
-            let ctrlParam = self.ctrlParams.find(cpI => cpI.$ref === cp.$ref);
-            if (ctrlParam) {
-                let idx = self.ctrlParams.indexOf(ctrlParam);
-                if (idx >= 0) {
-                    self.ctrlParamsMask[idx] = false;
-                }
+            cp = cp.data;
+            let ctrlParamIdx = self.ctrlParams.findIndex(cpI => cp.$res.name === cpI.$res.name && cp.zoneInfo.idZone == cpI.zoneInfo.idZone);
+            if (ctrlParamIdx >= 0) {
+                self.ctrlParamsMask[ctrlParamIdx] = false;
             }
         });
     }
     this.showSelectedCtrlParams = function() {
         if(!self.selectedCtrlParams) return;
         self.selectedCtrlParams.forEach(cp => {
-            let ctrlParam = self.ctrlParams.find(cpI => cpI.$ref === cp.$ref);
-            if (ctrlParam) {
-                let idx = self.ctrlParams.indexOf(ctrlParam);
-                if (idx >= 0) {
-                    self.ctrlParamsMask[idx] = true;
-                }
+            cp = cp.data;
+            let ctrlParamIdx = self.ctrlParams.findIndex(cpI => cp.$res.name === cpI.$res.name && cp.zoneInfo.idZone == cpI.zoneInfo.idZone);
+            if (ctrlParamIdx >= 0) {
+                self.ctrlParamsMask[ctrlParamIdx] = true;
             }
         });
         $timeout(() => {});
