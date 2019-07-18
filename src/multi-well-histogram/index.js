@@ -915,10 +915,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 zonesetName: self.zonesetName,
                 selectionType: self.selectionType,
                 selectionValue: self.selectionValue,
-                config: {...self.config, title: name} 
+                config: self.config
             }
             wiApi.newAssetPromise(self.idProject, name, type, content).then(res => {
-                self.idHistogram = res.idParameterSet;
                 self.onSaveAs && self.onSaveAs(res);
             })
                 .catch(e => {
