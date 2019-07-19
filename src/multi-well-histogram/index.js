@@ -227,7 +227,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.clickFunction = clickFunction;
     function clickFunction($event, node, selectedObjs, treeRoot) {
-        let wellSpec = self.wellSpec.find(wsp => wsp.idWell === treeRoot.idWell);
+        let wellSpec = self.wellSpec.find(wsp => wsp.idWell === treeRoot.idWell && wsp._idx === treeRoot._idx);
         wellSpec.idCurve = node.idCurve;
         wellSpec.idDataset = node.idDataset;
         wellSpec.curveName = node.Name;
@@ -241,15 +241,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     };
     async function getTree(wellSpec, callback) {
-        let wellIdx = self.treeConfig.findIndex(wellTree => wellTree.idWell === wellSpec.idWell) ;
-        if (wellIdx < 0) {
-            let well = await wiApi.getCachedWellPromise(wellSpec.idWell);
-            $timeout(() => {
-                self.treeConfig.push(well);
-            })
-            return well;
-        }
-        return null;
+        let wellIdx = self.treeConfig.findIndex(wellTree => wellTree.idWell === wellSpec.idWell && wellTree._idx === wellSpec._idx);
+        let well = await wiApi.getCachedWellPromise(wellSpec.idWell);
+        well = Object.assign({}, well);
+        well._idx = wellSpec._idx;
+        $timeout(() => {
+            self.treeConfig.push(well);
+        })
+        return well;
     }
     async function getTrees(callback) {
         wiLoading.show($element.find('.main')[0], self.silent);
@@ -257,6 +256,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         for (let w of self.wellSpec) {
             try {
                 let well = await wiApi.getCachedWellPromise(w.idWell || w);
+                well = Object.assign({}, well);
                 self.treeConfig.push(well);
             }
             catch(e) {
@@ -267,17 +267,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         callback && callback();
         wiLoading.hide();
-        // for (let w of self.wellSpec) {
-        //     promises.push(
-        //         wiApi.getWellPromise(w.idWell || w)
-        //             .then(well => ($timeout(() => self.treeConfig.push(well))))
-        //     );
-        // }
-        /*Promise.all(promises)
-            .then(() => callback && callback())
-            .catch(e => console.error(e))
-            .finally(() => wiLoading.hide());
-            */
     }
     function getZonesetsFromWells(wells) {
         if (!wells.length) return;
@@ -322,12 +311,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getWellSpec = getWellSpec;
     function getWellSpec(well) {
         if (!well) return {};
-        return self.wellSpec.find(wsp => wsp.idWell === well.idWell);
+        return self.wellSpec.find(wsp => wsp.idWell === well.idWell && wsp._idx === well._idx);
     }
     this.getCurve = getCurve;
     function getCurve(well) {
         let wellSpec = getWellSpec(well);
-        if (!Object.keys(wellSpec).length) return {};
+        if (!Object.keys(wellSpec || {}).length) return {};
         let curves = getCurvesInWell(well).filter(c => self.runMatch(c, self.selectionValue));
         let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) || curves[0] : curves[0];
         if (!curve) {
@@ -1159,9 +1148,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         .then(well => {
                             let zonesets = well.zone_sets;
                             let hasZonesetName = self.zonesetName != 'ZonationAll' ? zonesets.some(zs => zs.name == self.zonesetName) : true;
-                            if (!self.wellSpec.find(wsp => wsp.idWell === idWell) && hasZonesetName) {
-                                self.wellSpec.push({idWell});
-                                let wellTree = getTree({idWell}, null);
+                            if (hasZonesetName) {
+                                let _idx = (_.max(self.wellSpec.filter(ws => ws.idWell === idWell).map(ws => ws._idx)) || -1) + 1;
+                                self.wellSpec.push({idWell, _idx});
+                                let wellTree = getTree({idWell, _idx}, null);
                                 let curve = getCurve(well);
                                 if (!curve) {
                                     let msg = `Well ${well.name} does not meet requirement`;
@@ -1173,14 +1163,14 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                 if (__toastr) __toastr.warning(msg);
                                 console.warn(msg);
                             }
-                            next();
+                            next(null);
                         })
                         .catch(e => {
                             console.error(e);
-                            next();
+                            next(e);
                         })
                 }, err => {
-                    if (!err) {
+                    if (err) {
                         console.error(err);
                     }
                 })
@@ -1193,9 +1183,13 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.removeWell = function(well) {
         let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell);
         if(index >= 0) {
-            self.wellSpec.splice(index, 1);
+            $timeout(() => {
+                self.wellSpec.splice(index, 1);
+                let wellTreeIdx = self.treeConfig.findIndex(wTI => wTI.idWell == well.idWell);
+                self.treeConfig.splice(wellTreeIdx, 1);
+            })
         }
-        getTrees();
+        //getTrees();
     }
 
     this.cmltLineData = [];
