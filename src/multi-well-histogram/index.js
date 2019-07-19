@@ -433,7 +433,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.runCPMatch = function (node, criteria) {
         let keySearch = criteria.toLowerCase();
-        let searchArray = node.name.toLowerCase();
+        let searchArray = self.cpMarkerName(node).toLowerCase();
         return searchArray.includes(keySearch);
     }
     this.runLayerMatch = function (node, criteria) {
