@@ -143,7 +143,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         self.defaultConfig = self.defaultConfig || {};
         self.wellSpec = self.wellSpec || [];
-        getTree();
+        getTrees();
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
@@ -235,12 +235,23 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.refresh = function(){
         // self.histogramList.length = 0;
         // self.treeConfig.length = 0;
-        getTree(()=> {
+        getTrees(()=> {
             self.genHistogramList();
         });
 
     };
-    async function getTree(callback) {
+    async function getTree(wellSpec, callback) {
+        let wellIdx = self.treeConfig.findIndex(wellTree => wellTree.idWell === wellSpec.idWell) ;
+        if (wellIdx < 0) {
+            let well = await wiApi.getCachedWellPromise(wellSpec.idWell);
+            $timeout(() => {
+                self.treeConfig.push(well);
+            })
+            return well;
+        }
+        return null;
+    }
+    async function getTrees(callback) {
         wiLoading.show($element.find('.main')[0], self.silent);
         self.treeConfig = [];
         for (let w of self.wellSpec) {
@@ -352,6 +363,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
         self.zoneTree = (selectedItemProps || {}).zones;
+        if (!self.zoneTree || !self.zoneTree.length) return;
         self.zoneTreeUniq = _.uniqBy(self.zoneTree.map(zone => ({name: zone.zone_template.name})), zone => {
             return zone.name;
         });
@@ -1147,22 +1159,21 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         .then(well => {
                             let zonesets = well.zone_sets;
                             let hasZonesetName = self.zonesetName != 'ZonationAll' ? zonesets.some(zs => zs.name == self.zonesetName) : true;
-                            $timeout(() => {
-                                if (!self.wellSpec.find(wsp => wsp.idWell === idWell) && hasZonesetName) {
-                                    self.wellSpec.push({idWell});
-                                    let curve = getCurve(well);
-                                    if (!curve) {
-                                        let msg = `Well ${well.name} does not meet requirement`;
-                                        if (__toastr) __toastr.warning(msg);
-                                        console.warn(msg);
-                                    }
-                                } else if (!hasZonesetName) {
-                                    let msg = `User dataset do not have ${self.zonesetName}`;
+                            if (!self.wellSpec.find(wsp => wsp.idWell === idWell) && hasZonesetName) {
+                                self.wellSpec.push({idWell});
+                                let wellTree = getTree({idWell}, null);
+                                let curve = getCurve(well);
+                                if (!curve) {
+                                    let msg = `Well ${well.name} does not meet requirement`;
                                     if (__toastr) __toastr.warning(msg);
                                     console.warn(msg);
                                 }
-                                next();
-                            })
+                            } else if (!hasZonesetName) {
+                                let msg = `User dataset do not have ${self.zonesetName}`;
+                                if (__toastr) __toastr.warning(msg);
+                                console.warn(msg);
+                            }
+                            next();
                         })
                         .catch(e => {
                             console.error(e);
@@ -1170,7 +1181,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         })
                 }, err => {
                     if (!err) {
-                        getTree();
+                        console.error(err);
                     }
                 })
             })
@@ -1184,7 +1195,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         if(index >= 0) {
             self.wellSpec.splice(index, 1);
         }
-        getTree();
+        getTrees();
     }
 
     this.cmltLineData = [];
