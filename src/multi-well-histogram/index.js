@@ -74,7 +74,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.hasDiscriminator = function(well) {
         let wSpec = getWellSpec(well);
-        return wSpec.discriminator && Object.keys(wSpec.discriminator).length > 0 && wSpec.discriminator.active;
+        return Object.keys(((wSpec || {}).discriminator) || {}).length > 0 && wSpec.discriminator.active;
     }
     //--------------
     this.getDataset = function(well) {
@@ -258,6 +258,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             try {
                 let well = await wiApi.getCachedWellPromise(w.idWell || w);
                 well = Object.assign({}, well);
+                well._idx = w._idx;
                 self.treeConfig.push(well);
             }
             catch(e) {
@@ -352,6 +353,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetDropdownCtrl = wiDropdownListCtrl;
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
+        wiApi.indexZonesForCorrelation((selectedItemProps || {}).zones)
         self.zoneTree = (selectedItemProps || {}).zones;
         if (!self.zoneTree || !self.zoneTree.length) return;
         self.zoneTreeUniq = _.uniqBy(self.zoneTree.map(zone => ({name: zone.zone_template.name})), zone => {
@@ -605,6 +607,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     });
                     return !z._notUsed;
                 });
+                wiApi.indexZonesForCorrelation(zones);
+
                 if (self.getStackMode() === 'all') {
                     allZones = [...allZones, ...zones];
                 }
@@ -622,7 +626,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     }
                     let bins = genBins(dataArray);
                     bins.color = self.getColor(zone, well);
-                    bins.name = `${well.name}.${zone.zone_template.name}`;
+                    bins.name = `${well.name}.${zone.zone_template.name}:${zone._idx}`;
 
                     bins.stats = {};
                     switch (self.getStackMode()) {
@@ -644,7 +648,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         if (!zoneExisted) {
                             zoneBinsList.push([]);
                             zoneExisted = zoneBinsList[zoneBinsList.length - 1];
-                            zoneExisted.name = zone.zone_template.name;
+                            zoneExisted.name = `${zone.zone_template.name}:${zone._idx}`;
                             if (self.getColorMode() === 'zone') {
                                 zoneExisted.color = self.getColor(zone, well);
                             } else {
@@ -1151,7 +1155,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                             let zonesets = well.zone_sets;
                             let hasZonesetName = self.zonesetName != 'ZonationAll' ? zonesets.some(zs => zs.name == self.zonesetName) : true;
                             if (hasZonesetName) {
-                                let _idx = (_.max(self.wellSpec.filter(ws => ws.idWell === idWell).map(ws => ws._idx)) || -1) + 1;
+                                let _idx = _.max(self.wellSpec.filter(ws => ws.idWell === idWell).map(ws => ws._idx));
+                                _idx = (_idx >= 0 ? _idx : -1) + 1;
                                 self.wellSpec.push({idWell, _idx});
                                 let wellTree = getTree({idWell, _idx}, null);
                                 let curve = getCurve(well);
