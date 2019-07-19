@@ -45,9 +45,9 @@
         </div>
         <div style="display: flex;position: relative;flex-direction: row ; flex-wrap: wrap; max-width: 420px;border-top: 1px solid #dbdbdb; background: #f4f4f4; align-items: center;justify-content: flex-start;text-align: center;">
             <div class="axis-bar">
-                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 2;">Dataset: {{self.getWellSpec(well).datasetName}}</div>
+                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 1;" title="{{self.getWellSpec(well).datasetName}}">Dataset: {{self.getWellSpec(well).datasetName}}</div>
                 <div style="border-right: 1px solid #ddd;height: 17px;margin: 0 10px;"></div>
-                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 1;">Curver: {{self.getCurve(well).name}}</div>
+                <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; flex: 1;" title="{{self.getCurve(well).name}}">Curver: {{self.getCurve(well).name}}</div>
             </div>
         </div>
         <div>
