@@ -22,6 +22,7 @@ app.component(componentName, {
         selectionValue: "=",
         idHistogram: "<",
         config: '<',
+        noStack: '<',
         onSave: '<',
         onSaveAs: '<',
         title: '<',
@@ -147,7 +148,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || '', notShowCumulative: false};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: self.noStack ? 'none':'well', binGap: 5, title: self.title || '', notShowCumulative: false};
         self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
         self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
     }
@@ -850,9 +851,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return cMode === 'zone' ? zone.zone_template.background:(cMode === 'well'?well.color:'blue');
     }
     this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
-    this.getStackMode = () => (
-        self.getDisplayMode() === 'bar'?(self.config.stackMode||self.defaultConfig.stackMode||'none'):'none'
-    )
+    this.getStackMode = () => {
+        if (self.noStack) return 'none';
+        return self.getDisplayMode() === 'bar'?(self.config.stackMode||self.defaultConfig.stackMode||'none'):'none'
+    }
     this.getBinGap = () => (self.config.binGap || self.defaultConfig.binGap)
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)

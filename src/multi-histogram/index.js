@@ -18,6 +18,7 @@ app.component(componentName, {
         selectionValues: "<",
 		idHistograms: "<",
         configs: '<',
+        noStack: '<',
         ctrlParamsList: '<',
         onSave: '<',
         onSaveAs: '<',
