@@ -75,7 +75,7 @@
                 get-x='self.getBinX' get-y='self.getBinY' line-data="bins" line-color="bins.color"
                 line-width='2' line-dash="'2 0'" color-func="self.colorFn">
             </line-point-layer>
-            <control-marker-layer ng-if="self.ctrlParams && self.ctrlParams.length" 
+            <control-marker-layer ng-if="self.ctrlParams && self.ctrlParams.length && self.validPlotRegion()" 
                 min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
                 max-y='self.maxY || 100' 
                 markers="self.ctrlParams" draggable="true" 

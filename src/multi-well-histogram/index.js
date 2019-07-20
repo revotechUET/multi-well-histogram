@@ -102,6 +102,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         $timeout(() => {
             $scope.$watch(() => self.getFamilyTable(), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
+                updateDefaultConfig();
             }, true);
             $scope.$watch(() => (self.selectionType), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
@@ -376,6 +377,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.getZoneIcon = (node) => ( (node && !node._notUsed) ? 'zone-16x16': 'fa fa-ban' )
     const EMPTY_ARRAY = []
+    this.validPlotRegion = function() {
+        let result = (self.getRight() - self.getLeft());
+        return _.isFinite(result) && result != 0;
+    }
     this.noChildren = function (node) {
         return EMPTY_ARRAY;
     }
