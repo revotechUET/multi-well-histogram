@@ -22,6 +22,7 @@ app.component(componentName, {
         selectionValue: "=",
         idHistogram: "<",
         config: '<',
+        noStack: '<',
         onSave: '<',
         onSaveAs: '<',
         title: '<',
@@ -73,7 +74,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.hasDiscriminator = function(well) {
         let wSpec = getWellSpec(well);
-        return wSpec.discriminator && Object.keys(wSpec.discriminator).length > 0 && wSpec.discriminator.active;
+        return Object.keys(((wSpec || {}).discriminator) || {}).length > 0 && wSpec.discriminator.active;
     }
     //--------------
     this.getDataset = function(well) {
@@ -143,11 +144,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         self.defaultConfig = self.defaultConfig || {};
         self.wellSpec = self.wellSpec || [];
-        getTree();
+        getTrees();
         self.selectionType = self.selectionType || 'family-group';
         self.zoneTree = [];
         self.zonesetName = self.zonesetName || "ZonationAll";
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: 'well', binGap: 5, title: self.title || '', notShowCumulative: false};
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: self.noStack ? 'none':'well', binGap: 5, title: self.title || '', notShowCumulative: false};
         self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
         self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
     }
@@ -227,7 +228,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     }
     this.clickFunction = clickFunction;
     function clickFunction($event, node, selectedObjs, treeRoot) {
-        let wellSpec = self.wellSpec.find(wsp => wsp.idWell === treeRoot.idWell);
+        let wellSpec = self.wellSpec.find(wsp => wsp.idWell === treeRoot.idWell && wsp._idx === treeRoot._idx);
         wellSpec.idCurve = node.idCurve;
         wellSpec.idDataset = node.idDataset;
         wellSpec.curveName = node.Name;
@@ -235,17 +236,29 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.refresh = function(){
         // self.histogramList.length = 0;
         // self.treeConfig.length = 0;
-        getTree(()=> {
+        getTrees(()=> {
             self.genHistogramList();
         });
 
     };
-    async function getTree(callback) {
+    async function getTree(wellSpec, callback) {
+        let wellIdx = self.treeConfig.findIndex(wellTree => wellTree.idWell === wellSpec.idWell && wellTree._idx === wellSpec._idx);
+        let well = await wiApi.getCachedWellPromise(wellSpec.idWell);
+        well = Object.assign({}, well);
+        well._idx = wellSpec._idx;
+        $timeout(() => {
+            self.treeConfig.push(well);
+        })
+        return well;
+    }
+    async function getTrees(callback) {
         wiLoading.show($element.find('.main')[0], self.silent);
         self.treeConfig = [];
         for (let w of self.wellSpec) {
             try {
                 let well = await wiApi.getCachedWellPromise(w.idWell || w);
+                well = Object.assign({}, well);
+                well._idx = w._idx;
                 self.treeConfig.push(well);
             }
             catch(e) {
@@ -256,17 +269,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         callback && callback();
         wiLoading.hide();
-        // for (let w of self.wellSpec) {
-        //     promises.push(
-        //         wiApi.getWellPromise(w.idWell || w)
-        //             .then(well => ($timeout(() => self.treeConfig.push(well))))
-        //     );
-        // }
-        /*Promise.all(promises)
-            .then(() => callback && callback())
-            .catch(e => console.error(e))
-            .finally(() => wiLoading.hide());
-            */
     }
     function getZonesetsFromWells(wells) {
         if (!wells.length) return;
@@ -311,12 +313,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getWellSpec = getWellSpec;
     function getWellSpec(well) {
         if (!well) return {};
-        return self.wellSpec.find(wsp => wsp.idWell === well.idWell);
+        return self.wellSpec.find(wsp => wsp.idWell === well.idWell && wsp._idx === well._idx);
     }
     this.getCurve = getCurve;
     function getCurve(well) {
         let wellSpec = getWellSpec(well);
-        if (!Object.keys(wellSpec).length) return {};
+        if (!Object.keys(wellSpec || {}).length) return {};
         let curves = getCurvesInWell(well).filter(c => self.runMatch(c, self.selectionValue));
         let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) || curves[0] : curves[0];
         if (!curve) {
@@ -351,7 +353,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetDropdownCtrl = wiDropdownListCtrl;
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
+        wiApi.indexZonesForCorrelation((selectedItemProps || {}).zones)
         self.zoneTree = (selectedItemProps || {}).zones;
+        if (!self.zoneTree || !self.zoneTree.length) return;
         self.zoneTreeUniq = _.uniqBy(self.zoneTree.map(zone => ({name: zone.zone_template.name})), zone => {
             return zone.name;
         });
@@ -432,7 +436,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.runCPMatch = function (node, criteria) {
         let keySearch = criteria.toLowerCase();
-        let searchArray = node.name.toLowerCase();
+        let searchArray = self.cpMarkerName(node).toLowerCase();
         return searchArray.includes(keySearch);
     }
     this.runLayerMatch = function (node, criteria) {
@@ -603,6 +607,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     });
                     return !z._notUsed;
                 });
+                wiApi.indexZonesForCorrelation(zones);
+
                 if (self.getStackMode() === 'all') {
                     allZones = [...allZones, ...zones];
                 }
@@ -620,7 +626,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                     }
                     let bins = genBins(dataArray);
                     bins.color = self.getColor(zone, well);
-                    bins.name = `${well.name}.${zone.zone_template.name}`;
+                    bins.name = `${well.name}.${zone.zone_template.name}:${zone._idx}`;
 
                     bins.stats = {};
                     switch (self.getStackMode()) {
@@ -642,7 +648,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         if (!zoneExisted) {
                             zoneBinsList.push([]);
                             zoneExisted = zoneBinsList[zoneBinsList.length - 1];
-                            zoneExisted.name = zone.zone_template.name;
+                            zoneExisted.name = `${zone.zone_template.name}:${zone._idx}`;
                             if (self.getColorMode() === 'zone') {
                                 zoneExisted.color = self.getColor(zone, well);
                             } else {
@@ -849,9 +855,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return cMode === 'zone' ? zone.zone_template.background:(cMode === 'well'?well.color:'blue');
     }
     this.getDisplayMode = () => (self.config.displayMode || self.defaultConfig.displayMode || 'bar')
-    this.getStackMode = () => (
-        self.getDisplayMode() === 'bar'?(self.config.stackMode||self.defaultConfig.stackMode||'none'):'none'
-    )
+    this.getStackMode = () => {
+        if (self.noStack) return 'none';
+        return self.getDisplayMode() === 'bar'?(self.config.stackMode||self.defaultConfig.stackMode||'none'):'none'
+    }
     this.getBinGap = () => (self.config.binGap || self.defaultConfig.binGap)
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)
@@ -1147,30 +1154,31 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                         .then(well => {
                             let zonesets = well.zone_sets;
                             let hasZonesetName = self.zonesetName != 'ZonationAll' ? zonesets.some(zs => zs.name == self.zonesetName) : true;
-                            $timeout(() => {
-                                if (!self.wellSpec.find(wsp => wsp.idWell === idWell) && hasZonesetName) {
-                                    self.wellSpec.push({idWell});
-                                    let curve = getCurve(well);
-                                    if (!curve) {
-                                        let msg = `Well ${well.name} does not meet requirement`;
-                                        if (__toastr) __toastr.warning(msg);
-                                        console.warn(msg);
-                                    }
-                                } else if (!hasZonesetName) {
-                                    let msg = `User dataset do not have ${self.zonesetName}`;
+                            if (hasZonesetName) {
+                                let _idx = _.max(self.wellSpec.filter(ws => ws.idWell === idWell).map(ws => ws._idx));
+                                _idx = (_idx >= 0 ? _idx : -1) + 1;
+                                self.wellSpec.push({idWell, _idx});
+                                let wellTree = getTree({idWell, _idx});
+                                let curve = getCurve({...well, _idx});
+                                if (!curve) {
+                                    let msg = `Well ${well.name} does not meet requirement`;
                                     if (__toastr) __toastr.warning(msg);
                                     console.warn(msg);
                                 }
-                                next();
-                            })
+                            } else if (!hasZonesetName) {
+                                let msg = `User dataset do not have ${self.zonesetName}`;
+                                if (__toastr) __toastr.warning(msg);
+                                console.warn(msg);
+                            }
+                            next(null);
                         })
                         .catch(e => {
                             console.error(e);
-                            next();
+                            next(e);
                         })
                 }, err => {
-                    if (!err) {
-                        getTree();
+                    if (err) {
+                        console.error(err);
                     }
                 })
             })
@@ -1180,11 +1188,15 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         well._notUsed = !well._notUsed;
     }
     this.removeWell = function(well) {
-        let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell);
+        let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell && wsp._idx === well._idx);
         if(index >= 0) {
-            self.wellSpec.splice(index, 1);
+            $timeout(() => {
+                self.wellSpec.splice(index, 1);
+                let wellTreeIdx = self.treeConfig.findIndex(wTI => wTI.idWell === well.idWell && wTI._idx === well._idx);
+                self.treeConfig.splice(wellTreeIdx, 1);
+            })
         }
-        getTree();
+        //getTrees();
     }
 
     this.cmltLineData = [];
