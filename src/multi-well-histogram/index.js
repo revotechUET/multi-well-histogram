@@ -1188,11 +1188,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         well._notUsed = !well._notUsed;
     }
     this.removeWell = function(well) {
-        let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell);
+        let index = self.wellSpec.findIndex(wsp => wsp.idWell === well.idWell && wsp._idx === well._idx);
         if(index >= 0) {
             $timeout(() => {
                 self.wellSpec.splice(index, 1);
-                let wellTreeIdx = self.treeConfig.findIndex(wTI => wTI.idWell == well.idWell);
+                let wellTreeIdx = self.treeConfig.findIndex(wTI => wTI.idWell === well.idWell && wTI._idx === well._idx);
                 self.treeConfig.splice(wellTreeIdx, 1);
             })
         }
