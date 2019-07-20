@@ -1,4 +1,4 @@
-<side-bar ng-if="self.validPlotRegion()" my-default-width="370" orientation="w" collapsed="false">
+<side-bar ng-if="self.getFamilyTable()" my-default-width="370" orientation="w" collapsed="false">
     <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
         <!--Wells-->
         <div ng-show="isSet(1)" style="overflow: auto;flex: 1;display:flex;flex-direction:column;">
@@ -29,7 +29,7 @@
             ${require('./layers.html')}
         </div>
         <div style="display: flex;">
-            <span class="button-update" ng-click="self.genHistogramList()">
+            <span class="button-update" ng-class="{'disabled-click': !self.isSettingChange}" ng-click="self.genHistogramList()">
                 Update
             </span>
         </div>

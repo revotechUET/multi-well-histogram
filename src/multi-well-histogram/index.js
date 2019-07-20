@@ -69,6 +69,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
         let curvesArr = dataset.curves.map( c => ({type:'curve',name:c.name}) );
         wiDialog.discriminator(wSpec.discriminator, curvesArr, function(discrmnt) {
+            self.isSettingChange = true;
             wSpec.discriminator = discrmnt;
         });
     }
@@ -97,21 +98,36 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return familyList;
     }
     this.$onInit = async function () {
+        self.isSettingChange = true;
         if (self.token)
             wiToken.setToken(self.token);
         $timeout(() => {
+            $scope.$watch(() => self.config, (newVal, oldVal) => {
+                self.isSettingChange = true;
+            }, true);
             $scope.$watch(() => self.getFamilyTable(), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
                 updateDefaultConfig();
             });
+            $scope.$watch(() => {
+                return self.wellSpec.map(wsp => {
+                    return `${wsp.idCurve}`;
+                }).join('');
+            }, () => {
+                self.isSettingChange = true;
+                updateDefaultConfig();
+            }, true);
             $scope.$watch(() => (self.selectionType), () => {
+                self.isSettingChange = true;
                 getSelectionList(self.selectionType, self.treeConfig);
                 updateDefaultConfig();
             });
             $scope.$watch(() => (self.selectionValue), () => {
+                self.isSettingChange = true;
                 updateDefaultConfig();
             });
             $scope.$watch(() => (self.treeConfig.map(w => w.idWell)), () => {
+                self.isSettingChange = true;
                 getSelectionList(self.selectionType, self.treeConfig);
                 getZonesetsFromWells(self.treeConfig);
                 updateDefaultConfig();
@@ -237,10 +253,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.refresh = function(){
         // self.histogramList.length = 0;
         // self.treeConfig.length = 0;
+        self.isSettingChange = true;
         getTrees(()=> {
             self.genHistogramList();
         });
-
     };
     async function getTree(wellSpec, callback) {
         let wellIdx = self.treeConfig.findIndex(wellTree => wellTree.idWell === wellSpec.idWell && wellTree._idx === wellSpec._idx);
@@ -354,6 +370,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         self.zonesetDropdownCtrl = wiDropdownListCtrl;
     }
     this.onZonesetSelectionChanged = function(selectedItemProps) {
+        self.isSettingChange = true;
         wiApi.indexZonesForCorrelation((selectedItemProps || {}).zones)
         self.zoneTree = (selectedItemProps || {}).zones;
         if (!self.zoneTree || !self.zoneTree.length) return;
@@ -385,6 +402,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return EMPTY_ARRAY;
     }
     this.click2ToggleZone = function ($event, node, selectedObjs) {
+        self.isSettingChange = true;
         node._notUsed = !node._notUsed;
         let zoneTree = self.zoneTree.filter(zone => zone.zone_template.name == node.name);
         zoneTree.forEach(zone => {
@@ -564,6 +582,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     var listWellStats = [];
     var listAllStats = [];
     this.genHistogramList = async function() {
+        if (!self.isSettingChange) return;
+        self.isSettingChange = false;
         let preLayers = self.histogramList.map(layer => layer.name);
         //console.log(layer.name)
         this.histogramList.length = 0;
@@ -1147,6 +1167,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         $timeout(() => {});
     }
     this.showAllZone = function() {
+        self.isSettingChange = true;
         self.zoneTreeUniq.forEach(zone => {
             zone._notUsed = false;
         });
@@ -1193,6 +1214,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         }
     }
     this.toggleWell = function(well) {
+        self.isSettingChange = true;
         well._notUsed = !well._notUsed;
     }
     this.removeWell = function(well) {
