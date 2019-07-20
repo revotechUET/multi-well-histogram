@@ -337,7 +337,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let wellSpec = getWellSpec(well);
         if (!Object.keys(wellSpec || {}).length) return {};
         let curves = getCurvesInWell(well).filter(c => self.runMatch(c, self.selectionValue));
-        let curve = wellSpec.idCurve ? curves.find(c => c.idCurve === wellSpec.idCurve) || curves[0] : curves[0];
+        let curve = wellSpec.idCurve ? (curves.find(c => c.idCurve === wellSpec.idCurve) || curves[0]) : curves[0];
         if (!curve) {
             delete wellSpec.curveName;
             delete wellSpec.idCurve;
@@ -569,10 +569,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let family = wiApi.getFamily(curve.idFamily);
         if (!family) return;
         $timeout(() => {
-            self.defaultConfig.left = family.family_spec[0].minScale;
-            self.defaultConfig.right = family.family_spec[0].maxScale;
-            self.config.left = family.family_spec[0].minScale || 0;
-            self.config.right = family.family_spec[0].maxScale || 100;
+            self.defaultConfig.left = isNaN(family.family_spec[0].minScale) ? 0 : family.family_spec[0].minScale;
+            self.defaultConfig.right = isNaN(family.family_spec[0].maxScale) ? 100 : family.family_spec[0].maxScale;
+            //self.config.left = isNaN(family.family_spec[0].minScale) ? 0 : family.family_spec[0].minScale;
+            //self.config.right = isNaN(family.family_spec[0].maxScale) ? 100 : family.family_spec[0].maxScale;
             self.config.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
         })
     }
