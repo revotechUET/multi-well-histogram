@@ -103,7 +103,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             $scope.$watch(() => self.getFamilyTable(), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
                 updateDefaultConfig();
-            }, true);
+            });
             $scope.$watch(() => (self.selectionType), () => {
                 getSelectionList(self.selectionType, self.treeConfig);
                 updateDefaultConfig();
