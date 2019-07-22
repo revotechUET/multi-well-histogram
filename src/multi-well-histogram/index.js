@@ -872,6 +872,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         return getCorrectValue(getCorrectValue(self.config.right, self.defaultConfig.right), 0) ;
     } 
     this.getLoga = () => (self.config.loga === undefined? self.defaultConfig.loga : self.config.loga)
+    this.getMajor = () => ( isNaN(self.config.major) ? (self.defaultConfig.major || 5) : self.config.major)
+    this.getMinor = () => ( isNaN(self.config.minor) ? (self.defaultConfig.minor || 1) : self.config.minor)
     this.getNotUsedGaussian = () => {self.config.notUsedGaussian || false};
     this.getDivisions = () => (self.config.divisions || self.defaultConfig.divisions || 35)
     this.getColorMode = () => (self.config.colorMode || self.defaultConfig.colorMode || 'zone')
@@ -887,6 +889,12 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.getBinGap = () => (self.config.binGap || self.defaultConfig.binGap)
     this.getBinX = (bin) => ((bin.x0 + bin.x1)/2)
     this.getBinY = (bin) => (bin.length)
+    this.setConfigMajor = function(notUse, newValue) {
+        self.config.major = parseFloat(newValue);
+    }
+    this.setConfigMinor = function(notUse, newValue) {
+        self.config.minor = parseFloat(newValue);
+    }
 
     this.colorFn = function(bin, bins) {
         if (self.getStackMode() === 'none');
@@ -902,7 +910,6 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 input: self.getConfigTitle(),
             }, function(name) {
                 let type = 'HISTOGRAM';
-                self.setConfigTitle(null, name);
                 let content = {
                     wellSpec: self.wellSpec,
                     zonesetName: self.zonesetName,
@@ -992,8 +999,8 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 statsArray = flattenHistogramList.map(e => e.stats);
                 break;
             case 'all':
-                // statsArray = [...listAllStats];
-                statsArray = flattenHistogramList.map(e => e.stats);
+                statsArray = [...listAllStats];
+                //statsArray = flattenHistogramList.map(e => e.stats);
                 break;
             default:
                 statsArray = [];
