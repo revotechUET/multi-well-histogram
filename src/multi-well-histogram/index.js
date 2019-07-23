@@ -408,7 +408,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         zoneTree.forEach(zone => {
             zone._notUsed = !zone._notUsed;
         })
-        self.selectedZones = selectedObjs;
+        self.selectedZones = selectedObjs.map(obj => obj.data);
     }
     this.getZoneTreeMaxHeight = function() {
         return $element.height();
@@ -416,7 +416,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
 
     this.click2ToggleLayer = function ($event, node, selectedObjs) {
         node._notUsed = !node._notUsed;
-        self.selectedLayers = selectedObjs;
+        self.selectedLayers = selectedObjs.map(obj => obj.data);
     }
     this.click2ToggleCumulative = function ($event, node, selectedObjs) {
         node._useCmlt = !node._useCmlt;
@@ -430,7 +430,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.setGaussianData(self.histogramList);
         }
         self.setCumulativeData(self.histogramList);
-        self.selectedGaussian = selectedObjs;
+        self.selectedGaussian = selectedObjs.map(obj => obj.data);
     }
     this.click2ToggleCtrlParams = function ($event, node, selectedObjs) {
         let ctrlParamIdx = self.ctrlParams.findIndex(cp => node.$res.name === cp.$res.name && node.zoneInfo.idZone == cp.zoneInfo.idZone);
@@ -438,7 +438,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.ctrlParamsMask[ctrlParamIdx] = !self.ctrlParamsMask[ctrlParamIdx];
             self.selectedCtrlParams = selectedObjs;
         }
-        self.selectedCtrlParams = selectedObjs;
+        self.selectedCtrlParams = selectedObjs.map(obj => obj.data);
     }
     this.click2ToggleLogNormalD = function ($event, node, selectedObjs) {
         node._useLogNormalD = !node._useLogNormalD;
@@ -1201,7 +1201,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                 console.warn(msg);
                             }
                             if (!hasZonesetName) {
-                                let msg = `User dataset do not have ${self.zonesetName}`;
+                                let msg = `"Well ${well.name}" does not meet input "Zone ${self.zonesetName}"`;
                                 if (__toastr) __toastr.warning(msg);
                                 console.warn(msg);
                             }
