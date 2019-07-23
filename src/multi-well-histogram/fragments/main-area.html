@@ -44,10 +44,11 @@
                 ng-repeat="bins in self.histogramList">
             </canvas-barchart-layer>
             <line-formula-layer ng-if="self.condition4GaussianLine()" min-val='self.getLeft()' max-val='self.getRight()'
-                min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000'
+                min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000' loga="self.getLoga()"
                 formula="self.gaussianLine" line-color="self.gaussianLine.color" line-width="self.gaussianLine.width">
             </line-formula-layer>
             <control-marker-layer ng-if="self.condition4GaussianLine()" 
+                loga="self.getLoga()"
                 min-val="self.getLeft()" max-val="self.getRight()" min-y='self.minY || 0'
                 max-y='self.maxY || 100' 
                 markers="self.gaussianLine.sigmaLines" draggable="false" 
@@ -60,8 +61,9 @@
                 marker-width="19">
             </control-marker-layer>
             <line-formula-layer ng-if="self.condition4LogNormalD()" min-val='self.getLeft()' max-val='self.getRight()'
-                min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000' eqn-offsets="['65px', '0%']"
-                formula="self.logNormalDLine" line-color="self.logNormalDLine.color" line-width="self.logNormalDLine.width" show-equation='true'>
+                loga="self.getLoga()" min-y='self.minY || 0' max-y='self.maxY || 100' autofit='true' resolution='5000' 
+                eqn-offsets="['65px', '0%']" formula="self.logNormalDLine" line-color="self.logNormalDLine.color" 
+                line-width="self.logNormalDLine.width" show-equation='true'>
             </line-formula-layer>
             <line-point-layer ng-if="self.condition4CumulativeLine()" min-val="self.getLeft()"
                 max-val="self.getRight()" min-y='self.minY || 0' max-y='self.maxY || 100' loga="self.getLoga()"
