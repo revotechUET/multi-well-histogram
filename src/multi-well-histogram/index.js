@@ -1247,13 +1247,10 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     this.setCumulativeData = function(layers) {
         self.cmltLineData.length = 0;
         if (!layers.length) return;
-        if (self.getStackMode() != 'all') {
             layers = layers.filter(l => l._useGssn);
-        } else if (!layers._useGssn) {
-            return;
-        }
         if (self.getStackMode() === 'well' ||
-            self.getStackMode() === 'zone') layers = layers.flat();
+            self.getStackMode() === 'zone' ||
+            self.getStackMode() === 'all') layers = layers.flat();
         let newData = [];
         for (let i = 0; i < self.getDivisions(); i++) {
             let elem = [];
@@ -1285,14 +1282,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.gaussianLine._notUsed = true;
             return;
         }
-        if (self.getStackMode() != 'all') {
-            layers = layers.filter(l => l._useGssn);
-        } else if (!layers._useGssn) {
-            return;
-        }
+        layers = layers.filter(l => l._useGssn);
         self.gaussianLine._notUsed = false;
         if (self.getStackMode() === 'well' ||
-            self.getStackMode() === 'zone') layers = layers.flat();
+            self.getStackMode() === 'zone' ||
+            self.getStackMode() === 'all') layers = layers.flat();
         let fullData = [];
         for (let lIdx = 0; lIdx < layers.length; lIdx++) {
             for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
@@ -1328,14 +1322,11 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.logNormalDLine._notUsed = true;
             return;
         }
-        if (self.getStackMode() != 'all') {
-            layers = layers.filter(l => l._useGssn);
-        } else if (!layers._useGssn) {
-            return;
-        }
+        layers = layers.filter(l => l._useGssn);
         self.logNormalDLine._notUsed = false;
         if (self.getStackMode() === 'well' ||
-            self.getStackMode() === 'zone') layers = layers.flat();
+            self.getStackMode() === 'zone' ||
+            self.getStackMode() === 'all') layers = layers.flat();
         let fullData = [];
         for (let lIdx = 0; lIdx < layers.length; lIdx++) {
             for (let bIdx = 0; bIdx < layers[lIdx].length; bIdx++) {
