@@ -573,7 +573,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
             self.defaultConfig.right = isNaN(family.family_spec[0].maxScale) ? 100 : family.family_spec[0].maxScale;
             //self.config.left = isNaN(family.family_spec[0].minScale) ? 0 : family.family_spec[0].minScale;
             //self.config.right = isNaN(family.family_spec[0].maxScale) ? 100 : family.family_spec[0].maxScale;
-            self.config.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
+            self.defaultConfig.loga = family.family_spec[0].displayType.toLowerCase() === 'logarithmic';
         })
     }
 

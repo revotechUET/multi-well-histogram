@@ -18,7 +18,7 @@
             <axis-layer min-val='self.minY || 0' max-val='self.maxY || 100' n-ticks="10" minor-ticks="1"
                 precision="4" grid="!!self.config.grid" axis-direction="'up'" placement="0"></axis-layer>
             <axis-layer min-val="0" max-val="100" n-ticks="10" minor-ticks="1" precision="4"
-                grid="!!self.config.grid" axis-direction="'up'" placement="1"></axis-layer>
+                grid="false" axis-direction="'up'" placement="1"></axis-layer>
             <canvas-barchart-layer ng-show="!bins._notUsed"
                 ng-if="self.getDisplayMode() == 'bar' && self.getStackMode() == 'none'"
                 ng-repeat="bins in self.histogramList" min-val="self.getLeft()" max-val="self.getRight()"
