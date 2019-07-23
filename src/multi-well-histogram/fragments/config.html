@@ -158,10 +158,10 @@
         </div>
         <div>
             <span ng-class="{'active' : self.selectConfig === 'option1'}"
-                ng-click="self.selectConfig='option1'" class="button-with-label"
+                ng-click="self.changeHistogramMode('option1')" class="button-with-label"
                 style="margin-right: 8px;"> Frequency Count</span>
             <span ng-class="{'active' : self.selectConfig === 'option2'}"
-                ng-click="self.selectConfig='option2'"
+                ng-click="self.changeHistogramMode('option2')"
                 class="button-with-label">Percentile</span>
         </div>
 

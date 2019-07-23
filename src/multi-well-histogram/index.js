@@ -1378,4 +1378,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
     function resetHistograms() {
         self.histogramList = [];
     }
+    this.changeHistogramMode = changeHistogramMode;
+    function changeHistogramMode(option) {
+        self.isSettingChange = true;
+        selectConfig=option;
+    }
 }
