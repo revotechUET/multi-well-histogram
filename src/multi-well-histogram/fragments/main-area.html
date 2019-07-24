@@ -11,7 +11,7 @@
     <div class="main-body-center border-style" style="position: relative;">
         <layer-collection v-padding="50" h-padding='60'>
             <axis-layer min-val="self.getLeft()" max-val="self.getRight()" loga="self.getLoga()"
-                n-ticks="self.getMajor() || 10" minor-ticks="self.getMinor() || 1" precision="4"
+                n-ticks="self.getMajor() * self.getMinor()" minor-ticks="self.getMinor()" precision="4"
                 grid="!!self.config.grid" placement="1"
                 get-min-val="self.getLeft" get-max-val="self.getRight">
             </axis-layer>

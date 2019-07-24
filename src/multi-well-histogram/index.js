@@ -1202,7 +1202,7 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                                     console.warn(msg);
                                 }
                             } else {
-                                let msg = `"Well ${well.name}" does not meet input "Zone ${self.zonesetName}"`;
+                                let msg = `Well ${well.name} does not meet input Zone ${self.zonesetName}`;
                                 if (__toastr) __toastr.warning(msg);
                                 console.warn(msg);
                             }
