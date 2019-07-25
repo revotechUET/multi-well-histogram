@@ -1,6 +1,8 @@
 var componentName = 'multiWellHistogram';
 module.exports.name = componentName;
 require('./style.less');
+var PrintableController = Printable.klass;
+var component = Printable.component;
 
 const _DECIMAL_LEN = 4;
 
@@ -9,10 +11,9 @@ var app = angular.module(componentName, [
     'wiApi', 'editable', 'wiDialog',
     'wiDroppable', 'wiDropdownList','plot-toolkit','wiLoading','angularResizable','wiDiscriminator'
 ]);
-app.component(componentName, {
+app.component(componentName, component({
     template: require('./template.html'),
     controller: multiWellHistogramController,
-    controllerAs: 'self',
     bindings: {
         token: "<",
         idProject: "<",
@@ -37,10 +38,11 @@ app.component(componentName, {
         cpIconStyle: "<"
     },
     transclude: true
-});
+}))
 
-function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi, wiDialog, wiLoading) {
+function multiWellHistogramController($scope, $timeout, $element, $compile, wiToken, wiApi, wiDialog, wiLoading) {
     let self = this;
+    PrintableController.call(this, $scope, $element, $timeout, $compile, wiApi);
     self.silent = true;
     self.treeConfig = [];
     self.selectedNode = null;
@@ -97,10 +99,46 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
         let familyList = curves.map(c => wiApi.getFamily(c.idFamily));
         return familyList;
     }
-    this.$onInit = async function () {
-        self.isSettingChange = true;
+    this.defaultBindings = function() {
         if (self.token)
             wiToken.setToken(self.token);
+        self.isSettingChange = true;
+        self.cpGetMarkerVal = self.cpGetMarkerVal || function (marker, idx) { return  marker.value }
+        self.cpSetMarkerVal = self.cpSetMarkerVal || function (marker, idx, newVal) {marker.value = newVal;}
+        self.cpMarkerStyle = self.cpMarkerStyle || function (marker, idx) { return  {stroke:marker.color,'stroke-width':'2', fill:'none'} }
+        self.cpMarkerName = self.cpMarkerName || function(marker, idx) { return  marker.name; }
+        self.ctrlParams = self.ctrlParams || [];
+        self.notCPBackground = self.ctrlParams.length ? false : true;
+        self.ctrlParamsMask = self.ctrlParams.map(c => true);
+        self.cpIcon = self.cpIcon || function(node) {
+            let idx = self.ctrlParams.indexOf(node);
+            if (idx >= 0) {
+                let use = self.ctrlParamsMask[idx];
+                return use ? 'layer-16x16': 'fa fa-eye-slash';
+            }
+        }
+        self.cpIcons = self.cpIcons || function (node){ return ["rectangle"] }
+        self.cpIconStyle = self.cpIconStyle || function(node) { 
+            return  {
+                'background-color': node.color || 'red'
+            }
+        }
+        self.cpBackground = self.cpBackground || {
+            'background-color': 'rgba(255, 249, 160, 0.6)'
+        };
+
+
+        self.defaultConfig = self.defaultConfig || {};
+        self.wellSpec = self.wellSpec || [];
+        self.selectionType = self.selectionType || 'family-group';
+        self.zoneTree = [];
+        self.zonesetName = self.zonesetName || "ZonationAll";
+        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: self.noStack ? 'none':'well', binGap: 5, title: self.title || '', notShowCumulative: false};
+        self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
+        self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
+    }
+    this.$onInit = async function () {
+        self.doInit();
         $timeout(() => {
             $scope.$watch(() => self.config, (newVal, oldVal) => {
                 self.isSettingChange = true;
@@ -132,42 +170,9 @@ function multiWellHistogramController($scope, $timeout, $element, wiToken, wiApi
                 getZonesetsFromWells(self.treeConfig);
                 updateDefaultConfig();
             }, true);
+            getTrees();
         }, 500);
 
-        self.cpGetMarkerVal = self.cpGetMarkerVal || function (marker, idx) { return  marker.value }
-        self.cpSetMarkerVal = self.cpSetMarkerVal || function (marker, idx, newVal) {marker.value = newVal;}
-        self.cpMarkerStyle = self.cpMarkerStyle || function (marker, idx) { return  {stroke:marker.color,'stroke-width':'2', fill:'none'} }
-        self.cpMarkerName = self.cpMarkerName || function(marker, idx) { return  marker.name; }
-        self.ctrlParams = self.ctrlParams || [];
-        self.notCPBackground = self.ctrlParams.length ? false : true;
-        self.ctrlParamsMask = self.ctrlParams.map(c => true);
-        self.cpIcon = self.cpIcon || function(node) {
-            let idx = self.ctrlParams.indexOf(node);
-            if (idx >= 0) {
-                let use = self.ctrlParamsMask[idx];
-                return use ? 'layer-16x16': 'fa fa-eye-slash';
-            }
-        }
-        self.cpIcons = self.cpIcons || function (node){ return ["rectangle"] }
-        self.cpIconStyle = self.cpIconStyle || function(node) { 
-            return  {
-                'background-color': node.color || 'red'
-            }
-        }
-        self.cpBackground = self.cpBackground || {
-            'background-color': 'rgba(255, 249, 160, 0.6)'
-        };
-
-
-        self.defaultConfig = self.defaultConfig || {};
-        self.wellSpec = self.wellSpec || [];
-        getTrees();
-        self.selectionType = self.selectionType || 'family-group';
-        self.zoneTree = [];
-        self.zonesetName = self.zonesetName || "ZonationAll";
-        self.config = self.config || {grid:true, displayMode: 'bar', colorMode: 'zone', stackMode: self.noStack ? 'none':'well', binGap: 5, title: self.title || '', notShowCumulative: false};
-        self.getToggleGaussianFn = self.config.notUsedGaussian ? self.click2ToggleLogNormalD : self.click2ToggleGaussian;
-        self.getGaussianIconFn = self.config.notUsedGaussian ? self.getLogNormalDIcon : self.getGaussianIcon;
     }
 
     this.onInputSelectionChanged = function(selectedItemProps) {
